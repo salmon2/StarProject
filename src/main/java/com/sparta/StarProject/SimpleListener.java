@@ -1,17 +1,14 @@
 package com.sparta.StarProject;
 
 import com.sparta.StarProject.domain.*;
-import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.domain.board.UserMake;
-import com.sparta.StarProject.domain.repository.BoardRepository;
-import com.sparta.StarProject.domain.repository.CampingRepository;
-import com.sparta.StarProject.domain.repository.UserMakeRepository;
+import com.sparta.StarProject.repository.CampingRepository;
+import com.sparta.StarProject.repository.UserMakeRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -31,10 +28,6 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
 
     @Autowired
     private UserMakeRepository userMakeRepository;
-
-    @Autowired
-    private BoardRepository boardRepository;
-
 
 
     @Override
@@ -68,7 +61,6 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
                 Like newLike = new Like(newCamping, user);
                 em.persist(newLike);
             }
-
         }
 
         for (int i = 0 ; i<10; i++){
@@ -115,7 +107,6 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
         for (UserMake userMake : userMakeList) {
             System.out.println("userMake.getContent() = " + userMake.getContent());
         }
-
-
     }
+
 }
