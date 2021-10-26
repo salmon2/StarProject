@@ -2,17 +2,17 @@ package com.sparta.StarProject.weatherApi.accuweatherAPI;
 
 
 
+import com.sparta.StarProject.dto.StarGazingDto;
 import lombok.extern.slf4j.Slf4j;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -21,7 +21,7 @@ public class AccuWeatherApi {
     private final String apiKey = "WYPVfBdCy5hYrmNgjSj9ihfSJ45cDJQl";
     private final String StarGazingId = "12";
 
-    public void getStarGazing(CityId cityId) throws Exception {
+    public List<StarGazingDto> getStarGazing(CityId cityId) throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
@@ -37,14 +37,17 @@ public class AccuWeatherApi {
 
         JSONArray jsonArray = new JSONArray(responseEntity.getBody().toString());
 
+        List<StarGazingDto> starGazingDtoList = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             Map<String, Object> map = jsonArray.getJSONObject(i).toMap();
-            String name = (String) map.get("Name");
-
-            System.out.println("name = " + name);
+            StarGazingDto newStarGazingDto = new StarGazingDto(map);
+            starGazingDtoList.add(newStarGazingDto);
         }
 
+        return starGazingDtoList;
     }
+
+
 
     public static void main(String[] args) throws Exception {
         AccuWeatherApi accuWeatherApi = new AccuWeatherApi();
