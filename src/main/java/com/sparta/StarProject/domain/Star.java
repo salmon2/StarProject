@@ -1,5 +1,6 @@
 package com.sparta.StarProject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class Star {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
+    @JsonIgnore
     private Location location;
 
     private String moonrise;
@@ -38,6 +40,5 @@ public class Star {
         this.location = location;
         this.StarGazing = starGazing;
     }
-
 
 }
