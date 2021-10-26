@@ -23,7 +23,8 @@ import static javax.persistence.FetchType.*;
 @BatchSize(size = 100)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-@Getter @Setter
+@Getter
+@Setter
 @ToString   //문자열
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name = "Board")

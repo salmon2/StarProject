@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseDto<T> {
-    private Long code;
+    private Long id;
     private String msg;
     private T data;
 }

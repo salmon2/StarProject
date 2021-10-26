@@ -1,4 +1,4 @@
-package com.sparta.StarProject.repository;
+package com.sparta.StarProject.domain.repository;
 
 import com.sparta.StarProject.domain.board.Board;
 import org.springframework.data.jpa.repository.JpaRepository;

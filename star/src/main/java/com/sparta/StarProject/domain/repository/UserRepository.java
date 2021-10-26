@@ -1,6 +1,6 @@
 package com.sparta.StarProject.domain.repository;
 
-import com.sparta.StarProject.User;
+import com.sparta.StarProject.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
