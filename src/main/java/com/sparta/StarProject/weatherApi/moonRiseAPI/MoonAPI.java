@@ -13,7 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.net.URLEncoder;
 import java.io.IOException;
 
-public class moonAPI {
+public class MoonAPI {
 
     public SunMoonDto getMoon() throws IOException, ParserConfigurationException, SAXException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getAreaRiseSetInfo"); /*URL*/
@@ -28,6 +28,7 @@ public class moonAPI {
 
         doc.getDocumentElement().normalize();
         System.out.println("Root element: " + doc.getDocumentElement().getNodeName()); // Root element: result
+
         // 파싱할 tag
         NodeList nList = doc.getElementsByTagName("item");
         System.out.println("파싱할 리스트 수 : "+ nList.getLength());
@@ -45,6 +46,7 @@ public class moonAPI {
 //                System.out.println("일출  : " + getTagValue("sunset", eElement));
 //                System.out.println("지역  : " + getTagValue("location", eElement));
 //                System.out.println("지역  : " + getTagValue("aste", eElement));
+
 
                 SunMoonDto newSunMoonDto = new SunMoonDto(
                         getTagValue("moonrise", eElement),
@@ -71,7 +73,7 @@ public class moonAPI {
     }
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
-        moonAPI moonAPI = new moonAPI();
+        MoonAPI moonAPI = new MoonAPI();
         SunMoonDto moon = moonAPI.getMoon();
         System.out.println("moon = " + moon);
     }
