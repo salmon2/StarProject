@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StarRequestDto {
+public class StarGuideRequestDto {
     private Long id;
     private String moonrise;
     private String moonset;
