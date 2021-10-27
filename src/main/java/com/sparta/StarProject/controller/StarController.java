@@ -17,8 +17,8 @@ public class StarController {
     }
 
     @GetMapping("/star/info")
-    public ResponseDto readStarInfo(@RequestParam("locationId") Long locationId){
-        StarGuideResponseDto starGuideResponseDto = starService.readStarInfo(locationId);
+    public ResponseDto readStarGuide(@RequestParam("locationId") Long locationId){
+        StarGuideResponseDto starGuideResponseDto = starService.readStarGuide(locationId);
 
         return new ResponseDto(200L, "성공", starGuideResponseDto);
     }

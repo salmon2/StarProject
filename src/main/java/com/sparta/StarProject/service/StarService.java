@@ -16,7 +16,7 @@ public class StarService {
 
     private final LocationRepository locationRepository;
 
-    public StarGuideResponseDto readStarInfo(Long locationId) {
+    public StarGuideResponseDto readStarGuide(Long locationId) {
         Optional<Location> findLocation = locationRepository.findById(locationId);
         Location location = findLocation.get();
 
