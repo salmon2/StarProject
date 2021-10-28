@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class StarResponseDto {
+public class StarGuideResponseDto {
     private String moonrise;
     private String moonset;
     private String visibility;
@@ -14,7 +14,7 @@ public class StarResponseDto {
     private String weather;
     private String temperature;
 
-    public StarResponseDto(String moonrise, String moonset, String visibility, String humidity, String weather, String temperature) {
+    public StarGuideResponseDto(String moonrise, String moonset, String visibility, String humidity, String weather, String temperature) {
         this.moonrise = moonrise;
         this.moonset = moonset;
         this.visibility = visibility;
