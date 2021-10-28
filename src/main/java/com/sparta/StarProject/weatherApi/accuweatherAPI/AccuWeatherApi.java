@@ -49,7 +49,7 @@ public class AccuWeatherApi {
 
     public static void main(String[] args) throws Exception {
         AccuWeatherApi accuWeatherApi = new AccuWeatherApi();
-        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(StarGazingCity.Seoul);
+        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(StarGazingCity.광주);
         for (StarGazingDto starGazingDto : starGazing) {
             System.out.println("starGazingDto = " + starGazingDto);
         }

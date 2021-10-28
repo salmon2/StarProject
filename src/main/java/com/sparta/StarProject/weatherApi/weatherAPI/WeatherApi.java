@@ -21,6 +21,8 @@ import static com.sparta.StarProject.weatherApi.weatherAPI.WeatherCategory.POP;
 
 public class WeatherApi {
     private final String apiKey = "d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D";
+
+
     public List<WeatherApiDto> getWeather(WeatherCity weatherCity) throws IOException, ParserConfigurationException, SAXException {
 
         List<String> date = getCurrentTime();

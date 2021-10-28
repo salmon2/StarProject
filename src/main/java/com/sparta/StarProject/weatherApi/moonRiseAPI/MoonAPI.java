@@ -12,14 +12,25 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.net.URLEncoder;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MoonAPI {
+    private final String apiKey = "d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D";
 
-    public SunMoonDto getMoon() throws IOException, ParserConfigurationException, SAXException {
+    public SunMoonDto getMoon(MoonCity moonCity) throws IOException, ParserConfigurationException, SAXException {
+
+        List<String> date = getCurrentTime();
+
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getAreaRiseSetInfo"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("locdate","UTF-8") + "=" + URLEncoder.encode("20211026", "UTF-8")); /*날짜*/
-        urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode("광주(경기)", "UTF-8")); /*지역*/
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+ apiKey); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("locdate","UTF-8") + "=" + URLEncoder.encode(date.get(0), "UTF-8")); /*날짜*/
+
+        //urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode("광주(경기)", "UTF-8")); /*지역*/
+        urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode(moonCity.getKorName(), "UTF-8")); /*지역*/
+
         System.out.println("urlBuilder.toString() = " + urlBuilder.toString());
 
         DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
@@ -72,9 +83,26 @@ public class MoonAPI {
         return nValue.getNodeValue();
     }
 
+    private List<String> getCurrentTime() {
+        SimpleDateFormat format1 = new SimpleDateFormat ( "yyyyMMdd");
+        SimpleDateFormat format2 = new SimpleDateFormat ( "HH00");
+
+        Date rawTime = new Date();
+
+        String date = format1.format(rawTime);
+        String time = format2.format(rawTime);
+
+        List<String> result = new ArrayList<>();
+
+        result.add(date);
+        result.add(time);
+
+        return result;
+    }
+
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         MoonAPI moonAPI = new MoonAPI();
-        SunMoonDto moon = moonAPI.getMoon();
+        SunMoonDto moon = moonAPI.getMoon(MoonCity.안산);
         System.out.println("moon = " + moon);
     }
 
