@@ -12,7 +12,7 @@ public class SunMoonDto {
     private String moonSet;
     private String sunrise;
     private String sunSet;
-    private String location;
+    private String location; //위치
     private String aste;    //천문박명
     private String date;    //날짜
 }

@@ -21,9 +21,9 @@ public class AccuWeatherApi {
     private final String apiKey = "WYPVfBdCy5hYrmNgjSj9ihfSJ45cDJQl";
     private final String StarGazingId = "12";
 
-    public List<StarGazingDto> getStarGazing(CityId cityId) throws Exception {
+    public List<StarGazingDto> getStarGazing(StarGazingCity cityId) throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        httpHeaders.setContentType( new MediaType("application", "json", Charset.forName("UTF-8")));
 
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
 
@@ -47,11 +47,13 @@ public class AccuWeatherApi {
         return starGazingDtoList;
     }
 
-
-
     public static void main(String[] args) throws Exception {
         AccuWeatherApi accuWeatherApi = new AccuWeatherApi();
-        accuWeatherApi.getStarGazing(CityId.Seoul);
+        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(StarGazingCity.Seoul);
+        for (StarGazingDto starGazingDto : starGazing) {
+            System.out.println("starGazingDto = " + starGazingDto);
+        }
     }
+
 
 }
