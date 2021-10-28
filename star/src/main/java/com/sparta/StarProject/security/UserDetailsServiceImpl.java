@@ -1,7 +1,7 @@
 package com.sparta.StarProject.security;
 
 import com.sparta.StarProject.domain.User;
-import com.sparta.StarProject.domain.repository.UserRepository;
+import com.sparta.StarProject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

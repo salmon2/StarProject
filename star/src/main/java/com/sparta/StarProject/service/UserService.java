@@ -1,7 +1,7 @@
 package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.User;
-import com.sparta.StarProject.domain.repository.UserRepository;
+import com.sparta.StarProject.repository.UserRepository;
 import com.sparta.StarProject.dto.SignUpRequestDto;
 import com.sparta.StarProject.dto.UserRequestDto;
 import com.sparta.StarProject.exception.ErrorCode;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -47,13 +45,13 @@ public class UserService {
         String pwCheck = requestDto.getPasswordCheck();
 
         //패스워드 8자 이상 20자 이하
-        if (!pw.isEmpty() && !pwCheck.isEmpty()) {
-            if(pw.length() >= 8 && pw.length() <= 20){
-                if(!pw.equals(pwCheck)){
-                    throw new StarProjectException(ErrorCode.PASSWORD_CHECK);
-                }
-            }
-        }
+//        if (!pw.isEmpty() && !pwCheck.isEmpty()) {
+//            if(pw.length() >= 8 && pw.length() <= 20){
+//                if(!pw.equals(pwCheck)){
+//                    throw new StarProjectException(ErrorCode.PASSWORD_CHECK);
+//                }
+//            }
+//        }
 
         User user = new User(username, password, nickname);
         return userRepository.save(user);

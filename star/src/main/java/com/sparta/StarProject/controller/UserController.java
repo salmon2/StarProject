@@ -1,12 +1,17 @@
 package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.dto.SignUpRequestDto;
 import com.sparta.StarProject.dto.UserRequestDto;
+import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.security.jwt.JwtTokenProvider;
 import com.sparta.StarProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,22 +45,29 @@ public class UserController {
 
     //로그인
     @PostMapping("/user/login")
-    public List<Map<String, Object>> login(@RequestBody UserRequestDto requestDto) throws StarProjectException{
+    public ResponseDto login(@RequestBody UserRequestDto requestDto) throws StarProjectException{
         User user = userService.login(requestDto);
 
-        java.util.List<Map<String,Object>> addObject = new ArrayList<>();
-        Map<String, Object> msg = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
-            data.put("token", jwtTokenProvider.createToken(user.getUsername(), user.getUsername(), user.getNickname()));
-            data.put("username", user.getUsername());
-            data.put("nickname", user.getNickname());
-            msg.put("msg", "성공");
-            addObject.add(msg);
-            addObject.add(data);
+        data.put("token", jwtTokenProvider.createToken(user.getUsername(), user.getUsername(), user.getNickname()));
+        data.put("username", user.getUsername());
+        data.put("nickname", user.getNickname());
 
-            return addObject;
+
+            return new ResponseDto(200L, "성공", data);
     }
 
+    @GetMapping("/user/login/check")
+    public ResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        if(userDetails == null){
+            throw  new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
+        }
+        Map<String,Object> data = new HashMap<>();
+        data.put("username", userDetails.getUser().getUsername());
+        data.put("nickname", userDetails.getUser().getNickname());
+
+            return new ResponseDto(200L,"성공",data);
+    }
 
 }
 

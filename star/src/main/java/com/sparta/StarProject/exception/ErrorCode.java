@@ -10,6 +10,8 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 public enum  ErrorCode {
 
+    PHOTO_NOT_FOUND(INTERNAL_SERVER_ERROR, "알 수 없는 이유로 실패하였습니다."),
+
     USERNAME_DUPLICATE(NOT_IMPLEMENTED, "사용 불가능한 유저네임 입니다."),
     USER_NOT_FOUND(INTERNAL_SERVER_ERROR, "알 수 없는 이유로 실패하였습니다."),
 
