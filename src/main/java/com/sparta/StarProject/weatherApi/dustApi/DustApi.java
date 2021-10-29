@@ -1,26 +1,22 @@
 package com.sparta.StarProject.weatherApi.dustApi;
 
+import com.sparta.StarProject.dto.DustApiDto;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.io.BufferedReader;
-import java.io.IOException;
 
+@Component
 public class DustApi {
     private final String apiKey = "d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D";
 
-    public void getDust(DustCity dustCity) throws Exception {
+    public DustApiDto getDust(DustCity dustCity) throws Exception {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+apiKey); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8")); /*xml 또는 json*/
@@ -29,7 +25,7 @@ public class DustApi {
         urlBuilder.append("&" + URLEncoder.encode("sidoName","UTF-8") + "=" + URLEncoder.encode(dustCity.getKorName(), "UTF-8")); /*시도 이름(전국, 서울, 부산, 대구, 인천, 광주, 대전, 울산, 경기, 강원, 충북, 충남, 전북, 전남, 경북, 경남, 제주, 세종)*/
         urlBuilder.append("&" + URLEncoder.encode("ver","UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8")); /*버전별 상세 결과 참고*/
         URL url = new URL(urlBuilder.toString());
-        System.out.println("urlBuilder = " + urlBuilder.toString());
+        //System.out.println("urlBuilder = " + urlBuilder.toString());
 
         DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
@@ -43,15 +39,13 @@ public class DustApi {
         for(int temp = 0; temp < nList.getLength(); temp++){
             Node nNode = nList.item(temp);
             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
-
                 Element eElement = (Element) nNode;
-                System.out.println("######################");
-                //System.out.println(eElement.getTextContent());
-                System.out.println("월출  : " + getTagValue("pm10Value", eElement));
-                System.out.println("월출  : " + getTagValue("sidoName", eElement));
-                System.out.println("월출  : " + getTagValue("stationName", eElement));
+                DustApiDto newDustApiDto = new DustApiDto(getTagValue("pm10Value", eElement));
+                return newDustApiDto;
+
             }
         }
+        return null;
     }
     private static String getTagValue(String tag, Element eElement) {
         NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();

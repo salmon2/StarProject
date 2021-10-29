@@ -172,4 +172,13 @@ public enum WeatherCity {
     private String location;
     private Integer x;
     private Integer y;
+
+    public static WeatherCity getWeatherCityByString(String text) {
+        for (WeatherCity value : WeatherCity.values()) {
+            if(value.getLocation().equals(text)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

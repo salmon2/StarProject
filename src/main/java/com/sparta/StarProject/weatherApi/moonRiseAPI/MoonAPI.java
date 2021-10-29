@@ -1,6 +1,7 @@
 package com.sparta.StarProject.weatherApi.moonRiseAPI;
 
 import com.sparta.StarProject.dto.SunMoonDto;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class MoonAPI {
     private final String apiKey = "d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D";
 
@@ -31,18 +33,18 @@ public class MoonAPI {
         //urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode("광주(경기)", "UTF-8")); /*지역*/
         urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode(moonCity.getKorName(), "UTF-8")); /*지역*/
 
-        System.out.println("urlBuilder.toString() = " + urlBuilder.toString());
+        //System.out.println("urlBuilder.toString() = " + urlBuilder.toString());
 
         DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
         Document doc = dBuilder.parse(urlBuilder.toString());
 
         doc.getDocumentElement().normalize();
-        System.out.println("Root element: " + doc.getDocumentElement().getNodeName()); // Root element: result
+        //System.out.println("Root element: " + doc.getDocumentElement().getNodeName()); // Root element: result
 
         // 파싱할 tag
         NodeList nList = doc.getElementsByTagName("item");
-        System.out.println("파싱할 리스트 수 : "+ nList.getLength());
+        //System.out.println("파싱할 리스트 수 : "+ nList.getLength());
 
         for(int temp = 0; temp < nList.getLength(); temp++){
             Node nNode = nList.item(temp);
@@ -102,7 +104,7 @@ public class MoonAPI {
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         MoonAPI moonAPI = new MoonAPI();
-        SunMoonDto moon = moonAPI.getMoon(MoonCity.안산);
+        SunMoonDto moon = moonAPI.getMoon(MoonCity.대구);
         System.out.println("moon = " + moon);
     }
 

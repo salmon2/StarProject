@@ -12,9 +12,9 @@ public enum WeatherCategory {
     REH("습도", "REH"),
     SNO("신적설", "SNO"),
     SKY("하늘상태", "SKY"),	//맑음(1), 구름많음(3), 흐림(4)
-    TMP("기온℃", "TMP"),
-    TMN("일 최저기온℃", "TMN"),
-    TMX("일 최고기온℃", "TMX"),
+    TMP("기온", "TMP"),
+    TMN("일 최저기온", "TMN"),
+    TMX("일 최고기온", "TMX"),
     UUU("풍속(동서성분)","UUU"),
     VVV("풍속(남북성분)", "VVV"),
     WAV("파고", "WAV"),
