@@ -67,8 +67,6 @@ public class API {
         Location newLocation = new Location(null, null, address, location.get(0), board);
         Location saveLocation = locationRepository.save(newLocation);
 
-//        Star newStar = new Star(moon.getMoonrise(), moon.getMoonSet(), starGazing.get(0).getValue().toString(),
-//                "weather", "weather", "temperature", starGazing.get(0).getValue().toString(), newLocation);
 
 
     }

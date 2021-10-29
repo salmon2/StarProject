@@ -5,6 +5,7 @@ import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.UserMakeRepository;
+import com.sparta.StarProject.repository.WeatherRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -29,6 +30,8 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
     @Autowired
     private UserMakeRepository userMakeRepository;
 
+    @Autowired
+    private WeatherRepository weatherRepository;
 
     @Override
     @Transactional
@@ -48,19 +51,34 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
             Location newLocation = new Location(3.2, 1.5, "더미 주소", "대구", newCamping);
             em.persist(newLocation);
 
-            Star newStar = new Star("moonrise", "moonSet", "visibility",
-                    "humidity", "weather", "temperature", 3L, newLocation);
+            Star newStar = new Star("moonrise", "moonSet", 3L, newLocation);
             em.persist(newStar);
 
-            for (int j = 0; j < 3; j++) {
-                HashTag newHashTag = new HashTag(newCamping, "테스트 hashTag" + j);
-                em.persist(newHashTag);
+            for (int j = 12; j < 15; j++) {
+                Weather newWeather = new Weather(
+                        "humidity",
+                        "weather",
+                        "temperature",
+                        "maxTemperature",
+                        "minTemperature",
+                        "rainPercent",
+                        j+"00", //1200 1300 1400
+                        newLocation
+                );
+                em.persist(newWeather);
             }
 
-            for (int j = 0; j < 3; j++) {
-                Like newLike = new Like(newCamping, user);
-                em.persist(newLike);
-            }
+
+
+//            for (int j = 0; j < 3; j++) {
+//                HashTag newHashTag = new HashTag(newCamping, "테스트 hashTag" + j);
+//                em.persist(newHashTag);
+//            }
+//
+//            for (int j = 0; j < 3; j++) {
+//                Like newLike = new Like(newCamping, user);
+//                em.persist(newLike);
+//            }
         }
 
         for (int i = 0 ; i<10; i++){
@@ -73,19 +91,35 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
             Location newLocation = new Location(3.2, 1.5, "더미 주소", "대구", newUerMake);
             em.persist(newLocation);
 
-            Star newStar = new Star("moonrise", "moonSet", "visibility",
-                    "humidity", "weather", "temperature", 3L, newLocation);
+            Star newStar = new Star("moonrise", "moonSet", 3L, newLocation);
             em.persist(newStar);
 
-            for (int j = 0; j < 3; j++) {
-                HashTag newHashTag = new HashTag(newUerMake, "테스트 hashTag" + j);
-                em.persist(newHashTag);
+
+            for (int j = 12; j < 15; j++) {
+                Weather newWeather = new Weather(
+                        "humidity",
+                        "weather",
+                        "temperature",
+                        "maxTemperature",
+                        "minTemperature",
+                        "rainPercent",
+                        j+"00", //1200 1300 1400
+                        newLocation
+                );
+                em.persist(newWeather);
             }
 
-            for (int j = 0; j < 3; j++) {
-                Like newLike = new Like(newUerMake, user);
-                em.persist(newLike);
-            }
+
+
+//            for (int j = 0; j < 3; j++) {
+//                HashTag newHashTag = new HashTag(newUerMake, "테스트 hashTag" + j);
+//                em.persist(newHashTag);
+//            }
+//
+//            for (int j = 0; j < 3; j++) {
+//                Like newLike = new Like(newUerMake, user);
+//                em.persist(newLike);
+//            }
         }
 
 

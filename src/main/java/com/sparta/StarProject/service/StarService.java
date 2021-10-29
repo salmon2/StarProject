@@ -21,17 +21,16 @@ public class StarService {
         Location location = findLocation.get();
 
         Star findStar = location.getStar();
+//
+//        StarGuideResponseDto starGuideResponseDto = new StarGuideResponseDto(
+//                    findStar.getMoonrise(),
+//                    findStar.getMoonSet(),
+//                    findStar.getHumidity(),
+//                    findStar.getWeather(),
+//                    findStar.getTemperature()
+//        );
 
-        StarGuideResponseDto starGuideResponseDto = new StarGuideResponseDto(
-                    findStar.getMoonrise(),
-                    findStar.getMoonSet(),
-                    findStar.getVisibility(),
-                    findStar.getHumidity(),
-                    findStar.getWeather(),
-                    findStar.getTemperature()
-        );
-
-        return starGuideResponseDto;
+        return null;
     }
 
 

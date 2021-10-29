@@ -22,22 +22,13 @@ public class Star {
 
     private String moonrise;    //월출
     private String moonSet;     //월몰
-    private String visibility;  //시정거리
-    private String humidity;    //습도
-    private String weather;     //날씨
-    private String temperature; //온도
-
     private Long StarGazing;
 
-    public Star(String moonrise, String moonSet, String visibility,
-                String humidity, String weather,
-                String temperature, Long starGazing, Location location) {
+    public Star(String moonrise, String moonSet,
+
+               Long starGazing, Location location) {
         this.moonrise = moonrise;
         this.moonSet = moonSet;
-        this.visibility = visibility;
-        this.humidity = humidity;
-        this.weather = weather;
-        this.temperature = temperature;
         this.location = location;
         this.StarGazing = starGazing;
     }
