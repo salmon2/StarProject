@@ -63,6 +63,8 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
                         "minTemperature",
                         "rainPercent",
                         j+"00", //1200 1300 1400
+                        "나쁨",
+                        "20211029",
                         newLocation
                 );
                 em.persist(newWeather);
@@ -104,6 +106,8 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
                         "minTemperature",
                         "rainPercent",
                         j+"00", //1200 1300 1400
+                        "나쁨",
+                        "20211029",
                         newLocation
                 );
                 em.persist(newWeather);
