@@ -1,6 +1,7 @@
 package com.sparta.StarProject.weatherApi.moonRiseAPI;
 
 import com.sparta.StarProject.dto.SunMoonDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@Slf4j
 public class MoonAPI {
     private final String apiKey = "d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D";
 
@@ -69,11 +71,12 @@ public class MoonAPI {
                         getTagValue("location", eElement),
                         getTagValue("aste", eElement),
                         getTagValue("locdate", eElement));
+                log.info("moon = {}", newSunMoonDto);
                 return newSunMoonDto;
             }	// for end
         }	// if end
 
-
+        log.info("moon = NULL");
         return null;
     }
 

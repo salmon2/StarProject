@@ -17,6 +17,7 @@ import com.sparta.StarProject.weatherApi.moonRiseAPI.MoonCity;
 import com.sparta.StarProject.weatherApi.weatherAPI.WeatherApi;
 import com.sparta.StarProject.weatherApi.weatherAPI.WeatherCity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class API {
     private final AccuWeatherApi accuWeatherApi;
     private final DustApi dustApi;
@@ -59,11 +61,17 @@ public class API {
         MoonCity moonCity = MoonCity.getMoonCityByString(location.get(0), location.get(1));
         DustCity dustCity = DustCity.getDustCityByString(location.get(1));
         StarGazingCity starGazingCity = StarGazingCity.getStarGazingCityByString(location.get(0));
+        //List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity);
 
-        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity);
+        List<StarGazingDto> starGazing = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            StarGazingDto starGazingDto = new StarGazingDto();
+            starGazing.add(starGazingDto);
+        }
         SunMoonDto moon = moonAPI.getMoon(moonCity);
         List<WeatherApiDto2> weather = weatherApi.getWeather(weatherCity);
         DustApiDto dust = dustApi.getDust(dustCity);
+
 
         LocationStarMoonDustDto result = new LocationStarMoonDustDto(
                 starGazing,
@@ -72,6 +80,7 @@ public class API {
                 dust,
                 address
         );
+        log.info("result = {}", result);
         return result;
     }
 
@@ -83,13 +92,15 @@ public class API {
                 new Location(null, null, result.getAddress(), location.get(0), board);
         Location saveLocation = locationRepository.save(newLocation);
 
-        Star newStar =
-                new Star(
-                    result.getMoon().getMoonrise(),
-                    result.getMoon().getMoonSet(),
-                    Long.valueOf(result.getStarGazing().get(0).getValue().longValue()),
-                    saveLocation
-                );
+//        Star newStar =
+//                new Star(
+//                    result.getMoon().getMoonrise(),
+//                    result.getMoon().getMoonSet(),
+//                    Long.valueOf(result.getStarGazing().get(0).getValue().longValue()),
+//                    saveLocation
+//                );
+
+        Star newStar = new Star();
         Star saveStar = starRepository.save(newStar);
 
         for (WeatherApiDto2 weatherApiDto2 : result.getWeather()) {

@@ -1,5 +1,6 @@
 package com.sparta.StarProject.domain.board;
 
+import com.sparta.StarProject.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,8 @@ import javax.persistence.Entity;
 public class UserMake extends Board{
     private String userdata;
 
-    public UserMake(String locationName, String content, String img, String userdata) {
-        super(locationName, content, img);
+    public UserMake(String locationName, String address, String content, String img, User user, String userdata) {
+        super(locationName, address, content, img, user);
         this.userdata = userdata;
     }
 }

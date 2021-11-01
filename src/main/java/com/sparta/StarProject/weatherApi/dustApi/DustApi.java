@@ -1,6 +1,7 @@
 package com.sparta.StarProject.weatherApi.dustApi;
 
 import com.sparta.StarProject.dto.DustApiDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 @Component
+@Slf4j
 public class DustApi {
     private final String apiKey = "d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D";
 
@@ -41,10 +43,12 @@ public class DustApi {
             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 DustApiDto newDustApiDto = new DustApiDto(getTagValue("pm10Value", eElement));
+                log.info("dust = {}", newDustApiDto);
                 return newDustApiDto;
 
             }
         }
+        log.info("dust = null");
         return null;
     }
     private static String getTagValue(String tag, Element eElement) {

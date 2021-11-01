@@ -2,6 +2,7 @@ package com.sparta.StarProject.weatherApi.weatherAPI;
 
 import com.sparta.StarProject.dto.WeatherApiDto;
 import com.sparta.StarProject.dto.WeatherApiDto2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,6 +23,7 @@ import java.util.List;
 import static com.sparta.StarProject.weatherApi.weatherAPI.WeatherCategory.POP;
 
 @Component
+@Slf4j
 public class WeatherApi {
     private final String apiKey = "d0H0AaFc9Bq3uqyOHgbQ%2BfYrNjZXkTsepK6WlE4Ua6recSchagiHNTq6xOiiEr0PbFYD8mAiH82NCurTeHsKqA%3D%3D";
 
@@ -211,8 +213,11 @@ public class WeatherApi {
             apiDto2.setMinTemperature(minTemp);
         }
 
-        result.remove(0);
+        if(result.size() >0){
+            result.remove(0);
+        }
 
+        log.info("weather = {}", result);
         return result;
     }
 

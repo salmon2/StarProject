@@ -35,15 +35,12 @@ public class Board extends Timestamped{
 
 
     private String locationName;
+    private String address;
     private String content;
+    @Column( length = 100000 )
     private String img;
 
-    public Board(String locationName, String content, String img) {
-        this.locationName = locationName;
-        this.content = content;
-        this.img = img;
-    }
-
+    
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
@@ -58,6 +55,11 @@ public class Board extends Timestamped{
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private List<HashTag> hashTagList = new ArrayList<>();
 
-
-
+    public Board(String locationName, String address, String content, String img, User user) {
+        this.locationName = locationName;
+        this.address = address;
+        this.content = content;
+        this.img = img;
+        this.user = user;
+    }
 }
