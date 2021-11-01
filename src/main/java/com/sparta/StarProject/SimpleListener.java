@@ -45,7 +45,7 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
 
         for (int i = 0 ; i<10; i++){
             Camping newCamping = new Camping("테스트용 캠핑 제목" + i,
-                    "테스트용 캠핑 본문" + i, "테스트용 이미지" + i, "캠핑 데이터" + i);
+                    "테스트용 캠핑 본문" + i, "테스트용 이미지" + i, user, "캠핑 데이터" + i);
             em.persist(newCamping);
 
             Location newLocation = new Location(3.2, 1.5, "더미 주소", "대구", newCamping);
@@ -82,7 +82,7 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
         }
 
         for (int i = 0 ; i<10; i++){
-            UserMake newUerMake = new UserMake("테스트용 유저만든 제목" + i, "테스트용 유저만든 본문" + i, "테스트용 이미지" + i,
+            UserMake newUerMake = new UserMake("테스트용 유저만든 제목" + i, "테스트용 유저만든 본문" + i, "테스트용 이미지" + i, user,
                     "유저만든 데이터" + i);
             //UserMake saveUserMake = userMakeRepository.save(newUerMake);
             em.persist(newUerMake);

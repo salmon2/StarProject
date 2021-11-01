@@ -38,11 +38,6 @@ public class Board extends Timestamped{
     private String content;
     private String img;
 
-    public Board(String locationName, String content, String img) {
-        this.locationName = locationName;
-        this.content = content;
-        this.img = img;
-    }
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
@@ -51,6 +46,14 @@ public class Board extends Timestamped{
 
     @OneToOne(mappedBy = "board", fetch = LAZY)
     private Location location;
+
+
+    public Board(String locationName, String content, String img, User user) {
+        this.locationName = locationName;
+        this.content = content;
+        this.img = img;
+        this.user = user;
+    }
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private Set<Like> like = new HashSet<>();
