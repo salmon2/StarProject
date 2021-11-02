@@ -1,4 +1,4 @@
-package com.sparta.StarProject.weatherApi.dustApi;
+package com.sparta.StarProject.api.dustApi;
 
 import com.sparta.StarProject.dto.DustApiDto;
 import lombok.extern.slf4j.Slf4j;

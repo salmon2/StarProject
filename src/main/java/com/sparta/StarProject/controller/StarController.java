@@ -6,8 +6,8 @@ import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.dto.StarGuideResponseDto;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.service.StarService;
-import com.sparta.StarProject.weatherApi.API;
-import com.sparta.StarProject.weatherApi.CampingList;
+import com.sparta.StarProject.api.API;
+import com.sparta.StarProject.api.CampingList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +41,5 @@ public class StarController {
 
         api.saveStarLocationWeather(camping, infoByAddress);
     }
-
-
 
 }

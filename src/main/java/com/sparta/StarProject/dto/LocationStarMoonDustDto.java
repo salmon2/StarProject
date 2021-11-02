@@ -15,4 +15,5 @@ public class LocationStarMoonDustDto {
     List<WeatherApiDto2> weather;
     DustApiDto dust;
     String address;
+    GeographicDto geographicDto;
 }

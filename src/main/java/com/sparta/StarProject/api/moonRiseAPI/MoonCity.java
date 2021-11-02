@@ -1,6 +1,5 @@
-package com.sparta.StarProject.weatherApi.moonRiseAPI;
+package com.sparta.StarProject.api.moonRiseAPI;
 
-import com.sparta.StarProject.weatherApi.dustApi.DustCity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

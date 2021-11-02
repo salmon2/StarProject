@@ -1,6 +1,5 @@
-package com.sparta.StarProject.weatherApi.dustApi;
+package com.sparta.StarProject.api.dustApi;
 
-import com.sparta.StarProject.weatherApi.accuweatherAPI.StarGazingCity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

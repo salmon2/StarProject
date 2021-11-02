@@ -34,7 +34,7 @@ public class Board extends Timestamped{
     private Long id;
 
 
-    private String locationName;
+    private String title;
     private String address;
     private String content;
     @Column( length = 100000 )
@@ -49,8 +49,8 @@ public class Board extends Timestamped{
     private Location location;
 
 
-    public Board(String locationName, String content, String img, User user) {
-        this.locationName = locationName;
+    public Board(String title, String content, String img, User user) {
+        this.title = title;
         this.content = content;
         this.img = img;
         this.user = user;
@@ -62,8 +62,8 @@ public class Board extends Timestamped{
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private List<HashTag> hashTagList = new ArrayList<>();
 
-    public Board(String locationName, String address, String content, String img, User user) {
-        this.locationName = locationName;
+    public Board(String title, String address, String content, String img, User user) {
+        this.title = title;
         this.address = address;
         this.content = content;
         this.img = img;

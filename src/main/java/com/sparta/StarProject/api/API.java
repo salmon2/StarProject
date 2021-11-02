@@ -1,5 +1,6 @@
-package com.sparta.StarProject.weatherApi;
+package com.sparta.StarProject.api;
 
+import com.sparta.StarProject.api.locationAPI.AddressToGps;
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
 import com.sparta.StarProject.domain.Weather;
@@ -8,23 +9,21 @@ import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarRepository;
 import com.sparta.StarProject.repository.WeatherRepository;
-import com.sparta.StarProject.weatherApi.accuweatherAPI.AccuWeatherApi;
-import com.sparta.StarProject.weatherApi.accuweatherAPI.StarGazingCity;
-import com.sparta.StarProject.weatherApi.dustApi.DustApi;
-import com.sparta.StarProject.weatherApi.dustApi.DustCity;
-import com.sparta.StarProject.weatherApi.moonRiseAPI.MoonAPI;
-import com.sparta.StarProject.weatherApi.moonRiseAPI.MoonCity;
-import com.sparta.StarProject.weatherApi.weatherAPI.WeatherApi;
-import com.sparta.StarProject.weatherApi.weatherAPI.WeatherCity;
+import com.sparta.StarProject.api.accuweatherAPI.AccuWeatherApi;
+import com.sparta.StarProject.api.accuweatherAPI.StarGazingCity;
+import com.sparta.StarProject.api.dustApi.DustApi;
+import com.sparta.StarProject.api.dustApi.DustCity;
+import com.sparta.StarProject.api.moonRiseAPI.MoonAPI;
+import com.sparta.StarProject.api.moonRiseAPI.MoonCity;
+import com.sparta.StarProject.api.weatherAPI.WeatherApi;
+import com.sparta.StarProject.api.weatherAPI.WeatherCity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -34,12 +33,14 @@ public class API {
     private final DustApi dustApi;
     private final MoonAPI moonAPI;
     private final WeatherApi weatherApi;
+    private final AddressToGps addressToGps;
 
     private final LocationRepository locationRepository;
     private final StarRepository starRepository;
     private final WeatherRepository weatherRepository;
 
 
+    //주소를 city로 찾기
     public List<String> processAddress(String address){
         List<String> result = new ArrayList<>();
 
@@ -53,6 +54,7 @@ public class API {
         return result;
     }
 
+    //외부 api 쏘기
     public LocationStarMoonDustDto findInfoByAddress(String address) throws Exception {
         List<String> location = processAddress(address);    //경상북도 구미시, 구미
                                                             //서울특별시 ~~, 서울
@@ -62,29 +64,34 @@ public class API {
         DustCity dustCity = DustCity.getDustCityByString(location.get(1));
         StarGazingCity starGazingCity = StarGazingCity.getStarGazingCityByString(location.get(0));
 
+
         log.info("weatherCity = {}",weatherCity);
         log.info("moonCity = {}",moonCity);
         log.info("dustCity = {}",dustCity);
         log.info("starGazingCity = {}",starGazingCity);
 
 
+
         List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity);
         SunMoonDto moon = moonAPI.getMoon(moonCity);
         List<WeatherApiDto2> weather = weatherApi.getWeather(weatherCity);
         DustApiDto dust = dustApi.getDust(dustCity);
-
+        GeographicDto geographicDto = addressToGps.getAddress(address);
 
         LocationStarMoonDustDto result = new LocationStarMoonDustDto(
                 starGazing,
                 moon,
                 weather,
                 dust,
-                address
+                address,
+                geographicDto
         );
-        log.info("result = {}", result);
+
+
         return result;
     }
 
+    //외부 api 쏜거 저장하기
     @Transactional
     public void saveStarLocationWeather(Board board, LocationStarMoonDustDto result ) {
         List<String> location = processAddress(result.getAddress());

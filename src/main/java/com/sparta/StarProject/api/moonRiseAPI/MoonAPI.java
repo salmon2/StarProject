@@ -1,4 +1,4 @@
-package com.sparta.StarProject.weatherApi.moonRiseAPI;
+package com.sparta.StarProject.api.moonRiseAPI;
 
 import com.sparta.StarProject.dto.SunMoonDto;
 import lombok.extern.slf4j.Slf4j;

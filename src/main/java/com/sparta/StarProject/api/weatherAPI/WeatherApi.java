@@ -1,4 +1,4 @@
-package com.sparta.StarProject.weatherApi.weatherAPI;
+package com.sparta.StarProject.api.weatherAPI;
 
 import com.sparta.StarProject.dto.WeatherApiDto;
 import com.sparta.StarProject.dto.WeatherApiDto2;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.sparta.StarProject.weatherApi.weatherAPI.WeatherCategory.POP;
+import static com.sparta.StarProject.api.weatherAPI.WeatherCategory.POP;
 
 @Component
 @Slf4j

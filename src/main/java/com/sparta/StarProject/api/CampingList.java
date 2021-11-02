@@ -1,10 +1,8 @@
-package com.sparta.StarProject.weatherApi;
+package com.sparta.StarProject.api;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
@@ -70,4 +68,5 @@ public enum CampingList {
         this.locationX = locationX;
         this.locationY = locationY;
     }
+
 }

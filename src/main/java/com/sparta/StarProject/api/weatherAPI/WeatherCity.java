@@ -1,4 +1,4 @@
-package com.sparta.StarProject.weatherApi.weatherAPI;
+package com.sparta.StarProject.api.weatherAPI;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

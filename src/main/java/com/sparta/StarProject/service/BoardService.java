@@ -31,7 +31,7 @@ public class BoardService {
         }
 
         DetailBoardDto newDetailBoardDto = new DetailBoardDto(findBoard.getId(), findBoard.getUser().getNickname(),
-                findBoard.getLocationName(), findBoard.getLocation().getAddress(), findBoard.getImg(),
+                findBoard.getTitle(), findBoard.getLocation().getAddress(), findBoard.getImg(),
                 findBoard.getContent(), findBoard.getLocation().getXLocation(), findBoard.getLocation().getYLocation());
 
 
