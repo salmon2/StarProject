@@ -2,13 +2,12 @@ package com.sparta.StarProject.weatherApi;
 
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
+import com.sparta.StarProject.domain.Weather;
 import com.sparta.StarProject.domain.board.Board;
-import com.sparta.StarProject.domain.board.Camping;
-import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.*;
-import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarRepository;
+import com.sparta.StarProject.repository.WeatherRepository;
 import com.sparta.StarProject.weatherApi.accuweatherAPI.AccuWeatherApi;
 import com.sparta.StarProject.weatherApi.accuweatherAPI.StarGazingCity;
 import com.sparta.StarProject.weatherApi.dustApi.DustApi;
@@ -18,23 +17,27 @@ import com.sparta.StarProject.weatherApi.moonRiseAPI.MoonCity;
 import com.sparta.StarProject.weatherApi.weatherAPI.WeatherApi;
 import com.sparta.StarProject.weatherApi.weatherAPI.WeatherCity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class API {
     private final AccuWeatherApi accuWeatherApi;
     private final DustApi dustApi;
     private final MoonAPI moonAPI;
     private final WeatherApi weatherApi;
 
-    private final CampingRepository campingRepository;
     private final LocationRepository locationRepository;
     private final StarRepository starRepository;
+    private final WeatherRepository weatherRepository;
 
 
     public List<String> processAddress(String address){
@@ -50,25 +53,71 @@ public class API {
         return result;
     }
 
-    @Transactional
-    public void findInfoByAddress(Board board, String address) throws Exception {
-        List<String> location = processAddress(address);
+    public LocationStarMoonDustDto findInfoByAddress(String address) throws Exception {
+        List<String> location = processAddress(address);    //경상북도 구미시, 구미
+                                                            //서울특별시 ~~, 서울
 
         WeatherCity weatherCity = WeatherCity.getWeatherCityByString(location.get(0));
         MoonCity moonCity = MoonCity.getMoonCityByString(location.get(0), location.get(1));
         DustCity dustCity = DustCity.getDustCityByString(location.get(1));
         StarGazingCity starGazingCity = StarGazingCity.getStarGazingCityByString(location.get(0));
 
+        log.info("weatherCity = {}",weatherCity);
+        log.info("moonCity = {}",moonCity);
+        log.info("dustCity = {}",dustCity);
+        log.info("starGazingCity = {}",starGazingCity);
+
+
         List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity);
         SunMoonDto moon = moonAPI.getMoon(moonCity);
         List<WeatherApiDto2> weather = weatherApi.getWeather(weatherCity);
         DustApiDto dust = dustApi.getDust(dustCity);
 
-        Location newLocation = new Location(null, null, address, location.get(0), board);
+
+        LocationStarMoonDustDto result = new LocationStarMoonDustDto(
+                starGazing,
+                moon,
+                weather,
+                dust,
+                address
+        );
+        log.info("result = {}", result);
+        return result;
+    }
+
+    @Transactional
+    public void saveStarLocationWeather(Board board, LocationStarMoonDustDto result ) {
+        List<String> location = processAddress(result.getAddress());
+
+        Location newLocation =
+                new Location(36.21, 126.21, result.getAddress(), location.get(0), board);
         Location saveLocation = locationRepository.save(newLocation);
 
+        Star newStar =
+                new Star(
+                    result.getMoon().getMoonrise(),
+                    result.getMoon().getMoonSet(),
+                    Long.valueOf(result.getStarGazing().get(0).getValue().longValue()),
+                    saveLocation
+                );
+        Star saveStar = starRepository.save(newStar);
 
+        for (WeatherApiDto2 weatherApiDto2 : result.getWeather()) {
+            Weather newWeather =
+                    new Weather(
+                            weatherApiDto2.getHumidity(),
+                            weatherApiDto2.getWeather(),
+                            weatherApiDto2.getTemperature(),
+                            weatherApiDto2.getMaxTemperature(),
+                            weatherApiDto2.getMinTemperature(),
+                            weatherApiDto2.getPrecipitationProbability(),
+                            weatherApiDto2.getFcstTime(),
+                            result.getDust().getPm10Value(),
+                            weatherApiDto2.getBaseDate(),
+                            saveLocation);
 
+            Weather saveWeather = weatherRepository.save(newWeather);
+        }
     }
 
 }

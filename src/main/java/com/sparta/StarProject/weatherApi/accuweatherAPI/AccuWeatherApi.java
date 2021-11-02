@@ -44,6 +44,8 @@ public class AccuWeatherApi {
             starGazingDtoList.add(newStarGazingDto);
         }
 
+        log.info("stargazing = {}", starGazingDtoList);
+
         return starGazingDtoList;
     }
 

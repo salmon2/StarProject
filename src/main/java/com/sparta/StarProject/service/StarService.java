@@ -2,6 +2,7 @@ package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
+import com.sparta.StarProject.domain.Weather;
 import com.sparta.StarProject.dto.StarGuideResponseDto;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarRepository;
@@ -20,15 +21,7 @@ public class StarService {
         Optional<Location> findLocation = locationRepository.findById(locationId);
         Location location = findLocation.get();
 
-        Star findStar = location.getStar();
-//
-//        StarGuideResponseDto starGuideResponseDto = new StarGuideResponseDto(
-//                    findStar.getMoonrise(),
-//                    findStar.getMoonSet(),
-//                    findStar.getHumidity(),
-//                    findStar.getWeather(),
-//                    findStar.getTemperature()
-//        );
+
 
         return null;
     }
