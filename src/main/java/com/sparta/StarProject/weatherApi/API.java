@@ -61,13 +61,14 @@ public class API {
         MoonCity moonCity = MoonCity.getMoonCityByString(location.get(0), location.get(1));
         DustCity dustCity = DustCity.getDustCityByString(location.get(1));
         StarGazingCity starGazingCity = StarGazingCity.getStarGazingCityByString(location.get(0));
-        //List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity);
 
-        List<StarGazingDto> starGazing = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            StarGazingDto starGazingDto = new StarGazingDto();
-            starGazing.add(starGazingDto);
-        }
+        log.info("weatherCity = {}",weatherCity);
+        log.info("moonCity = {}",moonCity);
+        log.info("dustCity = {}",dustCity);
+        log.info("starGazingCity = {}",starGazingCity);
+
+
+        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity);
         SunMoonDto moon = moonAPI.getMoon(moonCity);
         List<WeatherApiDto2> weather = weatherApi.getWeather(weatherCity);
         DustApiDto dust = dustApi.getDust(dustCity);
@@ -89,18 +90,16 @@ public class API {
         List<String> location = processAddress(result.getAddress());
 
         Location newLocation =
-                new Location(null, null, result.getAddress(), location.get(0), board);
+                new Location(36.21, 126.21, result.getAddress(), location.get(0), board);
         Location saveLocation = locationRepository.save(newLocation);
 
-//        Star newStar =
-//                new Star(
-//                    result.getMoon().getMoonrise(),
-//                    result.getMoon().getMoonSet(),
-//                    Long.valueOf(result.getStarGazing().get(0).getValue().longValue()),
-//                    saveLocation
-//                );
-
-        Star newStar = new Star();
+        Star newStar =
+                new Star(
+                    result.getMoon().getMoonrise(),
+                    result.getMoon().getMoonSet(),
+                    Long.valueOf(result.getStarGazing().get(0).getValue().longValue()),
+                    saveLocation
+                );
         Star saveStar = starRepository.save(newStar);
 
         for (WeatherApiDto2 weatherApiDto2 : result.getWeather()) {
