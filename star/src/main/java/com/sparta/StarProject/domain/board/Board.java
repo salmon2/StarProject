@@ -6,6 +6,7 @@ import com.sparta.StarProject.domain.HashTag;
 import com.sparta.StarProject.domain.Like;
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.dto.BoardRequestDto;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -29,9 +30,10 @@ import static javax.persistence.FetchType.*;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name = "Board")
 @EntityListeners(AuditingEntityListener.class)
-public class Board extends Timestamped{
+public class Board extends Timestamped {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
 
@@ -58,7 +60,6 @@ public class Board extends Timestamped{
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private List<HashTag> hashTagList = new ArrayList<>();
-
 
 
 }

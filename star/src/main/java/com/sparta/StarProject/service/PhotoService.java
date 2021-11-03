@@ -1,7 +1,7 @@
 package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.StarInfo;
-import com.sparta.StarProject.domain.repository.StarInfoRepository;
+import com.sparta.StarProject.repository.StarInfoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

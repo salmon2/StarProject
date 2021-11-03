@@ -18,23 +18,15 @@ public class Star {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    private String moonrise;
-    private String moonSet;
-    private String visibility;
-    private String humidity;
-    private String weather;
-    private String temperature;
-
+    private String moonrise;    //월출
+    private String moonSet;     //월몰
     private Long StarGazing;
 
-    public Star(String moonrise, String moonSet, String visibility, String humidity, String weather,
-                String temperature, Long starGazing, Location location) {
+    public Star(String moonrise, String moonSet,
+
+               Long starGazing, Location location) {
         this.moonrise = moonrise;
         this.moonSet = moonSet;
-        this.visibility = visibility;
-        this.humidity = humidity;
-        this.weather = weather;
-        this.temperature = temperature;
         this.location = location;
         this.StarGazing = starGazing;
     }
