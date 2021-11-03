@@ -34,7 +34,7 @@ public class Board extends Timestamped{
     private Long id;
 
 
-    private String title;
+    private String locationName;
     private String address;
     private String content;
     @Column( length = 100000 )
@@ -50,7 +50,7 @@ public class Board extends Timestamped{
 
 
     public Board(String title, String content, String img, User user) {
-        this.title = title;
+        this.locationName = title;
         this.content = content;
         this.img = img;
         this.user = user;
@@ -63,7 +63,7 @@ public class Board extends Timestamped{
     private List<HashTag> hashTagList = new ArrayList<>();
 
     public Board(String title, String address, String content, String img, User user) {
-        this.title = title;
+        this.locationName = title;
         this.address = address;
         this.content = content;
         this.img = img;

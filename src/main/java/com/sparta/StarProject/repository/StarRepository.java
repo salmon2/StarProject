@@ -9,4 +9,5 @@ import java.util.List;
 public interface StarRepository  extends JpaRepository<Star, Long> {
     List<Star> findAllByLocation(Location location);
     List<Star> findTop3ByOrderByStarGazingDesc();
+    List<Star> findAllByOrderByStarGazingDesc();
 }

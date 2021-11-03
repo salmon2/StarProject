@@ -17,8 +17,6 @@ import java.util.List;
 public class StarController {
     private final StarService starService;
 
-
-
     @GetMapping("/star/info")
     public ResponseDto getStarInfo(@RequestParam Double latitude, @RequestParam Double longitude){
 
@@ -43,8 +41,6 @@ public class StarController {
         return  new ResponseDto(200L, "성공", recommendStarResponseDtos);
 
     }
-
-
 
 
 }
