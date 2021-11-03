@@ -22,13 +22,13 @@ public class Star {
 
     private String moonrise;    //월출
     private String moonSet;     //월몰
-    private Long StarGazing;
+    private Long starGazing;
 
     public Star(String moonrise, String moonSet, Long starGazing, Location location) {
         this.moonrise = moonrise;
         this.moonSet = moonSet;
         this.location = location;
-        this.StarGazing = starGazing;
+        this.starGazing = starGazing;
     }
 
 }

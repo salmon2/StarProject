@@ -17,8 +17,8 @@ public class Location {
     @Id @GeneratedValue
     private Long id;
 
-    private Double xLocation;
-    private Double yLocation;
+    private Double longitude;
+    private Double latitude;
 
     private String address;
     private String cityName;
@@ -35,8 +35,8 @@ public class Location {
 
 
     public Location(Double xLocation, Double yLocation, String address, String cityName, Board board) {
-        this.xLocation = xLocation;
-        this.yLocation = yLocation;
+        this.longitude = xLocation;
+        this.latitude = yLocation;
         this.address = address;
         this.cityName = cityName;
         this.board = board;
