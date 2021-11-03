@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -25,7 +27,7 @@ public class UserService {
     }
 
     //회원가입
-    public User registerUser(SignUpRequestDto requestDto) {
+    public User registerUser(SignUpRequestDto requestDto) throws StarProjectException {
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         String username = requestDto.getUsername();
@@ -45,13 +47,13 @@ public class UserService {
         String pwCheck = requestDto.getPasswordCheck();
 
         //패스워드 8자 이상 20자 이하
-//        if (!pw.isEmpty() && !pwCheck.isEmpty()) {
-//            if(pw.length() >= 8 && pw.length() <= 20){
-//                if(!pw.equals(pwCheck)){
-//                    throw new StarProjectException(ErrorCode.PASSWORD_CHECK);
-//                }
-//            }
-//        }
+        if (!pw.isEmpty() && !pwCheck.isEmpty()) {
+            if(pw.length() >= 8 && pw.length() <= 20){
+                if(!pw.equals(pwCheck)){
+                    throw new StarProjectException(ErrorCode.PASSWORD_CHECK);
+                }
+            }
+        }
 
         User user = new User(username, password, nickname);
         return userRepository.save(user);
@@ -70,30 +72,32 @@ public class UserService {
         return user;
     }
 
-//    //username 중복
-//    public Map<String, String> sameId(UserRequestDto userRequestDto) {
-//        User user = userRepository.findByUsername(userRequestDto.getUsername()).orElseThrow(null);
-//
-//        Map<String, String> result = new HashMap<>();
-//        if (user == null) {
-//            result.put("result", "success");
-//            return result;
-//        }
-//        result.put("result", "fail");
-//        result.put("message", "중복된 ID가 있습니다.");
-//        return result;
-//    }
-//    public Map<String, String> sameNickname (SignUpRequestDto signUpRequestDto){
-//        User user = userRepository.findByNickname(signUpRequestDto.getNickname()).orElseThrow(null);
-//
-//        Map<String, String> result = new HashMap<>();
-//        if(user == null) {
-//            result.put("result", "seuccess");
-//            return result;
-//        }
-//        result.put("result" , "fail");
-//        result.put("message", "중복된 nickname이 있습니다.");
-//        return result;
-//    }
+    //username 중복
+    public Map<String, String> sameId(UserRequestDto userRequestDto) {
+        User user = userRepository.findByUsername(userRequestDto.getUsername()).orElseThrow(null);
+
+        Map<String, String> result = new HashMap<>();
+        if (user == null) {
+            result.put("code", "200");
+            result.put("msg", "성공");
+            return result;
+        }
+        result.put("code", "501");
+        result.put("msg", "사용 불가능한 유저네임 입니다.");
+        return result;
+    }
+    public Map<String, String> sameNickname (SignUpRequestDto signUpRequestDto){
+        User user = userRepository.findByNickname(signUpRequestDto.getNickname()).orElseThrow(null);
+
+        Map<String, String> result = new HashMap<>();
+        if(user == null) {
+            result.put("code", "200");
+            result.put("msg", "성공");
+            return result;
+        }
+        result.put("code" , "501");
+        result.put("message", "사용 불가능한 닉네임입니다.");
+        return result;
+    }
 
 }
