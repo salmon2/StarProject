@@ -4,7 +4,10 @@ import com.sparta.StarProject.dto.DetailBoardDto;
 import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +24,15 @@ public class BoardController {
         DetailBoardDto detailBoardDto = boardService.getDetailBoard(boardId);
 
         return new ResponseDto(200L, "성공", detailBoardDto);
+    }
+
+    @DeleteMapping("/detail/delete")
+    public ResponseDto deleteDetailBoard(@RequestParam Long boardId,
+                                         @AuthenticationPrincipal UserDetails userDetails){
+        int result = boardService.deleteBoard(boardId, userDetails);
+        if(result == 1)
+            return new ResponseDto(200L, "성공", null);
+        return new ResponseDto(500L, "실패", null);
     }
 
 }

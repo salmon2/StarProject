@@ -8,6 +8,7 @@ import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.UserMakeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,5 +37,18 @@ public class BoardService {
 
 
         return newDetailBoardDto;
+    }
+
+    public int deleteBoard(Long boardId, UserDetails userDetails) {
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(
+                () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
+        );
+
+        if(findBoard.getUser().getUsername().equals(userDetails.getUsername())){
+            boardRepository.deleteById(boardId);
+            return 1;
+        }
+
+        return 0;
     }
 }

@@ -1,24 +1,16 @@
 package com.sparta.StarProject.controller;
 
 
-
 import com.sparta.StarProject.dto.RecommendStarResponseDto;
 import com.sparta.StarProject.dto.ResponseDto;
-
 import com.sparta.StarProject.service.StarService;
-
 import com.sparta.StarProject.dto.StarInfoResponseDto;
 import com.sparta.StarProject.dto.StarWeatherResponseDto;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
