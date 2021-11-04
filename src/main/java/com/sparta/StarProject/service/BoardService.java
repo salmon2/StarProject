@@ -40,12 +40,9 @@ public class BoardService {
             findBoard = (UserMake)findBoard;
         }
 
-        DetailBoardDto newDetailBoardDto = new DetailBoardDto(findBoard.getId(), findBoard.getUser().getNickname(),
-                findBoard.getLocationName(), findBoard.getLocation().getAddress(), findBoard.getImg(),
-                findBoard.getContent(), findBoard.getLocation().getLongitude(), findBoard.getLocation().getLatitude());
 
 
-        return newDetailBoardDto;
+        return null;
     }
 
     public int deleteBoard(Long boardId, UserDetails userDetails) {
@@ -68,7 +65,7 @@ public class BoardService {
 
         for (Star star : starList) {
             Location location = star.getLocation();
-            Board board = location.getBoard();
+            Board board = null;
 
             CommunityDto communityDto = new CommunityDto(
                     board.getId(),

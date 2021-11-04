@@ -40,21 +40,20 @@ public class Board extends Timestamped{
     @Column( length = 100000 )
     private String img;
 
+    private Double longitude;
+    private Double latitude;
+
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
-    @OneToOne(mappedBy = "board", fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "location_id")
+    @JsonIgnore
     private Location location;
 
-
-    public Board(String title, String content, String img, User user) {
-        this.locationName = title;
-        this.content = content;
-        this.img = img;
-        this.user = user;
-    }
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private Set<Like> like = new HashSet<>();
@@ -62,11 +61,14 @@ public class Board extends Timestamped{
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private List<HashTag> hashTagList = new ArrayList<>();
 
-    public Board(String title, String address, String content, String img, User user) {
-        this.locationName = title;
+    public Board(String locationName, String address, String content, String img, Double longitude, Double latitude, User user, Location location) {
+        this.locationName = locationName;
         this.address = address;
         this.content = content;
         this.img = img;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.user = user;
+        this.location = location;
     }
 }

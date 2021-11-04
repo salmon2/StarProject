@@ -18,10 +18,24 @@ import java.util.Map;
 @Component
 @Slf4j
 public class AccuWeatherApi {
-    private final String apiKey = "WYPVfBdCy5hYrmNgjSj9ihfSJ45cDJQl";
     private final String StarGazingId = "12";
 
-    public List<StarGazingDto> getStarGazing(StarGazingCity cityId) throws Exception {
+    public List<StarGazingDto> getStarGazing(StarGazingCity cityId, int count) throws Exception {
+
+        String apiKey = "8HAczaRzd9THEjlcmTrzucgtfFNDl8LK";
+        if(count > 50){
+            apiKey = "LsVoEqE65kPf3Sz91zBhJaMlO4scciuB";
+        }
+        else if(count >110){
+            apiKey = "WYPVfBdCy5hYrmNgjSj9ihfSJ45cDJQl";
+        }
+        else if(count > 150){
+            apiKey = "p6wV66GJIR4kIkpqe4DlHIXLg4f6GE5r";
+        }
+        else if(count > 200){
+            apiKey = "GAeuwGP4vCAKeVLY47RyEzoKeozEJG82";
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType( new MediaType("application", "json", Charset.forName("UTF-8")));
 
@@ -45,13 +59,14 @@ public class AccuWeatherApi {
         }
 
         log.info("stargazing = {}", starGazingDtoList);
+        log.info("star count = {}", count);
 
         return starGazingDtoList;
     }
 
     public static void main(String[] args) throws Exception {
         AccuWeatherApi accuWeatherApi = new AccuWeatherApi();
-        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(StarGazingCity.광주);
+        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(StarGazingCity.가평, 0);
         for (StarGazingDto starGazingDto : starGazing) {
             System.out.println("starGazingDto = " + starGazingDto);
         }

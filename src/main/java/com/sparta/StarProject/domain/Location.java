@@ -17,15 +17,10 @@ public class Location {
     @Id @GeneratedValue
     private Long id;
 
-    private Double longitude;
-    private Double latitude;
-
-    private String address;
     private String cityName;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Board> board = new ArrayList<>();
 
     @OneToOne(mappedBy = "location", fetch = FetchType.LAZY)
     private Star star;
@@ -34,11 +29,7 @@ public class Location {
     private List<Weather> weatherList = new ArrayList<>();
 
 
-    public Location(Double xLocation, Double yLocation, String address, String cityName, Board board) {
-        this.longitude = xLocation;
-        this.latitude = yLocation;
-        this.address = address;
+    public Location(String cityName) {
         this.cityName = cityName;
-        this.board = board;
     }
 }

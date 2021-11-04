@@ -225,9 +225,11 @@ public class WeatherApi {
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         WeatherApi weatherApi = new WeatherApi();
-        List<WeatherApiDto2> weather = weatherApi.getWeather(WeatherCity.대구);
-        for (WeatherApiDto2 weatherApiDto2 : weather) {
-            System.out.println("weatherApiDto2 = " + weatherApiDto2);
+        for (WeatherCity value : WeatherCity.values()) {
+            List<WeatherApiDto2> weather = weatherApi.getWeather(value);
+            for (WeatherApiDto2 weatherApiDto2 : weather) {
+                System.out.println("weatherApiDto2 = " + weatherApiDto2);
+            }
         }
     }
 

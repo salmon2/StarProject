@@ -4,8 +4,8 @@ import com.sparta.StarProject.api.locationAPI.AddressToGps;
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
 import com.sparta.StarProject.domain.Weather;
-import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.*;
+import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarRepository;
 import com.sparta.StarProject.repository.WeatherRepository;
@@ -55,7 +55,7 @@ public class API {
     }
 
     //외부 api 쏘기
-    public LocationStarMoonDustDto findInfoByAddress(String address) throws Exception {
+    public LocationStarMoonDustDto findInfoByAddress(String address, int count) throws Exception {
         List<String> location = processAddress(address);    //경상북도 구미시, 구미
                                                             //서울특별시 ~~, 서울
 
@@ -72,7 +72,7 @@ public class API {
 
 
 
-        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity);
+        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity, count);
         SunMoonDto moon = moonAPI.getMoon(moonCity);
         List<WeatherApiDto2> weather = weatherApi.getWeather(weatherCity);
         DustApiDto dust = dustApi.getDust(dustCity);
@@ -93,11 +93,9 @@ public class API {
 
     //외부 api 쏜거 저장하기
     @Transactional
-    public void saveStarLocationWeather(Board board, LocationStarMoonDustDto result ) {
+    public Location saveStarLocationWeather(LocationStarMoonDustDto result ) {
         List<String> location = processAddress(result.getAddress());
-
-        Location newLocation =
-                new Location(36.21, 126.21, result.getAddress(), location.get(0), board);
+        Location newLocation = new Location(location.get(0));
         Location saveLocation = locationRepository.save(newLocation);
 
         Star newStar =
@@ -125,6 +123,8 @@ public class API {
 
             Weather saveWeather = weatherRepository.save(newWeather);
         }
+
+        return saveLocation;
     }
 
 }

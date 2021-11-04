@@ -1,9 +1,11 @@
 package com.sparta.StarProject;
 
+import com.sparta.StarProject.api.accuweatherAPI.StarGazingCity;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.dto.LocationStarMoonDustDto;
 import com.sparta.StarProject.repository.CampingRepository;
+import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.UserRepository;
 import com.sparta.StarProject.api.API;
 import com.sparta.StarProject.api.CampingList;
@@ -12,17 +14,20 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @NoArgsConstructor
-//@Component
+@Component
 public class SimpleListener implements ApplicationListener<ApplicationStartedEvent> {
     @Autowired
     UserRepository userRepository;
     @Autowired
     CampingRepository campingRepository;
+    @Autowired
+    LocationRepository locationRepository;
 
     @Autowired
     API api;
@@ -32,17 +37,30 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
     @Transactional
     public void onApplicationEvent(ApplicationStartedEvent event) {
         User user = new User("기남", "asdf", "salmon2");
+        userRepository.save(user);
 
-        for (CampingList value : CampingList.values()) {
-            Camping campingData = new Camping(value.getName(), value.getAddress(), value.getAddress(), value.getImgSrc(), user, "campingData");
-            campingRepository.save(campingData);
-
+        int count = 0;
+        for (StarGazingCity city : StarGazingCity.values()) {
+            LocationStarMoonDustDto infoByAddress = api.findInfoByAddress(city.getKorName(), count);
+            api.saveStarLocationWeather(infoByAddress);
+            count++;
+            if(count >48)
+                break;
         }
 
-        List<Camping> campingList = campingRepository.findAll();
-        for (Camping camping : campingList) {
-            LocationStarMoonDustDto infoByAddress = api.findInfoByAddress(camping.getAddress());
-            api.saveStarLocationWeather(camping, infoByAddress);
+        int count2= 0;
+        for (CampingList value : CampingList.values()) {
+            if(count2 >5){
+                break;
+            }
+            List<String> strings = api.processAddress(value.getAddress());
+
+            Location findLocation = locationRepository.findByCityName(strings.get(0));
+
+            Camping campingData = new Camping(value.getName(), value.getAddress(),
+                    value.getAddress(), value.getImgSrc(), value.getLocationX(), value.getLocationY(), user, findLocation, "campingData");
+            campingRepository.save(campingData);
+            count2++;
         }
     }
 

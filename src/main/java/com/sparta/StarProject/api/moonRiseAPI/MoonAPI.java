@@ -35,7 +35,7 @@ public class MoonAPI {
         //urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode("광주(경기)", "UTF-8")); /*지역*/
         urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode(moonCity.getKorName(), "UTF-8")); /*지역*/
 
-        //System.out.println("urlBuilder.toString() = " + urlBuilder.toString());
+        System.out.println("urlBuilder.toString() = " + urlBuilder.toString());
 
         DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
@@ -76,8 +76,17 @@ public class MoonAPI {
             }	// for end
         }	// if end
 
-        log.info("moon = NULL");
-        return null;
+        SunMoonDto newSunMoonDto = new SunMoonDto(
+                "moonrise",
+                "moonset",
+                "sunrise",
+                "sunset",
+                "location",
+                "aste",
+                "locdate");
+
+        log.info("moon = {}", newSunMoonDto);
+        return newSunMoonDto;
     }
 
     private static String getTagValue(String tag, Element eElement) {
@@ -107,8 +116,11 @@ public class MoonAPI {
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         MoonAPI moonAPI = new MoonAPI();
-        SunMoonDto moon = moonAPI.getMoon(MoonCity.대구);
-        System.out.println("moon = " + moon);
+        for (MoonCity value : MoonCity.values()) {
+            SunMoonDto moon = moonAPI.getMoon(value);
+            System.out.println("moon = " + moon);
+        }
+
     }
 
 

@@ -27,7 +27,7 @@ public class DustApi {
         urlBuilder.append("&" + URLEncoder.encode("sidoName","UTF-8") + "=" + URLEncoder.encode(dustCity.getKorName(), "UTF-8")); /*시도 이름(전국, 서울, 부산, 대구, 인천, 광주, 대전, 울산, 경기, 강원, 충북, 충남, 전북, 전남, 경북, 경남, 제주, 세종)*/
         urlBuilder.append("&" + URLEncoder.encode("ver","UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8")); /*버전별 상세 결과 참고*/
         URL url = new URL(urlBuilder.toString());
-        //System.out.println("urlBuilder = " + urlBuilder.toString());
+        System.out.println("urlBuilder = " + urlBuilder.toString());
 
         DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
@@ -42,15 +42,22 @@ public class DustApi {
             Node nNode = nList.item(temp);
             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
+                String pm10Value = getTagValue("pm10Value", eElement);
+                if( pm10Value == null){
+                    continue;
+                }
+                if( pm10Value.equals("-")){
+                    continue;
+                }
                 DustApiDto newDustApiDto = new DustApiDto(getTagValue("pm10Value", eElement));
-                log.info("dust = {}", newDustApiDto);
+                log.info("dust = {}", newDustApiDto.getPm10Value());
                 return newDustApiDto;
-
             }
         }
         log.info("dust = null");
         return null;
     }
+
     private static String getTagValue(String tag, Element eElement) {
         NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
         Node nValue = (Node) nlList.item(0);
@@ -62,7 +69,12 @@ public class DustApi {
 
     public static void main(String[] args) throws Exception {
         DustApi dustApi = new DustApi();
-        dustApi.getDust(DustCity.ChungcheongbukDo);
+        dustApi.getDust(DustCity.GyeonggiDo);
+
+//        for (DustCity value : DustCity.values()) {
+//            dustApi.getDust(value);
+//        }
+//
     }
 
 }

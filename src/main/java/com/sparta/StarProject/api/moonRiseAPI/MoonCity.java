@@ -139,6 +139,9 @@ public enum MoonCity {
         else if(location.equals("경남")){
             return MoonCity.부산;
         }
+        else if(location.equals("고성")){
+            return MoonCity.목포;
+        }
 
         return null;
     }

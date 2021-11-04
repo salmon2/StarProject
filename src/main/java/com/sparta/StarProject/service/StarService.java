@@ -27,16 +27,16 @@ public class StarService {
 
     public StarInfoResponseDto getStarInfo(Double latitude, Double longitude){
 
-        Location findLocation = locationRepository.findByLongitudeAndLatitude(longitude, latitude);
-
-        Star findStar = findLocation.getStar();
-
-        StarInfoResponseDto starInfoResponseDto = new StarInfoResponseDto(
-                findStar.getMoonrise(),
-                findStar.getMoonSet(),
-                findStar.getStarGazing()
-        );
-        return starInfoResponseDto;
+//        //Location findLocation = locationRepository.findByLongitudeAndLatitude(longitude, latitude);
+//
+//        Star findStar = findLocation.getStar();
+//
+//        StarInfoResponseDto starInfoResponseDto = new StarInfoResponseDto(
+//                findStar.getMoonrise(),
+//                findStar.getMoonSet(),
+//                findStar.getStarGazing()
+//        );
+        return null;
 
     }
 
@@ -44,26 +44,26 @@ public class StarService {
 
     public StarWeatherResponseDto getWeatherInfo(Double latitude, Double longitude, String predictTime) {
 
-        Location location = locationRepository.findByLongitudeAndLatitude(longitude, latitude);
-        List<Weather> weatherList = location.getWeatherList();
-        Weather findWeather = null;
-
-        for (Weather weather : weatherList) {
-            if(weather.getPredictTime().equals(predictTime)){
-                findWeather = weather;
-            }
-        }
-
-        StarWeatherResponseDto starWeatherResponseDto = new StarWeatherResponseDto(
-                location.getCityName(),
-                findWeather.getRainPercent(),
-                findWeather.getHumidity(),
-                findWeather.getWeather(),
-                findWeather.getTemperature(),
-                findWeather.getMaxTemperature(),
-                findWeather.getMinTemperature()
-        );
-        return starWeatherResponseDto;
+//        Location location = locationRepository.findByLongitudeAndLatitude(longitude, latitude);
+//        List<Weather> weatherList = location.getWeatherList();
+//        Weather findWeather = null;
+//
+//        for (Weather weather : weatherList) {
+//            if(weather.getPredictTime().equals(predictTime)){
+//                findWeather = weather;
+//            }
+//        }
+//
+//        StarWeatherResponseDto starWeatherResponseDto = new StarWeatherResponseDto(
+//                location.getCityName(),
+//                findWeather.getRainPercent(),
+//                findWeather.getHumidity(),
+//                findWeather.getWeather(),
+//                findWeather.getTemperature(),
+//                findWeather.getMaxTemperature(),
+//                findWeather.getMinTemperature()
+//        );
+        return null;
     }
 
 
