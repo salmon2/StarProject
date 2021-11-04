@@ -44,13 +44,14 @@ public class BoardController {
         return new ResponseDto(500L, "실패", null);
     }
     @PostMapping("/board")
-    public ResponseDto createBoard(@RequestBody BoardDto boardDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseDto createBoard(@RequestBody BoardDto boardDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
 
         User user = userDetails.getUser();
         Board createBoard = boardService.createBoard(boardDto, user);
 
         return new ResponseDto(200L,"성공",boardDto);
     }
+
     @PutMapping("/board/update")
     public ResponseDto updateBoard(@RequestParam Long id,@RequestBody BoardDto boardDto){
         Board updateBoard = boardService.updateBoard(id, boardDto);

@@ -1,5 +1,7 @@
 package com.sparta.StarProject.service;
 
+import com.sparta.StarProject.api.API;
+import com.sparta.StarProject.api.locationAPI.AddressToGps;
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
 import com.sparta.StarProject.domain.User;
@@ -10,12 +12,10 @@ import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.BoardDto;
 import com.sparta.StarProject.dto.CommunityDto;
 import com.sparta.StarProject.dto.DetailBoardDto;
+import com.sparta.StarProject.dto.GeographicDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
-import com.sparta.StarProject.repository.BoardRepository;
-import com.sparta.StarProject.repository.CampingRepository;
-import com.sparta.StarProject.repository.StarRepository;
-import com.sparta.StarProject.repository.UserMakeRepository;
+import com.sparta.StarProject.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,9 @@ public class BoardService {
     private final CampingRepository campingRepository;
     private final UserMakeRepository userMakeRepository;
     private final StarRepository starRepository;
+    private final API api;
+    private final LocationRepository locationRepository;
+    private final AddressToGps addressToGps;
 
 
     public DetailBoardDto getDetailBoard(Long id) {
@@ -91,13 +94,22 @@ public class BoardService {
 
     //게시글 생성
     @Transactional
-    public Board createBoard(BoardDto boardDto, User user){
-        Board saveBoard = new Board(
-                boardDto.getAddress(),
-                boardDto.getLocationName(),
+    public Board createBoard(BoardDto boardDto, User user) throws Exception {
+        List<String> strings = api.processAddress(boardDto.getAddress()); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
+        Location findLocation = locationRepository.findByCityName(strings.get(0));
+        GeographicDto address = addressToGps.getAddress(boardDto.getAddress());
+
+
+        Board saveBoard = new UserMake(
+                boardDto.getLocationName(), //title
+                boardDto.getAddress(),      //address
                 boardDto.getImg(),
                 boardDto.getContent(),
-                user
+                Double.valueOf(address.getLongitude()),
+                Double.valueOf(address.getLatitude()),
+                user,
+                findLocation,
+                "유저가 만듬"
         );
 
         Board createBoard = boardRepository.save(saveBoard);
