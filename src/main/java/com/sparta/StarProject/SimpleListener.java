@@ -48,6 +48,7 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
                 break;
         }
 
+
         int count2= 0;
         for (CampingList value : CampingList.values()) {
             if(count2 >5){
@@ -62,6 +63,8 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
             campingRepository.save(campingData);
             count2++;
         }
+
+
     }
 
 }

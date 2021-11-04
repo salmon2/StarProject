@@ -53,7 +53,6 @@ public class BoardService {
     }
 
 
-
     public int deleteBoard(Long boardId, UserDetails userDetails) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
@@ -66,6 +65,7 @@ public class BoardService {
 
         return 0;
     }
+
 
     public List<CommunityDto> getBoardList() {
         List<CommunityDto>  communityDtoList = new ArrayList<>();
