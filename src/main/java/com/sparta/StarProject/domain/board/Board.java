@@ -6,6 +6,7 @@ import com.sparta.StarProject.domain.HashTag;
 import com.sparta.StarProject.domain.Like;
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.dto.BoardDto;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -32,7 +33,6 @@ public class Board extends Timestamped{
 
     @Id @GeneratedValue
     private Long id;
-
 
     private String locationName;
     private String address;
@@ -70,5 +70,12 @@ public class Board extends Timestamped{
         this.latitude = latitude;
         this.user = user;
         this.location = location;
+    }
+    public Board(String address,String content,String img,String locationName, User user){
+        this.locationName = locationName;
+        this.address = address;
+        this.img = img;
+        this.content = content;
+        this.user = user;
     }
 }

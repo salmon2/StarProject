@@ -2,10 +2,12 @@ package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
+import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.domain.board.Timestamped;
 import com.sparta.StarProject.domain.board.UserMake;
+import com.sparta.StarProject.dto.BoardDto;
 import com.sparta.StarProject.dto.CommunityDto;
 import com.sparta.StarProject.dto.DetailBoardDto;
 import com.sparta.StarProject.repository.BoardRepository;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,8 +83,20 @@ public class BoardService {
 
             communityDtoList.add(communityDto);
         }
-
-
         return communityDtoList;
+    }
+    @Transactional
+    public Board createBoard(BoardDto boardDto, User user){
+        Board saveBoard = new Board(
+                boardDto.getAddress(),
+                boardDto.getLocationName(),
+                boardDto.getImg(),
+                boardDto.getContent(),
+                user
+        );
+
+        Board createBoard = boardRepository.save(saveBoard);
+        return createBoard;
+
     }
 }
