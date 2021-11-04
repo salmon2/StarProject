@@ -49,7 +49,9 @@ public class BoardController {
         User user = userDetails.getUser();
         Board createBoard = boardService.createBoard(boardDto, user);
 
-        return new ResponseDto(200L,"성공","null");
-
+        return new ResponseDto(200L,"성공",createBoard);
     }
+//    @PutMapping("/board/update")
+//    public ResponseDto updateBoard(@RequestParam )
+
 }

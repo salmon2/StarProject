@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -85,6 +86,8 @@ public class BoardService {
         }
         return communityDtoList;
     }
+
+    //게시글 생성
     @Transactional
     public Board createBoard(BoardDto boardDto, User user){
         Board saveBoard = new Board(
@@ -97,6 +100,16 @@ public class BoardService {
 
         Board createBoard = boardRepository.save(saveBoard);
         return createBoard;
-
     }
+//
+//    //게시글 수정
+//    @Transactional
+//    public Board updateBoard(Long id, BoardDto boardDto){
+//        Optional<Board> board = boardRepository.findById(id);
+//        Board findBoard = board.get();
+//
+//        findBoard.update(boardDto);
+//        return findBoard;
+//    }
+
 }
