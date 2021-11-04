@@ -78,4 +78,17 @@ public class Board extends Timestamped{
         this.content = content;
         this.user = user;
     }
+    public Board(String address,String content,String img,String locationName){
+        this.locationName = locationName;
+        this.address = address;
+        this.img = img;
+        this.content = content;
+    }
+
+    public void update(BoardDto boardDto){
+        this.locationName = locationName;
+        this.address = address;
+        this.img = img;
+        this.content = content;
+    }
 }

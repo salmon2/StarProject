@@ -10,6 +10,8 @@ import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.BoardDto;
 import com.sparta.StarProject.dto.CommunityDto;
 import com.sparta.StarProject.dto.DetailBoardDto;
+import com.sparta.StarProject.exception.ErrorCode;
+import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.StarRepository;
@@ -101,15 +103,15 @@ public class BoardService {
         Board createBoard = boardRepository.save(saveBoard);
         return createBoard;
     }
-//
-//    //게시글 수정
-//    @Transactional
-//    public Board updateBoard(Long id, BoardDto boardDto){
-//        Optional<Board> board = boardRepository.findById(id);
-//        Board findBoard = board.get();
-//
-//        findBoard.update(boardDto);
-//        return findBoard;
-//    }
+
+    //게시글 수정
+    @Transactional
+    public Board updateBoard(Long id, BoardDto boardDto){
+        Board board = boardRepository.findById(id).orElseThrow(
+                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+        );
+        board.update(boardDto);
+        return board;
+    }
 
 }
