@@ -2,6 +2,7 @@ package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.dto.CommunityDto;
 import com.sparta.StarProject.dto.DetailBoardDto;
+import com.sparta.StarProject.dto.MapBoardDto;
 import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class BoardController {
     @GetMapping("/community/list")
     public ResponseDto getBoard(){
 
-        List<CommunityDto> commutyDtoList = boardService.getBoardList();
-        return new ResponseDto(200L, "성공", commutyDtoList);
+        List<CommunityDto> communityDtoList = boardService.getBoardList();
+        return new ResponseDto(200L, "성공", communityDtoList);
     }
 
 
@@ -42,6 +43,12 @@ public class BoardController {
         if(result == 1)
             return new ResponseDto(200L, "성공", null);
         return new ResponseDto(500L, "실패", null);
+    }
+
+    @GetMapping("/board/map/list")
+    public ResponseDto getMapList(){
+        List<MapBoardDto> mapBoardDto = boardService.getBoardMapList();
+        return new ResponseDto(200L, "성공", mapBoardDto);
     }
 
 }

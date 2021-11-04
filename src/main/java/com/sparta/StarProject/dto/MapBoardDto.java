@@ -7,15 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class DetailBoardDto {
+@NoArgsConstructor
+public class MapBoardDto {
     private Long id;
-    private String writer;
-    private String title;
-    private String address;
-    private String img;
-    private String content;
+    private String dtype;
     private Double x_location;
     private Double y_location;
+    private String address;
+    private Long starGazing;
+    private String img;
 }

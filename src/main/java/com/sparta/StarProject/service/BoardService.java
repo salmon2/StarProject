@@ -8,11 +8,13 @@ import com.sparta.StarProject.domain.board.Timestamped;
 import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.CommunityDto;
 import com.sparta.StarProject.dto.DetailBoardDto;
+import com.sparta.StarProject.dto.MapBoardDto;
 import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.StarRepository;
 import com.sparta.StarProject.repository.UserMakeRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -33,17 +35,24 @@ public class BoardService {
                 () -> new NullPointerException("존재하는 게시글이 없습니다.")
         );
 
-        if (findBoard instanceof Camping){
-            findBoard = (Camping)findBoard;
-        }
-        else if (findBoard instanceof UserMake){
-            findBoard = (UserMake)findBoard;
-        }
+        findBoard = getCampingOrUserMake(findBoard);
+
+        DetailBoardDto detailBoardDto = new DetailBoardDto(
+                findBoard.getId(),
+                findBoard.getUser().getNickname(),
+                findBoard.getLocationName(),
+                findBoard.getAddress(),
+                findBoard.getImg(),
+                findBoard.getContent(),
+                findBoard.getLongitude(),   //경도
+                findBoard.getLatitude()     //위도
+        );
 
 
-
-        return null;
+        return detailBoardDto;
     }
+
+
 
     public int deleteBoard(Long boardId, UserDetails userDetails) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(
@@ -62,26 +71,76 @@ public class BoardService {
         List<CommunityDto>  communityDtoList = new ArrayList<>();
         List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
 
-
         for (Star star : starList) {
             Location location = star.getLocation();
-            Board board = null;
-
-            CommunityDto communityDto = new CommunityDto(
-                    board.getId(),
-                    board.getUser().getNickname(),
-                    board.getLocationName(),
-                    location.getCityName(),
-                    board.getImg(),
-                    3L,
-                    board.getContent(),
-                    Timestamped.TimeToString(board.getModifiedAt())
-            );
-
-            communityDtoList.add(communityDto);
+            List<Board> boardList = location.getBoard();
+            for (Board board : boardList) {
+                CommunityDto communityDto = new CommunityDto(
+                        board.getId(),
+                        board.getUser().getNickname(),
+                        board.getLocationName(),
+                        location.getCityName(),
+                        board.getImg(),
+                        3L,
+                        board.getContent(),
+                        Timestamped.TimeToString(board.getModifiedAt())
+                );
+                communityDtoList.add(communityDto);
+            }
         }
 
 
         return communityDtoList;
     }
+
+    public List<MapBoardDto> getBoardMapList() {
+        List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
+        List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
+
+        for (Star star : starList) {
+            Location location = star.getLocation();
+            List<Board> boardList = location.getBoard();
+            for (Board board : boardList) {
+               board = getCampingOrUserMake(board);
+
+                MapBoardDto mapBoardDto = new MapBoardDto(
+                        board.getId(),
+                        getTypeToString(board),
+                        board.getLongitude(),
+                        board.getLatitude(),
+                        board.getAddress(),
+                        star.getStarGazing(),
+                        board.getImg()
+                );
+
+                mapBoardDtoList.add(mapBoardDto);
+            }
+        }
+
+        return mapBoardDtoList;
+    }
+
+
+    private Board getCampingOrUserMake(Board board) {
+        if (board instanceof Camping){
+            board = (Camping) board;
+        }
+        else if (board instanceof UserMake){
+            board = (UserMake) board;
+        }
+        return board;
+    }
+
+    private String getTypeToString(Board board){
+        if (board instanceof Camping){
+            return "Camping";
+        }
+        else if (board instanceof UserMake){
+            return "UserMaking";
+        }
+        return "None Type";
+    }
+
+
+
 }
