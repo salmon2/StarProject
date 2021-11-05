@@ -5,6 +5,7 @@ import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.BoardDto;
 import com.sparta.StarProject.dto.CommunityDto;
 import com.sparta.StarProject.dto.DetailBoardDto;
+import com.sparta.StarProject.dto.MapBoardDto;
 import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
@@ -23,8 +24,8 @@ public class BoardController {
     @GetMapping("/community/list")
     public ResponseDto getBoard(){
 
-        List<CommunityDto> commutyDtoList = boardService.getBoardList();
-        return new ResponseDto(200L, "성공", commutyDtoList);
+        List<CommunityDto> communityDtoList = boardService.getBoardList();
+        return new ResponseDto(200L, "성공", communityDtoList);
     }
 
     @GetMapping("/detail")
@@ -56,6 +57,15 @@ public class BoardController {
     public ResponseDto updateBoard(@RequestParam Long id,@RequestBody BoardDto boardDto){
         Board updateBoard = boardService.updateBoard(id, boardDto);
         return new ResponseDto(200L,"성공",updateBoard);
+    }
+
+
+
+
+    @GetMapping("/board/map/list")
+    public ResponseDto getMapList(){
+        List<MapBoardDto> mapBoardDto = boardService.getBoardMapList();
+        return new ResponseDto(200L, "성공", mapBoardDto);
     }
 
 }
