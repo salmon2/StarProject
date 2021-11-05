@@ -60,8 +60,6 @@ public class BoardController {
     }
 
 
-
-
     @GetMapping("/board/map/list")
     public ResponseDto getMapList(){
         List<MapBoardDto> mapBoardDto = boardService.getBoardMapList();

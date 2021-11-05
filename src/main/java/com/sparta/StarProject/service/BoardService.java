@@ -56,7 +56,7 @@ public class BoardService {
         DetailBoardDto detailBoardDto = new DetailBoardDto(
                 findBoard.getId(),
                 findBoard.getUser().getNickname(),
-                findBoard.getLocationName(),
+                findBoard.getTitle(),
                 findBoard.getAddress(),
                 findBoard.getImg(),
                 findBoard.getContent(),
@@ -94,7 +94,7 @@ public class BoardService {
                 CommunityDto communityDto = new CommunityDto(
                         board.getId(),
                         board.getUser().getNickname(),
-                        board.getLocationName(),
+                        board.getTitle(),
                         location.getCityName(),
                         board.getImg(),
                         3L,

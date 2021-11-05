@@ -19,22 +19,17 @@ import java.util.Map;
 @Slf4j
 public class AccuWeatherApi {
     private final String StarGazingId = "12";
+    private final String[] apiKeyList = {
+            "WYPVfBdCy5hYrmNgjSj9ihfSJ45cDJQl",
+            "p6wV66GJIR4kIkpqe4DlHIXLg4f6GE5r",
+            "8HAczaRzd9THEjlcmTrzucgtfFNDl8LK",
+            "LsVoEqE65kPf3Sz91zBhJaMlO4scciuB",
+            "GAeuwGP4vCAKeVLY47RyEzoKeozEJG82"
+    };
 
     public List<StarGazingDto> getStarGazing(StarGazingCity cityId, int count) throws Exception {
 
-        String apiKey = "8HAczaRzd9THEjlcmTrzucgtfFNDl8LK";
-        if(count > 50){
-            apiKey = "LsVoEqE65kPf3Sz91zBhJaMlO4scciuB";
-        }
-        else if(count >110){
-            apiKey = "WYPVfBdCy5hYrmNgjSj9ihfSJ45cDJQl";
-        }
-        else if(count > 150){
-            apiKey = "p6wV66GJIR4kIkpqe4DlHIXLg4f6GE5r";
-        }
-        else if(count > 200){
-            apiKey = "GAeuwGP4vCAKeVLY47RyEzoKeozEJG82";
-        }
+        String apiKey = apiKeyList[count%apiKeyList.length];
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType( new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -48,6 +43,11 @@ public class AccuWeatherApi {
                         "/" + StarGazingId +
                         "?apikey=" + apiKey +
                         "&language=ko-kr", HttpMethod.GET, httpEntity, String.class);
+        log.info("AcuuWeather URL = {}", "http://dataservice.accuweather.com/indices/v1/daily/5day" +
+                "/" + cityId.getId().toString() +
+                "/" + StarGazingId +
+                "?apikey=" + apiKey +
+                "&language=ko-kr");
 
         JSONArray jsonArray = new JSONArray(responseEntity.getBody().toString());
 

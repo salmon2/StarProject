@@ -1,11 +1,11 @@
 package com.sparta.StarProject.controller;
 
 
-import com.sparta.StarProject.dto.RecommendStarResponseDto;
-import com.sparta.StarProject.dto.ResponseDto;
+import com.sparta.StarProject.api.StellaList;
+import com.sparta.StarProject.domain.StarInfo;
+import com.sparta.StarProject.dto.*;
+import com.sparta.StarProject.repository.StarInfoRepository;
 import com.sparta.StarProject.service.StarService;
-import com.sparta.StarProject.dto.StarInfoResponseDto;
-import com.sparta.StarProject.dto.StarWeatherResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +16,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StarController {
     private final StarService starService;
+    private final StarInfoRepository starInfoRepository;
+
+    @GetMapping("/star/photo/saveData")
+    public ResponseDto saveStarPhoto(){
+        starInfoRepository.deleteAll();
+        for (StellaList value : StellaList.values()) {
+            StarInfo starInfo = new StarInfo(value.getImg(), value.getName(), value.getComment(), value.getMonth().toString());
+            starInfoRepository.save(starInfo);
+        }
+
+        return null;
+    }
+    @GetMapping("/star/photo")
+    public ResponseDto getStarPhoto(){
+        StarPhotoDto starPhotoDto = starService.getStarPhoto();
+
+        return new ResponseDto(200L, "성공", starPhotoDto);
+    }
+
+
 
     @GetMapping("/star/info")
     public ResponseDto getStarInfo(@RequestParam Double latitude, @RequestParam Double longitude){

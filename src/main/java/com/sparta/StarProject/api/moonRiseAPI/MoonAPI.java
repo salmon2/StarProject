@@ -35,7 +35,7 @@ public class MoonAPI {
         //urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode("광주(경기)", "UTF-8")); /*지역*/
         urlBuilder.append("&" + URLEncoder.encode("location","UTF-8") + "=" + URLEncoder.encode(moonCity.getKorName(), "UTF-8")); /*지역*/
 
-        System.out.println("urlBuilder.toString() = " + urlBuilder.toString());
+        log.info("moonAPi url = {}",urlBuilder.toString());
 
         DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
