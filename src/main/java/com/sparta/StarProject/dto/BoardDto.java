@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BoardDto {
     private String address;
-    private String locationName;
+    private String title;
     private String content;
     private String img;
 }

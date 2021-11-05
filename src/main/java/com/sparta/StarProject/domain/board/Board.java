@@ -34,7 +34,7 @@ public class Board extends Timestamped{
     @Id @GeneratedValue
     private Long id;
 
-    private String locationName;
+    private String title;
     private String address;
     private String content;
     @Column( length = 100000 )
@@ -61,8 +61,8 @@ public class Board extends Timestamped{
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private List<HashTag> hashTagList = new ArrayList<>();
 
-    public Board(String locationName, String address, String content, String img, Double longitude, Double latitude, User user, Location location) {
-        this.locationName = locationName;
+    public Board(String title, String address, String content, String img, Double longitude, Double latitude, User user, Location location) {
+        this.title = title;
         this.address = address;
         this.content = content;
         this.img = img;
@@ -71,22 +71,22 @@ public class Board extends Timestamped{
         this.user = user;
         this.location = location;
     }
-    public Board(String address,String content,String img,String locationName, User user){
-        this.locationName = locationName;
+    public Board(String address,String content,String img,String title, User user){
+        this.title = title;
         this.address = address;
         this.img = img;
         this.content = content;
         this.user = user;
     }
-    public Board(String address,String content,String img,String locationName){
-        this.locationName = locationName;
+    public Board(String address,String content,String img,String title){
+        this.title = title;
         this.address = address;
         this.img = img;
         this.content = content;
     }
 
     public void update(BoardDto boardDto){
-        this.locationName = locationName;
+        this.title = title;
         this.address = address;
         this.img = img;
         this.content = content;

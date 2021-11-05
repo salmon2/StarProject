@@ -33,12 +33,10 @@ public class UserController {
 
     //가입요청
     @PostMapping("/user/signup")
-    public Map<String, String> registerUser(@RequestBody SignUpRequestDto requestDto)
+    public ResponseDto registerUser(@RequestBody SignUpRequestDto requestDto)
             throws StarProjectException {
         User user = userService.registerUser(requestDto);
-        Map<String, String> msg = new HashMap<>();
-        msg.put("msg", "성공");
-        return msg;
+        return new ResponseDto(200L,"성공",null);
     }
 
     //로그인
