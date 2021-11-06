@@ -17,9 +17,9 @@ import java.util.List;
 public class StarController {
     private final StarService starService;
 
-    @GetMapping("/star/info")
-    public ResponseDto getStarInfo(@RequestParam Double latitude, @RequestParam Double longitude){
 
+    @GetMapping("/star/info")
+    public ResponseDto getStarInfo(@RequestParam double latitude, @RequestParam double longitude) throws Exception {
         StarInfoResponseDto starInfoResponseDto = starService.getStarInfo(latitude, longitude);
 
         return new ResponseDto(200L, "성공", starInfoResponseDto);
@@ -27,7 +27,7 @@ public class StarController {
 
 
     @GetMapping("/star/info/time")
-    public ResponseDto getWeatherByTime(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam("time") String predictTime){
+    public ResponseDto getWeatherByTime(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam("time") String predictTime) throws Exception {
         StarWeatherResponseDto starWeatherResponseDto = starService.getWeatherInfo(latitude, longitude, predictTime);
 
         return new ResponseDto(200L, "성공", starWeatherResponseDto);
