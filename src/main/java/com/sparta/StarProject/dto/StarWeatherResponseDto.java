@@ -14,8 +14,9 @@ public class StarWeatherResponseDto {
     private String temperature; //온도
     private String maxTemperature; //최고온도
     private String minTemperature; //최고온도
+    private String dust;    //미세먼지
 
-    public StarWeatherResponseDto(String location, String rainPercent, String humidity, String weather, String temperature, String maxTemperature, String minTemperature) {
+    public StarWeatherResponseDto(String location, String rainPercent, String humidity, String weather, String temperature, String maxTemperature, String minTemperature, String dust) {
         this.location = location;
         this.rainPercent = rainPercent;
         this.humidity = humidity;
@@ -23,5 +24,6 @@ public class StarWeatherResponseDto {
         this.temperature = temperature;
         this.maxTemperature = maxTemperature;
         this.minTemperature = minTemperature;
+        this.dust = dust;
     }
 }

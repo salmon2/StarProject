@@ -69,7 +69,8 @@ public class StarService {
                 findWeather.getWeather(),
                 findWeather.getTemperature(),
                 findWeather.getMaxTemperature(),
-                findWeather.getMinTemperature()
+                findWeather.getMinTemperature(),
+                findWeather.getDust()
         );
 
         return starWeatherResponseDto;
