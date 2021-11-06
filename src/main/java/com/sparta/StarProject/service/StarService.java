@@ -14,6 +14,8 @@ import com.sparta.StarProject.repository.StarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,15 +81,11 @@ public class StarService {
 
             List<Weather> weatherList = location.getWeatherList();
             Weather weather = weatherList.get(0);
-            String maxTemperature = weather.getMaxTemperature();
-            String minTemperature = weather.getMinTemperature();
-            Double avg = (Double.valueOf(maxTemperature) + Double.valueOf(minTemperature))/2;
-
 
             RecommendStarResponseDto recommendStarResponseDto = new RecommendStarResponseDto(
                     location.getCityName(),
                     star.getStarGazing(),
-                    avg.longValue()
+                    weather.getTemperature()
             );
 
             recommendStarResponseDtos.add(recommendStarResponseDto);
