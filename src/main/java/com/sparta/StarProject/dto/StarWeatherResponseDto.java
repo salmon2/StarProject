@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class StarWeatherResponseDto {
-    private String location;
+    private String cityName;
     private String rainPercent; //강수확률
     private String humidity;    //습도
     private String weather;     //날씨
@@ -16,8 +16,8 @@ public class StarWeatherResponseDto {
     private String minTemperature; //최고온도
     private String dust;    //미세먼지
 
-    public StarWeatherResponseDto(String location, String rainPercent, String humidity, String weather, String temperature, String maxTemperature, String minTemperature, String dust) {
-        this.location = location;
+    public StarWeatherResponseDto(String cityName, String rainPercent, String humidity, String weather, String temperature, String maxTemperature, String minTemperature, String dust) {
+        this.cityName = cityName;
         this.rainPercent = rainPercent;
         this.humidity = humidity;
         this.weather = weather;
