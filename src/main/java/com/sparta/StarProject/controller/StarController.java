@@ -27,18 +27,16 @@ public class StarController {
             StarInfo starInfo = new StarInfo(value.getImg(), value.getName(), value.getComment(), value.getMonth().toString());
             starInfoRepository.save(starInfo);
         }
-
         return null;
     }
+
+
     @GetMapping("/star/photo")
     public ResponseDto getStarPhoto(){
         StarPhotoDto starPhotoDto = starService.getStarPhoto();
 
         return new ResponseDto(200L, "성공", starPhotoDto);
     }
-
-
-
 
     @GetMapping("/star/info")
     public ResponseDto getStarInfo(@RequestParam double latitude, @RequestParam double longitude) throws Exception {
@@ -58,9 +56,9 @@ public class StarController {
 
     @GetMapping("/star/hot")
     public ResponseDto recommendStar() {
-        List<RecommendStarResponseDto> recommendStarResponseDtos = starService.recommendStar();
+        starHotDto starHotDto = starService.recommendStar();
 
-        return  new ResponseDto(200L, "성공", recommendStarResponseDtos);
+        return  new ResponseDto(200L, "성공", starHotDto);
 
     }
 

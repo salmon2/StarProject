@@ -81,7 +81,7 @@ public class AddressToGps {
 
     public static void main(String[] args) throws Exception {
         AddressToGps addressToGps = new AddressToGps();
-        GeographicDto address = addressToGps.getAddress("대구광역시 달서구 야외음악당로49길 23");
+        GeographicDto address = addressToGps.getAddress("서울특별시 마포구");
         log.info("위도 = {}, 경도 = {}", address.getLatitude(), address.getLongitude());
     }
 

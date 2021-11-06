@@ -44,16 +44,11 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
             LocationStarMoonDustDto infoByAddress = api.findInfoByAddress(city.getKorName(), count);
             api.saveStarLocationWeather(infoByAddress);
             count++;
-            if(count >48)
-                break;
         }
 
 
         int count2= 0;
         for (CampingList value : CampingList.values()) {
-            if(count2 >5){
-                break;
-            }
             List<String> strings = api.processAddress(value.getAddress());
 
             Location findLocation = locationRepository.findByCityName(strings.get(0));

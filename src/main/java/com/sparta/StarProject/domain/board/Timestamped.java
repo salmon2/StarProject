@@ -34,17 +34,21 @@ public abstract class Timestamped {
         SimpleDateFormat format1 = new SimpleDateFormat ( "yyyyMMdd");
         SimpleDateFormat format2 = new SimpleDateFormat ( "HH00");
         SimpleDateFormat format3 = new SimpleDateFormat ( "MM");
+        SimpleDateFormat format4 = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+
         Date rawTime = new Date();
 
         String date = format1.format(rawTime);
         String time = format2.format(rawTime);
         String month = format3.format(rawTime);
+        String date2 = format4.format(rawTime);
 
         List<String> result = new ArrayList<>();
 
         result.add(date);
         result.add(time);
         result.add(month);
+        result.add(date2);
 
         return result;
     }

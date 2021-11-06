@@ -8,10 +8,7 @@ import com.sparta.StarProject.domain.StarInfo;
 import com.sparta.StarProject.domain.Weather;
 
 import com.sparta.StarProject.domain.board.Timestamped;
-import com.sparta.StarProject.dto.RecommendStarResponseDto;
-import com.sparta.StarProject.dto.StarInfoResponseDto;
-import com.sparta.StarProject.dto.StarPhotoDto;
-import com.sparta.StarProject.dto.StarWeatherResponseDto;
+import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarInfoRepository;
 import com.sparta.StarProject.repository.StarRepository;
@@ -19,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,11 +71,12 @@ public class StarService {
                 findWeather.getMaxTemperature(),
                 findWeather.getMinTemperature()
         );
+
         return starWeatherResponseDto;
     }
 
 
-    public List<RecommendStarResponseDto> recommendStar() {
+    public starHotDto recommendStar() {
         List<RecommendStarResponseDto> recommendStarResponseDtos = new ArrayList<>();
         List<Star> hotList = starRepository.findTop3ByOrderByStarGazingDesc();
 
@@ -98,8 +94,13 @@ public class StarService {
 
             recommendStarResponseDtos.add(recommendStarResponseDto);
         }
+        List<String> currentTime = Timestamped.getCurrentTime();
 
-        return recommendStarResponseDtos;
+
+        starHotDto starHotDto = new starHotDto(currentTime.get(3), recommendStarResponseDtos);
+
+
+        return starHotDto;
     }
 
     public StarPhotoDto getStarPhoto() {
