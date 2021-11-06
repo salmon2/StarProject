@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -37,9 +39,9 @@ public class StarController {
 
 
 
-    @GetMapping("/star/info")
-    public ResponseDto getStarInfo(@RequestParam Double latitude, @RequestParam Double longitude){
 
+    @GetMapping("/star/info")
+    public ResponseDto getStarInfo(@RequestParam double latitude, @RequestParam double longitude) throws Exception {
         StarInfoResponseDto starInfoResponseDto = starService.getStarInfo(latitude, longitude);
 
         return new ResponseDto(200L, "성공", starInfoResponseDto);
@@ -47,7 +49,7 @@ public class StarController {
 
 
     @GetMapping("/star/info/time")
-    public ResponseDto getWeatherByTime(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam("time") String predictTime){
+    public ResponseDto getWeatherByTime(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam("time") String predictTime) throws Exception {
         StarWeatherResponseDto starWeatherResponseDto = starService.getWeatherInfo(latitude, longitude, predictTime);
 
         return new ResponseDto(200L, "성공", starWeatherResponseDto);

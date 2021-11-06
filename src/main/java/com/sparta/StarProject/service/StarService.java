@@ -1,5 +1,7 @@
 package com.sparta.StarProject.service;
 
+import com.sparta.StarProject.api.API;
+import com.sparta.StarProject.api.locationAPI.GpsToAddress;
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
 import com.sparta.StarProject.domain.StarInfo;
@@ -17,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,48 +33,50 @@ public class StarService {
     private final LocationRepository locationRepository;
     private final StarRepository starRepository;
     private final StarInfoRepository starInfoRepository;
+    private final GpsToAddress gpsToAddress;
+    private final API api;
 
 
 
-    public StarInfoResponseDto getStarInfo(Double latitude, Double longitude){
+    public StarInfoResponseDto getStarInfo(double latitude, double longitude) throws Exception{
+        String address = gpsToAddress.getAddress(latitude,longitude);
+        List<String> cityName = api.processAddress(address);
+        Location findLocation = locationRepository.findByCityName(cityName.get(0));
 
-//        //Location findLocation = locationRepository.findByLongitudeAndLatitude(longitude, latitude);
-//
-//        Star findStar = findLocation.getStar();
-//
-//        StarInfoResponseDto starInfoResponseDto = new StarInfoResponseDto(
-//                findStar.getMoonrise(),
-//                findStar.getMoonSet(),
-//                findStar.getStarGazing()
-//        );
-        return null;
+        Star findStar = findLocation.getStar();
 
+        StarInfoResponseDto starInfoResponseDto = new StarInfoResponseDto(
+                findStar.getMoonrise(),
+                findStar.getMoonSet(),
+                findStar.getStarGazing()
+        );
+        return starInfoResponseDto;
     }
 
+    public StarWeatherResponseDto getWeatherInfo(Double latitude, Double longitude, String predictTime) throws Exception {
+        String address = gpsToAddress.getAddress(latitude,longitude);
+        List<String> cityName = api.processAddress(address);
+        Location findLocation = locationRepository.findByCityName(cityName.get(0));
 
+        List<Weather> weatherList = findLocation.getWeatherList();
+        Weather findWeather = null;
 
-    public StarWeatherResponseDto getWeatherInfo(Double latitude, Double longitude, String predictTime) {
+        for (Weather weather : weatherList) {
+            if(weather.getPredictTime().equals(predictTime)){
+                findWeather = weather;
+            }
+        }
 
-//        Location location = locationRepository.findByLongitudeAndLatitude(longitude, latitude);
-//        List<Weather> weatherList = location.getWeatherList();
-//        Weather findWeather = null;
-//
-//        for (Weather weather : weatherList) {
-//            if(weather.getPredictTime().equals(predictTime)){
-//                findWeather = weather;
-//            }
-//        }
-//
-//        StarWeatherResponseDto starWeatherResponseDto = new StarWeatherResponseDto(
-//                location.getCityName(),
-//                findWeather.getRainPercent(),
-//                findWeather.getHumidity(),
-//                findWeather.getWeather(),
-//                findWeather.getTemperature(),
-//                findWeather.getMaxTemperature(),
-//                findWeather.getMinTemperature()
-//        );
-        return null;
+        StarWeatherResponseDto starWeatherResponseDto = new StarWeatherResponseDto(
+                findLocation.getCityName(),
+                findWeather.getRainPercent(),
+                findWeather.getHumidity(),
+                findWeather.getWeather(),
+                findWeather.getTemperature(),
+                findWeather.getMaxTemperature(),
+                findWeather.getMinTemperature()
+        );
+        return starWeatherResponseDto;
     }
 
 
@@ -83,15 +89,11 @@ public class StarService {
 
             List<Weather> weatherList = location.getWeatherList();
             Weather weather = weatherList.get(0);
-            String maxTemperature = weather.getMaxTemperature();
-            String minTemperature = weather.getMinTemperature();
-            Double avg = (Double.valueOf(maxTemperature) + Double.valueOf(minTemperature))/2;
-
 
             RecommendStarResponseDto recommendStarResponseDto = new RecommendStarResponseDto(
                     location.getCityName(),
                     star.getStarGazing(),
-                    avg.longValue()
+                    weather.getTemperature()
             );
 
             recommendStarResponseDtos.add(recommendStarResponseDto);
