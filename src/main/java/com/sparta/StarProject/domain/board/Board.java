@@ -71,7 +71,8 @@ public class Board extends Timestamped{
         this.user = user;
         this.location = location;
     }
-    public Board(String address, String content, String img, String title, User user){
+
+    public Board(String address,String content,String img,String title, User user){
         this.title = title;
         this.address = address;
         this.img = img;

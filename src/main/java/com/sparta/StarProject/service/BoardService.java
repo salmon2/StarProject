@@ -116,7 +116,7 @@ public class BoardService {
 
 
         Board saveBoard = new UserMake(
-                boardDto.getLocationName(), //title
+                boardDto.getTitle(), //title
                 boardDto.getAddress(),      //address
                 boardDto.getImg(),
                 boardDto.getContent(),

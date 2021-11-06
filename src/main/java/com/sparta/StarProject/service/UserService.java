@@ -32,12 +32,18 @@ public class UserService {
 
         String username = requestDto.getUsername();
         Optional<User> found = userRepository.findByUsername(username);
+        if (username.isEmpty()){
+            throw new StarProjectException(ErrorCode.USERNAME_NOT_FOUND);
+        }
         if (found.isPresent()) {
             throw new StarProjectException(ErrorCode.USERNAME_DUPLICATE);
         }
 
         String nickname = requestDto.getNickname();
         Optional<User> found2 = userRepository.findByNickname(nickname);
+        if (nickname.isEmpty()){
+            throw new StarProjectException(ErrorCode.NICKNAME_NOT_FOUND);
+        }
         if (found2.isPresent()) {
             throw new StarProjectException(ErrorCode.NICKNAME_DUPLICATE);
         }
@@ -46,6 +52,9 @@ public class UserService {
         String pw = requestDto.getPassword();
         String pwCheck = requestDto.getPasswordCheck();
 
+        if (pw.isEmpty()){
+            throw new StarProjectException(ErrorCode.PASSWORD_FOT_FOUND);
+        }
         //패스워드 8자 이상 20자 이하
         if (!pw.isEmpty() && !pwCheck.isEmpty()) {
             if(pw.length() >= 8 && pw.length() <= 20){
@@ -64,7 +73,14 @@ public class UserService {
         User user = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(
                 () -> new StarProjectException(ErrorCode.USER_NOT_FOUND)
         );
-
+        String username = requestDto.getUsername();
+        if (username.isEmpty()){
+            throw new StarProjectException(ErrorCode.USERNAME_NOT_FOUND);
+        }
+        String password = requestDto.getPassword();
+        if (password.isEmpty()){
+            throw new StarProjectException(ErrorCode.PASSWORD_FOT_FOUND);
+        }
         //패스워드 암호화
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new StarProjectException(ErrorCode.USER_NOT_FOUND);

@@ -11,7 +11,8 @@ public class RestApiExceptionHandler {
     @ExceptionHandler(value = {StarProjectException.class})
     public ResponseEntity<Object> handleApiRequestException(StarProjectException ex) {
         RestApiException restApiException = new RestApiException();
-        restApiException.setCode(ex.getMessage());
+        restApiException.setCode("500");
+        restApiException.setData(null);
 //        restApiException.setMsg("알 수 없는 이유로 실패하였습니다.");
 //        restApiException.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         restApiException.setMsg(ex.getErrorCode().getMessage());
