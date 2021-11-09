@@ -29,12 +29,6 @@ public class BoardController {
         return new ResponseDto(200L, "성공", communityDtoList);
     }
 
-//    @GetMapping("/community/list")
-//    public ResponseDto sortBoard(@RequestParam String sort){
-//
-//        List<CommunityDto> communityDtoList = boardService.getBoardList(sort);
-//        return new ResponseDto(200L, "성공",communityDtoList)
-//    }
 
     @GetMapping("/detail")
     public ResponseDto detailBoard(@RequestParam Long boardId){

@@ -177,6 +177,7 @@ public class BoardService {
                 MapBoardDto mapBoardDto = new MapBoardDto(
                         board.getId(),
                         getTypeToString(board),
+                        board.getTitle(),
                         board.getLongitude(),
                         board.getLatitude(),
                         board.getAddress(),

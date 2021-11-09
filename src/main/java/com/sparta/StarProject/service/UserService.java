@@ -90,34 +90,32 @@ public class UserService {
 
     //username 중복
     public Map<String, String> sameUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(null);
+        Optional<User> user = userRepository.findByUsername(username);
 
         Map<String, String> result = new HashMap<>();
-        if (user == null) {
+        if (!user.isPresent()) {
             result.put("code", "200");
             result.put("msg", "성공");
             result.put("data", null);
             return result;
         }
-        result.put("code", "501");
-        result.put("msg", "사용 불가능한 유저네임 입니다.");
-        result.put("data", null);
-        return result;
+        else{
+            throw new StarProjectException(ErrorCode.USERNAME_DUPLICATE);
+        }
     }
-    public Map<String, String> sameNickname (String nickname){
-        User user = userRepository.findByNickname(nickname).orElseThrow(null);
 
+    public Map<String, String> sameNickname (String nickname){
+        Optional<User> user = userRepository.findByNickname(nickname);
         Map<String, String> result = new HashMap<>();
-        if(user == null) {
+        if (!user.isPresent()) {
             result.put("code", "200");
             result.put("msg", "성공");
             result.put("data", null);
             return result;
         }
-        result.put("code" , "501");
-        result.put("msg", "사용 불가능한 닉네임입니다.");
-        result.put("data", null);
-        return result;
+        else{
+            throw new StarProjectException(ErrorCode.NICKNAME_DUPLICATE);
+        }
     }
 
 }
