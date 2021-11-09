@@ -8,16 +8,11 @@ import lombok.AllArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class MainDto {
     private String title;
     private String address;
+    private String contents;
     private Long StarGazing;
     private String img;
-
-    public MainDto(String title, String address, Long starGazing, String img) {
-        this.title = title;
-        this.address = address;
-        StarGazing = starGazing;
-        this.img = img;
-    }
 }

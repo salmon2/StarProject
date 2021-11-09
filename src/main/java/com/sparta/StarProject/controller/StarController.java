@@ -59,8 +59,6 @@ public class StarController {
         starHotDto starHotDto = starService.recommendStar();
 
         return  new ResponseDto(200L, "성공", starHotDto);
-
     }
-
 
 }
