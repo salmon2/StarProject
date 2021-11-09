@@ -11,10 +11,7 @@ import com.sparta.StarProject.security.jwt.JwtTokenProvider;
 import com.sparta.StarProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +33,7 @@ public class UserController {
     public ResponseDto registerUser(@RequestBody SignUpRequestDto requestDto)
             throws StarProjectException {
         User user = userService.registerUser(requestDto);
-        return new ResponseDto(200L,"성공",null);
+        return new ResponseDto(200L, "성공", null);
     }
 
     //로그인
@@ -65,5 +62,23 @@ public class UserController {
         data.put("nickname", userDetails.getUser().getNickname());
 
         return new ResponseDto(200L, "성공", data);
+    }
+
+    //    @PostMapping("/user/username/check")
+//    public Map<String, String> sameUsername(@RequestBody UserRequestDto userRequestDto){
+//        return userService.sameUsername(userRequestDto);
+//    }
+//    @PostMapping("/user/nickname/check")
+//    public Map<String, String> sameNickname(@RequestBody SignUpRequestDto signUpRequestDto){
+//        return userService.sameNickname(signUpRequestDto);
+//    }
+    @GetMapping("/user/username/check")
+    public Map<String, String> sameUsername(@RequestParam String username) {
+        return userService.sameUsername(username);
+    }
+
+    @GetMapping("/user/nickname/check")
+    public Map<String, String> sameNickname(@RequestParam String nickname) {
+        return userService.sameNickname(nickname);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -27,6 +28,13 @@ public class BoardController {
         List<CommunityDto> communityDtoList = boardService.getBoardList();
         return new ResponseDto(200L, "성공", communityDtoList);
     }
+
+//    @GetMapping("/community/list")
+//    public ResponseDto sortBoard(@RequestParam String sort){
+//
+//        List<CommunityDto> communityDtoList = boardService.getBoardList(sort);
+//        return new ResponseDto(200L, "성공",communityDtoList)
+//    }
 
     @GetMapping("/detail")
     public ResponseDto detailBoard(@RequestParam Long boardId){
@@ -59,11 +67,9 @@ public class BoardController {
         return new ResponseDto(200L,"성공",updateBoard);
     }
 
-
     @GetMapping("/board/map/list")
     public ResponseDto getMapList(){
         List<MapBoardDto> mapBoardDto = boardService.getBoardMapList();
         return new ResponseDto(200L, "성공", mapBoardDto);
     }
-
 }

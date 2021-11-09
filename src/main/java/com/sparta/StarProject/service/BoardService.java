@@ -64,10 +64,8 @@ public class BoardService {
                 findBoard.getLatitude()     //위도
         );
 
-
         return detailBoardDto;
     }
-
 
     public int deleteBoard(Long boardId, UserDetails userDetails) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(
@@ -106,6 +104,29 @@ public class BoardService {
         }
         return communityDtoList;
     }
+
+//    public List<CommunityDto> sortBoardList(){
+//        List<CommunityDto> communityDtoList = new ArrayList<>();
+//        List<Location> LocationList = locationRepository.findAllByOrderByCityNameDesc();
+//
+//        for (Location location : LocationList) {
+//            List<Board> boardList = location.getBoard();
+//            for (Board board : boardList) {
+//                CommunityDto communityDto = new CommunityDto(
+//                        board.getId(),
+//                        board.getUser().getNickname(),
+//                        board.getTitle(),
+//                        location.getCityName(),
+//                        board.getImg(),
+//                        3L,
+//                        board.getContent(),
+//                        Timestamped.TimeToString(board.getModifiedAt())
+//                );
+//                communityDtoList.add(communityDto);
+//            }
+//        }
+//        return communityDtoList;
+//    }
 
     //게시글 생성
     @Transactional
