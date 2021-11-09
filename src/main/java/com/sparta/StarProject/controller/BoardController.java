@@ -10,6 +10,7 @@ import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,9 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/community/list")
-    public ResponseDto getBoard(){
-
-        List<CommunityDto> communityDtoList = boardService.getBoardList();
+    public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
+                                @RequestParam(defaultValue = "all") String cityName){
+        List<CommunityDto> communityDtoList = boardService.getBoardList(sort, cityName);
         return new ResponseDto(200L, "성공", communityDtoList);
     }
 

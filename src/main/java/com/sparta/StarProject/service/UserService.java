@@ -26,6 +26,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     //회원가입
     public User registerUser(SignUpRequestDto requestDto) throws StarProjectException {
         String password = passwordEncoder.encode(requestDto.getPassword());
@@ -87,6 +88,7 @@ public class UserService {
         }
         return user;
     }
+
 
     //username 중복
     public Map<String, String> sameUsername(String username) {
