@@ -10,15 +10,30 @@ public class RestApiExceptionHandler {
 
     @ExceptionHandler(value = {StarProjectException.class})
     public ResponseEntity<Object> handleApiRequestException(StarProjectException ex) {
+
+        ErrorCode errorCode = ex.getErrorCode();
         RestApiException restApiException = new RestApiException();
-        restApiException.setCode("500");
-        restApiException.setData(null);
-//        restApiException.setMsg("알 수 없는 이유로 실패하였습니다.");
-//        restApiException.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        restApiException.setMsg(ex.getErrorCode().getMessage());
+
+
+        if(errorCode.equals(ErrorCode.NICKNAME_DUPLICATE)){
+            restApiException.setCode(501L);
+            restApiException.setData(null);
+            restApiException.setMsg(ex.getErrorCode().getMessage());
+        }
+        else if (errorCode.equals(ErrorCode.USERNAME_DUPLICATE)){
+            restApiException.setCode(501L);
+            restApiException.setData(null);
+            restApiException.setMsg(ex.getErrorCode().getMessage());
+        }
+       else {
+            //공통 에러 제어
+            restApiException.setCode(500L);
+            restApiException.setData(null);
+            restApiException.setMsg(ex.getErrorCode().getMessage());
+        }
         return new ResponseEntity<>(
                 restApiException,
-                HttpStatus.INTERNAL_SERVER_ERROR
+                HttpStatus.OK
         );
     }
 }

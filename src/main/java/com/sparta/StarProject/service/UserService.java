@@ -90,7 +90,9 @@ public class UserService {
 
     //username 중복
     public Map<String, String> sameUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(null);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new StarProjectException(ErrorCode.USERNAME_AVAILABLE)
+        );
 
         Map<String, String> result = new HashMap<>();
         if (user == null) {
@@ -105,7 +107,9 @@ public class UserService {
         return result;
     }
     public Map<String, String> sameNickname (String nickname){
-        User user = userRepository.findByNickname(nickname).orElseThrow(null);
+        User user = userRepository.findByNickname(nickname).orElseThrow(
+                () -> new StarProjectException(ErrorCode.NICKNAME_DUPLICATE)
+        );
 
         Map<String, String> result = new HashMap<>();
         if(user == null) {
