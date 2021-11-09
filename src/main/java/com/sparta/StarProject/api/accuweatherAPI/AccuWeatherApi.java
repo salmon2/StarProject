@@ -24,7 +24,8 @@ public class AccuWeatherApi {
             "p6wV66GJIR4kIkpqe4DlHIXLg4f6GE5r",
             "8HAczaRzd9THEjlcmTrzucgtfFNDl8LK",
             "LsVoEqE65kPf3Sz91zBhJaMlO4scciuB",
-            "GAeuwGP4vCAKeVLY47RyEzoKeozEJG82"
+            "GAeuwGP4vCAKeVLY47RyEzoKeozEJG82",
+            "AqXAn7GgSIBTsCOFCHvL7asizcukERry"
     };
 
     public List<StarGazingDto> getStarGazing(StarGazingCity cityId, int count) throws Exception {

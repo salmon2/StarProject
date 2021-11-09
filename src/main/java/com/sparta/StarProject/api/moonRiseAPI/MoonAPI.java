@@ -53,16 +53,6 @@ public class MoonAPI {
             if(nNode.getNodeType() == Node.ELEMENT_NODE){
 
                 Element eElement = (Element) nNode;
-//                System.out.println("######################");
-//                //System.out.println(eElement.getTextContent());
-//                System.out.println("월출  : " + getTagValue("moonrise", eElement));
-//                System.out.println("월몰  : " + getTagValue("moonset", eElement));
-//                System.out.println("일몰 : " + getTagValue( "sunrise", eElement));
-//                System.out.println("일출  : " + getTagValue("sunset", eElement));
-//                System.out.println("지역  : " + getTagValue("location", eElement));
-//                System.out.println("지역  : " + getTagValue("aste", eElement));
-
-
                 SunMoonDto newSunMoonDto = new SunMoonDto(
                         getTagValue("moonrise", eElement),
                         getTagValue("moonset", eElement),
@@ -76,14 +66,7 @@ public class MoonAPI {
             }	// for end
         }	// if end
 
-        SunMoonDto newSunMoonDto = new SunMoonDto(
-                "moonrise",
-                "moonset",
-                "sunrise",
-                "sunset",
-                "location",
-                "aste",
-                "locdate");
+        SunMoonDto newSunMoonDto = null;
 
         log.info("moon = {}", newSunMoonDto);
         return newSunMoonDto;
@@ -118,7 +101,7 @@ public class MoonAPI {
         MoonAPI moonAPI = new MoonAPI();
         for (MoonCity value : MoonCity.values()) {
             SunMoonDto moon = moonAPI.getMoon(value);
-            System.out.println("moon = " + moon);
+            log.info("moon = {}", moon);
         }
 
     }

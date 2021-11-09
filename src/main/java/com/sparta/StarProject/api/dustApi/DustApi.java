@@ -73,10 +73,12 @@ public class DustApi {
         DustApi dustApi = new DustApi();
         dustApi.getDust(DustCity.GyeonggiDo);
 
-//        for (DustCity value : DustCity.values()) {
-//            dustApi.getDust(value);
-//        }
-//
+        for (DustCity value : DustCity.values()) {
+            DustApiDto dust = dustApi.getDust(value);
+            log.info("dust = {}", dust);
+
+        }
+
     }
 
 }

@@ -55,9 +55,11 @@ public class UserController {
 
     @GetMapping("/user/login/check")
     public ResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         if (userDetails == null) {
             throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
         }
+
         Map<String, Object> data = new HashMap<>();
         data.put("username", userDetails.getUser().getUsername());
         data.put("nickname", userDetails.getUser().getNickname());

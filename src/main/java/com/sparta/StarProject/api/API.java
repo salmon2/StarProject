@@ -70,13 +70,28 @@ public class API {
         log.info("dustCity = {}",dustCity);
         log.info("starGazingCity = {}",starGazingCity);
 
+        List<StarGazingDto> starGazing = null;
+        SunMoonDto moon = null;
+        List<WeatherApiDto2> weather = null;
+        DustApiDto dust = null;
+        GeographicDto geographicDto = null;
 
 
-        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity, count);
-        SunMoonDto moon = moonAPI.getMoon(moonCity);
-        List<WeatherApiDto2> weather = weatherApi.getWeather(weatherCity);
-        DustApiDto dust = dustApi.getDust(dustCity);
-        GeographicDto geographicDto = addressToGps.getAddress(address);
+        do{
+            starGazing = accuWeatherApi.getStarGazing(starGazingCity, count);
+        }while(starGazing == null);
+        do{
+            moon = moonAPI.getMoon(moonCity);
+        }while(moon == null);
+        do{
+            weather = weatherApi.getWeather(weatherCity);
+        }while(weather == null);
+        do{
+            dust = dustApi.getDust(dustCity);
+        }while(dust == null);
+        do{
+            geographicDto = addressToGps.getAddress(address);
+        }while(geographicDto ==null);
 
         LocationStarMoonDustDto result = new LocationStarMoonDustDto(
                 starGazing,

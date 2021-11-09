@@ -13,12 +13,10 @@ public enum MoonCity {
     거창("거창"),
     경산("경산"),
     경주("경주"),
-    고성("고성"),
     고양("고양"),
     고흥("고흥"),
     광양("광양"),
     광주("광주"),
-    경기광주("경기광주"),
     구미("구미"),
     군산("군산"),
     김천("김천"),
@@ -138,9 +136,6 @@ public enum MoonCity {
         }
         else if(location.equals("경남")){
             return MoonCity.부산;
-        }
-        else if(location.equals("고성")){
-            return MoonCity.목포;
         }
 
         return null;
