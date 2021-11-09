@@ -89,30 +89,34 @@ public class UserService {
     }
 
     //username 중복
-    public Map<String, String> sameId(UserRequestDto userRequestDto) {
-        User user = userRepository.findByUsername(userRequestDto.getUsername()).orElseThrow(null);
+    public Map<String, String> sameUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(null);
 
         Map<String, String> result = new HashMap<>();
         if (user == null) {
             result.put("code", "200");
             result.put("msg", "성공");
+            result.put("data", null);
             return result;
         }
         result.put("code", "501");
         result.put("msg", "사용 불가능한 유저네임 입니다.");
+        result.put("data", null);
         return result;
     }
-    public Map<String, String> sameNickname (SignUpRequestDto signUpRequestDto){
-        User user = userRepository.findByNickname(signUpRequestDto.getNickname()).orElseThrow(null);
+    public Map<String, String> sameNickname (String nickname){
+        User user = userRepository.findByNickname(nickname).orElseThrow(null);
 
         Map<String, String> result = new HashMap<>();
         if(user == null) {
             result.put("code", "200");
             result.put("msg", "성공");
+            result.put("data", null);
             return result;
         }
         result.put("code" , "501");
-        result.put("message", "사용 불가능한 닉네임입니다.");
+        result.put("msg", "사용 불가능한 닉네임입니다.");
+        result.put("data", null);
         return result;
     }
 
