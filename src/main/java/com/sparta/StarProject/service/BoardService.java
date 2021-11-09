@@ -5,20 +5,17 @@ import com.sparta.StarProject.api.locationAPI.AddressToGps;
 import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
 import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.domain.Weather;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.domain.board.Timestamped;
 import com.sparta.StarProject.domain.board.UserMake;
-import com.sparta.StarProject.dto.BoardDto;
-import com.sparta.StarProject.dto.CommunityDto;
-import com.sparta.StarProject.dto.DetailBoardDto;
+import com.sparta.StarProject.dto.*;
 
-import com.sparta.StarProject.dto.GeographicDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.*;
 
-import com.sparta.StarProject.dto.MapBoardDto;
 import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.StarRepository;
@@ -52,7 +49,32 @@ public class BoardService {
         );
 
         findBoard = getCampingOrUserMake(findBoard);
+        List<Weather> weatherList = findBoard.getLocation().getWeatherList();
+        Location findBoardLocation = findBoard.getLocation();
+        Star findStar = findBoardLocation.getStar();
 
+
+        List<DetailWeatherWeatherList> detailWeatherWeatherLists = new ArrayList<>();
+        for (Weather weather : weatherList) {
+            DetailWeatherWeatherList detailWeatherWeatherList = new DetailWeatherWeatherList(
+                    weather.getPredictTime(),
+                    Long.valueOf(weather.getRainPercent()),
+                    weather.getWeather(),
+                    Long.valueOf(weather.getHumidity()),
+                    Long.valueOf(weather.getTemperature()),
+                    Long.valueOf(weather.getDust())
+            );
+            detailWeatherWeatherLists.add(detailWeatherWeatherList);
+        }
+
+        DetailWeatherDto newDetailBoardDto = new DetailWeatherDto(
+                findBoardLocation.getCityName(),
+                Timestamped.getCurrentTime().get(3),
+                findStar.getStarGazing(),
+                findStar.getMoonrise(),
+                findStar.getMoonSet(),
+                detailWeatherWeatherLists
+        );
         DetailBoardDto detailBoardDto = new DetailBoardDto(
                 findBoard.getId(),
                 findBoard.getUser().getNickname(),
@@ -61,7 +83,8 @@ public class BoardService {
                 findBoard.getImg(),
                 findBoard.getContent(),
                 findBoard.getLongitude(),   //경도
-                findBoard.getLatitude()     //위도
+                findBoard.getLatitude(),     //위도,
+                newDetailBoardDto
         );
 
         return detailBoardDto;
@@ -71,6 +94,7 @@ public class BoardService {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
+
 
         if(findBoard.getUser().getUsername().equals(userDetails.getUsername())){
             boardRepository.deleteById(boardId);
@@ -104,29 +128,6 @@ public class BoardService {
         }
         return communityDtoList;
     }
-
-//    public List<CommunityDto> sortBoardList(){
-//        List<CommunityDto> communityDtoList = new ArrayList<>();
-//        List<Location> LocationList = locationRepository.findAllByOrderByCityNameDesc();
-//
-//        for (Location location : LocationList) {
-//            List<Board> boardList = location.getBoard();
-//            for (Board board : boardList) {
-//                CommunityDto communityDto = new CommunityDto(
-//                        board.getId(),
-//                        board.getUser().getNickname(),
-//                        board.getTitle(),
-//                        location.getCityName(),
-//                        board.getImg(),
-//                        3L,
-//                        board.getContent(),
-//                        Timestamped.TimeToString(board.getModifiedAt())
-//                );
-//                communityDtoList.add(communityDto);
-//            }
-//        }
-//        return communityDtoList;
-//    }
 
     //게시글 생성
     @Transactional

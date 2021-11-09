@@ -18,4 +18,5 @@ public class DetailBoardDto {
     private String content;
     private Double x_location;
     private Double y_location;
+    private DetailWeatherDto weather;
 }

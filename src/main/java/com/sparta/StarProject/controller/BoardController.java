@@ -29,10 +29,8 @@ public class BoardController {
         return new ResponseDto(200L, "성공", communityDtoList);
     }
 
-
     @GetMapping("/detail")
     public ResponseDto detailBoard(@RequestParam Long boardId){
-
         DetailBoardDto detailBoardDto = boardService.getDetailBoard(boardId);
 
         return new ResponseDto(200L, "성공", detailBoardDto);
@@ -47,7 +45,8 @@ public class BoardController {
         return new ResponseDto(500L, "실패", null);
     }
     @PostMapping("/board")
-    public ResponseDto createBoard(@RequestBody BoardDto boardDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
+    public ResponseDto createBoard(@RequestBody BoardDto boardDto,
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
 
         User user = userDetails.getUser();
         Board createBoard = boardService.createBoard(boardDto, user);
@@ -66,4 +65,6 @@ public class BoardController {
         List<MapBoardDto> mapBoardDto = boardService.getBoardMapList();
         return new ResponseDto(200L, "성공", mapBoardDto);
     }
+
+
 }

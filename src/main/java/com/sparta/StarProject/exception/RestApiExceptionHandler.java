@@ -16,26 +16,31 @@ public class RestApiExceptionHandler {
 
 
         if(errorCode.equals(ErrorCode.NICKNAME_DUPLICATE)){
-            restApiException.setCode(501L);
-            restApiException.setData(null);
-            restApiException.setMsg(ex.getErrorCode().getMessage());
+            ServerError(ex, restApiException, 501L);
         }
         else if (errorCode.equals(ErrorCode.USERNAME_DUPLICATE)){
-            restApiException.setCode(501L);
-            restApiException.setData(null);
-            restApiException.setMsg(ex.getErrorCode().getMessage());
+            ServerError(ex, restApiException, 501L);
         }
         else {
             //공통 에러 제어
-            restApiException.setCode(500L);
-            restApiException.setData(null);
-            restApiException.setMsg(ex.getErrorCode().getMessage());
+            ServerError(ex, restApiException, 500L);
         }
 
         return new ResponseEntity<>(
                 restApiException,
                 HttpStatus.OK
         );
+    }
+
+    @ExceptionHandler(value = {NullPointerException.class})
+    public ResponseEntity<Object> NullPointExceptionHandler(StarProjectException ex) {
+        return null;
+    }
+
+    private void ServerError(StarProjectException ex, RestApiException restApiException, long l) {
+        restApiException.setCode(l);
+        restApiException.setData(null);
+        restApiException.setMsg(ex.getErrorCode().getMessage());
     }
 
 
