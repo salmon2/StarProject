@@ -61,4 +61,6 @@ public class StarController {
         return  new ResponseDto(200L, "성공", starHotDto);
     }
 
+
+
 }
