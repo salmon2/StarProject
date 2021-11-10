@@ -1,5 +1,6 @@
 package com.sparta.StarProject.repository;
 
+import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.BoardDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     public List<Board> findBoardDto();
 
 
-
+    List<Board> findAllByUser(User user);
 }

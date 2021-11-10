@@ -5,19 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDto {
-    private String address;
+public class MyBoardDto {
     private String title;
     private String content;
     private String img;
-
-    public BoardDto(String title, String content, String img) {
-        this.title = title;
-        this.content = content;
-        this.img = img;
-    }
 }

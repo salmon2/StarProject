@@ -1,30 +1,36 @@
 package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.dto.BoardDto;
+import com.sparta.StarProject.dto.MyBoardDto;
 import com.sparta.StarProject.dto.SignUpRequestDto;
 import com.sparta.StarProject.dto.UserRequestDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.UserRepository;
+import com.sparta.StarProject.security.UserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+//    @Autowired
+//    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+//        this.userRepository = userRepository;
+//        this.passwordEncoder = passwordEncoder;
+//    }
 
 
     //회원가입
@@ -120,4 +126,18 @@ public class UserService {
         }
     }
 
+    public List<BoardDto> getBoardList(User user) {
+        List<BoardDto> boardDtos = new ArrayList<>();
+        List<Board> myBoardList = boardRepository.findAllByUser(user);
+
+        for(Board board : myBoardList){
+            BoardDto boardDto = new BoardDto(
+                    board.getTitle(),
+                    board.getContent(),
+                    board.getImg()
+            );
+            boardDtos.add(boardDto);
+        }
+        return boardDtos;
+    }
 }

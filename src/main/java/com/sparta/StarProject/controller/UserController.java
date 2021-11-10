@@ -1,9 +1,7 @@
 package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
-import com.sparta.StarProject.dto.ResponseDto;
-import com.sparta.StarProject.dto.SignUpRequestDto;
-import com.sparta.StarProject.dto.UserRequestDto;
+import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.security.UserDetailsImpl;
@@ -14,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -72,5 +71,14 @@ public class UserController {
     @GetMapping("/user/nickname/check")
     public Map<String, String> sameNickname(@RequestParam String nickname) {
         return userService.sameNickname(nickname);
+    }
+
+    @GetMapping("/my/writeList")
+    public ResponseDto getBoardList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        if(userDetails == null){
+//            throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
+//        }
+        List<BoardDto> boardDto = userService.getBoardList(userDetails.getUser());
+        return new ResponseDto(200L, "성공", boardDto);
     }
 }
