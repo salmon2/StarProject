@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface LocationRepository extends JpaRepository<Location, String> {
     Location findByCityName(String cityName);
     List<Location> findAllByOrderByCityNameDesc();
+
 }

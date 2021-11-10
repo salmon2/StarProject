@@ -34,8 +34,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final CampingRepository campingRepository;
-    private final UserMakeRepository userMakeRepository;
     private final StarRepository starRepository;
     private final API api;
     private final LocationRepository locationRepository;
@@ -213,15 +211,20 @@ public class BoardService {
     public List<SearchBoardDto> searchBoard(String key){
         List<SearchBoardDto> searchBoardDtoList = new ArrayList<>();
         List<Board> boardList = boardRepository.findByAddressStartingWith(key);
+        Star findStar = starRepository.findByStarGazing();
 
         if(boardList.isEmpty())
             return searchBoardDtoList;
 
         for (Board board : boardList) {
            SearchBoardDto searchBoardDto = new SearchBoardDto(
-                   board.getAddress(),
+                   board.getId(),
+                   getTypeToString(board),
                    board.getTitle(),
-                   board.getContent(),
+                   board.getLongitude(),
+                   board.getLatitude(),
+                   board.getAddress(),
+                   findStar.getStarGazing(),
                    board.getImg()
            );
            searchBoardDtoList.add(searchBoardDto);

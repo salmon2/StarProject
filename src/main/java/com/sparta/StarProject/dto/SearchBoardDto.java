@@ -10,8 +10,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchBoardDto {
-    private String address;
+    private Long id;
+    private String dtype;
     private String title;
-    private String content;
+    private Double x_location;
+    private Double y_location;
+    private String address;
+    private Long starGazing;
     private String img;
 }
