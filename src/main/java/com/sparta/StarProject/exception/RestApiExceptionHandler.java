@@ -44,7 +44,7 @@ public class RestApiExceptionHandler {
      * Null Porint Exception
      */
     @ExceptionHandler(value = {NullPointerException.class})
-    public ResponseEntity<Object> NullPointExceptionHandler(StarProjectException ex) {
+    public ResponseEntity<Object> NullPointExceptionHandler(Exception ex) {
         RestApiException restApiException = ServerError(ex, 500L);
 
         return new ResponseEntity<>(
@@ -54,12 +54,26 @@ public class RestApiExceptionHandler {
     }
 
 
-    private RestApiException ServerError(StarProjectException ex, long l) {
+
+    /**
+     * Not Found Gps Exception
+     */
+    @ExceptionHandler(value = {NotFoundGps.class})
+    public ResponseEntity<Object> NotFoundGps(Exception ex) {
+        RestApiException restApiException = ServerError(ex, 500L);
+
+        return new ResponseEntity<>(
+                restApiException,
+                HttpStatus.OK
+        );
+    }
+
+    private RestApiException ServerError(Exception ex, long l) {
         RestApiException restApiException = new RestApiException();
 
         restApiException.setCode(l);
         restApiException.setData(null);
-        restApiException.setMsg(ex.getErrorCode().getMessage());
+        restApiException.setMsg(ex.getMessage());
 
         return restApiException;
     }

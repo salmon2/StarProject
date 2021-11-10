@@ -3,6 +3,7 @@ package com.sparta.StarProject.controller;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.*;
+import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class BoardController {
 
     @DeleteMapping("/detail/delete")
     public ResponseDto deleteDetailBoard(@RequestParam Long boardId,
-                                         @AuthenticationPrincipal UserDetails userDetails){
+                                         @AuthenticationPrincipal UserDetails userDetails) throws StarProjectException {
         boardService.deleteBoard(boardId, userDetails);
 
         return new ResponseDto(200L, "성공", null);
@@ -51,14 +52,14 @@ public class BoardController {
     }
 
     @PutMapping("/board/update")
-    public ResponseDto updateBoard(@RequestParam Long id,@RequestBody BoardDto boardDto){
-        Board updateBoard = boardService.updateBoard(id, boardDto);
+    public ResponseDto updateBoard(@RequestParam Long boardId,@RequestBody BoardDto boardDto){
+        Board updateBoard = boardService.updateBoard(boardId, boardDto);
         return new ResponseDto(200L,"성공",updateBoard);
     }
 
     @GetMapping("/board/map/list")
-    public ResponseDto getMapList(){
-        List<MapBoardDto> mapBoardDto = boardService.getBoardMapList();
+    public ResponseDto getMapList(@RequestParam String cityName){
+        List<MapBoardDto> mapBoardDto = boardService.getBoardMapList(cityName);
         return new ResponseDto(200L, "성공", mapBoardDto);
     }
 

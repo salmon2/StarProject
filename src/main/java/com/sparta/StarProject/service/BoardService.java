@@ -13,6 +13,7 @@ import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.*;
 
 import com.sparta.StarProject.exception.ErrorCode;
+import com.sparta.StarProject.exception.NotFoundGps;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.*;
 
@@ -88,13 +89,16 @@ public class BoardService {
         return detailBoardDto;
     }
 
-    public void deleteBoard(Long boardId, UserDetails userDetails) {
+    public void deleteBoard(Long boardId, UserDetails userDetails) throws StarProjectException {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
 
         if(findBoard.getUser().getUsername().equals(userDetails.getUsername())){
             boardRepository.deleteById(boardId);
+        }
+        else{
+            throw new StarProjectException(ErrorCode.User_Forbidden);
         }
 
     }
@@ -160,6 +164,9 @@ public class BoardService {
         List<String> strings = api.processAddress(boardDto.getAddress()); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
         Location findLocation = locationRepository.findByCityName(strings.get(0));
         GeographicDto address = addressToGps.getAddress(boardDto.getAddress());
+        if(address.getLatitude().equals("")){
+            throw new NotFoundGps(ErrorCode.NotFoundGps.getMessage());
+        }
 
 
         Board saveBoard = new UserMake(
@@ -193,38 +200,32 @@ public class BoardService {
     }
 
 
-    public List<MapBoardDto> getBoardMapList() {
-        List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
-
+    public List<MapBoardDto> getBoardMapList(String cityName) {
         try {
-            List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
+            List<MapBoardDto> mapBoardDtoArrayList = new ArrayList<>();
+            List<Board> boardList = boardRepository.findByAddressContaining(cityName);
 
-            for (Star star : starList) {
-                Location location = star.getLocation();
-                List<Board> boardList = location.getBoard();
-                for (Board board : boardList) {
-                   board = getCampingOrUserMake(board);
-
-                    MapBoardDto mapBoardDto = new MapBoardDto(
-                            board.getId(),
-                            getTypeToString(board),
-                            board.getTitle(),
-                            board.getLongitude(),
-                            board.getLatitude(),
-                            board.getAddress(),
-                            star.getStarGazing(),
-                            board.getImg()
-                    );
-                    mapBoardDtoList.add(mapBoardDto);
-                }
-
+            for (Board board : boardList) {
+                Star star = board.getLocation().getStar();
+                MapBoardDto mapBoardDto = new MapBoardDto(
+                        board.getId(),
+                        getTypeToString(board),
+                        board.getTitle(),
+                        board.getLongitude(),
+                        board.getLatitude(),
+                        board.getAddress(),
+                        star.getStarGazing(),
+                        board.getImg()
+                );
+                mapBoardDtoArrayList.add(mapBoardDto);
             }
+
+            return mapBoardDtoArrayList;
         }
         catch(NullPointerException nullPointerException){
             throw new NullPointerException("해당하는 게시글이 존재하지 않습니다.");
         }
 
-        return mapBoardDtoList;
     }
 
 
@@ -247,11 +248,12 @@ public class BoardService {
         }
         return "None Type";
     }
+
     //검색 기능
     @Transactional
     public List<SearchBoardDto> searchBoard(String key){
         List<SearchBoardDto> searchBoardDtoList = new ArrayList<>();
-        List<Board> boardList = boardRepository.findByAddressStartingWith(key);
+        List<Board> boardList = boardRepository.findByAddressContaining(key);
 
         if(boardList.isEmpty())
             return searchBoardDtoList;

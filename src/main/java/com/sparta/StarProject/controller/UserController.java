@@ -5,17 +5,18 @@ import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.dto.SignUpRequestDto;
 import com.sparta.StarProject.dto.UserRequestDto;
 import com.sparta.StarProject.dto.UserUpdateDto;
+import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.security.jwt.JwtTokenProvider;
 import com.sparta.StarProject.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -53,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/user/login/check")
-    public ResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails) throws StarProjectException {
 
         if (userDetails == null) {
             throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
@@ -67,14 +68,15 @@ public class UserController {
     }
 
     @GetMapping("/user/username/check")
-    public Map<String, String> sameUsername(@RequestParam String username) {
+    public Map<String, String> sameUsername(@RequestParam String username) throws StarProjectException {
         return userService.sameUsername(username);
     }
 
     @GetMapping("/user/nickname/check")
-    public Map<String, String> sameNickname(@RequestParam String nickname) {
+    public Map<String, String> sameNickname(@RequestParam String nickname) throws StarProjectException {
         return userService.sameNickname(nickname);
     }
+
 
     @GetMapping("/my/leave")
     public ResponseDto myLeave(@AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -85,8 +87,18 @@ public class UserController {
 
     @PutMapping("/my/update")
     public ResponseDto myUpdate(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                @RequestParam UserUpdateDto userUpdateDto){
+                                @RequestBody UserUpdateDto userUpdateDto) throws StarProjectException {
         userService.myUpdate(userDetails.getUser(), userUpdateDto);
-        return new ResponseDto(200L, "성공", null );
+        return new ResponseDto(200L, "성공", null);
+    }
+
+    @GetMapping("/my/writeList")
+    public ResponseDto getBoardList(@AuthenticationPrincipal UserDetailsImpl userDetails) throws StarProjectException {
+        if(userDetails == null){
+            throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
+        }
+        List<MyBoardDto> boardDto = userService.getBoardList(userDetails.getUser());
+        return new ResponseDto(200L, "성공", boardDto);
+
     }
 }

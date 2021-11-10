@@ -1,31 +1,36 @@
 package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.dto.BoardDto;
+import com.sparta.StarProject.dto.MyBoardDto;
 import com.sparta.StarProject.dto.SignUpRequestDto;
 import com.sparta.StarProject.dto.UserRequestDto;
 import com.sparta.StarProject.dto.UserUpdateDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+//    @Autowired
+//    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+//        this.userRepository = userRepository;
+//        this.passwordEncoder = passwordEncoder;
+//    }
 
 
     //회원가입
@@ -91,7 +96,7 @@ public class UserService {
     }
 
 
-    public Map<String, String> sameUsername(String username) {
+    public Map<String, String> sameUsername(String username) throws StarProjectException {
         Optional<User> user = userRepository.findByUsername(username);
 
         Map<String, String> result = new HashMap<>();
@@ -108,7 +113,7 @@ public class UserService {
 
 
 
-    public Map<String, String> sameNickname (String nickname){
+    public Map<String, String> sameNickname (String nickname) throws StarProjectException {
         Optional<User> user = userRepository.findByNickname(nickname);
         Map<String, String> result = new HashMap<>();
         if (!user.isPresent()) {
@@ -131,7 +136,8 @@ public class UserService {
         userRepository.deleteById(findUser.getId());
     }
 
-    public void myUpdate(User user, UserUpdateDto userUpdateDto) {
+    @Transactional
+    public void myUpdate(User user, UserUpdateDto userUpdateDto) throws StarProjectException {
         User findUser = userRepository.findById(user.getId()).orElseThrow(
                 () -> new NullPointerException(ErrorCode.USER_NOT_FOUND.getMessage())
         );
@@ -146,5 +152,21 @@ public class UserService {
         );
 
     }
+
+    public List<MyBoardDto> getBoardList(User user) {
+        List<MyBoardDto> boardDtos = new ArrayList<>();
+        List<Board> myBoardList = boardRepository.findAllByUser(user);
+
+        for(Board board : myBoardList){
+            MyBoardDto boardDto = new MyBoardDto(
+                    board.getTitle(),
+                    board.getContent(),
+                    board.getImg()
+            );
+            boardDtos.add(boardDto);
+        }
+        return boardDtos;
+    }
+
 
 }
