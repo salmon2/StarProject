@@ -177,6 +177,7 @@ public class BoardService {
                 MapBoardDto mapBoardDto = new MapBoardDto(
                         board.getId(),
                         getTypeToString(board),
+                        board.getTitle(),
                         board.getLongitude(),
                         board.getLatitude(),
                         board.getAddress(),
@@ -211,5 +212,26 @@ public class BoardService {
         }
         return "None Type";
     }
+    //검색 기능
+    @Transactional
+    public List<BoardDto> searchBoard(String key){
+        List<BoardDto> boardDtoList = new ArrayList<>();
+        List<Board> boardList = boardRepository.findByAddressStartingWith(key);
 
+        if(boardList.isEmpty())
+            return boardDtoList;
+
+        for (Board board : boardList) {
+           boardDtoList.add(this.searchBoardDto(board));
+        }
+        return boardDtoList;
+    }
+    private BoardDto searchBoardDto(Board board){
+        return BoardDto.builder()
+                .address(board.getAddress())
+                .content(board.getContent())
+                .img(board.getImg())
+                .title(board.getTitle())
+                .build();
+    }
 }

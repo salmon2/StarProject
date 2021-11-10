@@ -25,15 +25,18 @@ public class RestApiExceptionHandler {
             restApiException.setData(null);
             restApiException.setMsg(ex.getErrorCode().getMessage());
         }
-       else {
+        else {
             //공통 에러 제어
             restApiException.setCode(500L);
             restApiException.setData(null);
             restApiException.setMsg(ex.getErrorCode().getMessage());
         }
+
         return new ResponseEntity<>(
                 restApiException,
                 HttpStatus.OK
         );
     }
+
+
 }

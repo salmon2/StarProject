@@ -64,14 +64,6 @@ public class UserController {
         return new ResponseDto(200L, "성공", data);
     }
 
-    //    @PostMapping("/user/username/check")
-//    public Map<String, String> sameUsername(@RequestBody UserRequestDto userRequestDto){
-//        return userService.sameUsername(userRequestDto);
-//    }
-//    @PostMapping("/user/nickname/check")
-//    public Map<String, String> sameNickname(@RequestBody SignUpRequestDto signUpRequestDto){
-//        return userService.sameNickname(signUpRequestDto);
-//    }
     @GetMapping("/user/username/check")
     public Map<String, String> sameUsername(@RequestParam String username) {
         return userService.sameUsername(username);
