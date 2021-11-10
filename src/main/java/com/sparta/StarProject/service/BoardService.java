@@ -9,16 +9,12 @@ import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.domain.board.Timestamped;
 import com.sparta.StarProject.domain.board.UserMake;
-import com.sparta.StarProject.dto.BoardDto;
-import com.sparta.StarProject.dto.CommunityDto;
-import com.sparta.StarProject.dto.DetailBoardDto;
+import com.sparta.StarProject.dto.*;
 
-import com.sparta.StarProject.dto.GeographicDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.*;
 
-import com.sparta.StarProject.dto.MapBoardDto;
 import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.StarRepository;
@@ -214,24 +210,22 @@ public class BoardService {
     }
     //검색 기능
     @Transactional
-    public List<BoardDto> searchBoard(String key){
-        List<BoardDto> boardDtoList = new ArrayList<>();
+    public List<SearchBoardDto> searchBoard(String key){
+        List<SearchBoardDto> searchBoardDtoList = new ArrayList<>();
         List<Board> boardList = boardRepository.findByAddressStartingWith(key);
 
         if(boardList.isEmpty())
-            return boardDtoList;
+            return searchBoardDtoList;
 
         for (Board board : boardList) {
-           boardDtoList.add(this.searchBoardDto(board));
+           SearchBoardDto searchBoardDto = new SearchBoardDto(
+                   board.getAddress(),
+                   board.getTitle(),
+                   board.getContent(),
+                   board.getImg()
+           );
+           searchBoardDtoList.add(searchBoardDto);
         }
-        return boardDtoList;
-    }
-    private BoardDto searchBoardDto(Board board){
-        return BoardDto.builder()
-                .address(board.getAddress())
-                .content(board.getContent())
-                .img(board.getImg())
-                .title(board.getTitle())
-                .build();
+        return searchBoardDtoList;
     }
 }

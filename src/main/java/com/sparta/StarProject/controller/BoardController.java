@@ -2,11 +2,7 @@ package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
-import com.sparta.StarProject.dto.BoardDto;
-import com.sparta.StarProject.dto.CommunityDto;
-import com.sparta.StarProject.dto.DetailBoardDto;
-import com.sparta.StarProject.dto.MapBoardDto;
-import com.sparta.StarProject.dto.ResponseDto;
+import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +64,7 @@ public class BoardController {
 
     @GetMapping("/board/keyword")
     public ResponseDto searchBoard(@RequestParam(value = "key") String key){
-        List<BoardDto> boardDtoList = boardService.searchBoard(key);
+        List<SearchBoardDto> boardDtoList = boardService.searchBoard(key);
 
         return new ResponseDto(200L,"성공",boardDtoList);
     }
