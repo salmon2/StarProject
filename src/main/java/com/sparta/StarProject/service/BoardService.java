@@ -195,6 +195,7 @@ public class BoardService {
 
     public List<MapBoardDto> getBoardMapList() {
         List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
+
         try {
             List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
 
@@ -216,6 +217,7 @@ public class BoardService {
                     );
                     mapBoardDtoList.add(mapBoardDto);
                 }
+
             }
         }
         catch(NullPointerException nullPointerException){
@@ -245,5 +247,24 @@ public class BoardService {
         }
         return "None Type";
     }
+    //검색 기능
+    @Transactional
+    public List<SearchBoardDto> searchBoard(String key){
+        List<SearchBoardDto> searchBoardDtoList = new ArrayList<>();
+        List<Board> boardList = boardRepository.findByAddressStartingWith(key);
 
+        if(boardList.isEmpty())
+            return searchBoardDtoList;
+
+        for (Board board : boardList) {
+           SearchBoardDto searchBoardDto = new SearchBoardDto(
+                   board.getAddress(),
+                   board.getTitle(),
+                   board.getContent(),
+                   board.getImg()
+           );
+           searchBoardDtoList.add(searchBoardDto);
+        }
+        return searchBoardDtoList;
+    }
 }

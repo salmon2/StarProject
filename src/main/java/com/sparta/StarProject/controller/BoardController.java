@@ -2,11 +2,7 @@ package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
-import com.sparta.StarProject.dto.BoardDto;
-import com.sparta.StarProject.dto.CommunityDto;
-import com.sparta.StarProject.dto.DetailBoardDto;
-import com.sparta.StarProject.dto.MapBoardDto;
-import com.sparta.StarProject.dto.ResponseDto;
+import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,6 +24,7 @@ public class BoardController {
         List<CommunityDto> communityDtoList = boardService.getBoardList(sort, cityName);
         return new ResponseDto(200L, "성공", communityDtoList);
     }
+
 
     @GetMapping("/detail")
     public ResponseDto detailBoard(@RequestParam Long boardId){
@@ -65,5 +61,14 @@ public class BoardController {
         List<MapBoardDto> mapBoardDto = boardService.getBoardMapList();
         return new ResponseDto(200L, "성공", mapBoardDto);
     }
+
+
+    @GetMapping("/board/keyword")
+    public ResponseDto searchBoard(@RequestParam(value = "key") String key){
+        List<SearchBoardDto> boardDtoList = boardService.searchBoard(key);
+
+        return new ResponseDto(200L,"성공",boardDtoList);
+    }
+
 
 }

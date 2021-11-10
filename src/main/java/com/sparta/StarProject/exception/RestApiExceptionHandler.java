@@ -12,6 +12,7 @@ public class RestApiExceptionHandler {
     public ResponseEntity<Object> handleApiRequestException(StarProjectException ex) {
 
         ErrorCode errorCode = ex.getErrorCode();
+
         RestApiException restApiException = null;
 
         /**
@@ -30,14 +31,14 @@ public class RestApiExceptionHandler {
          * 공통 에러 제어
          */
         else {
-           restApiException = ServerError(ex, 500L);
+            restApiException = ServerError(ex, 500L);
         }
-
         return new ResponseEntity<>(
                 restApiException,
                 HttpStatus.OK
         );
     }
+
 
     /**
      * Null Porint Exception
@@ -51,9 +52,6 @@ public class RestApiExceptionHandler {
                 HttpStatus.OK
         );
     }
-
-
-
 
 
     private RestApiException ServerError(StarProjectException ex, long l) {
