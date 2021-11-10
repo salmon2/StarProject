@@ -33,4 +33,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Like> like;
+
+    public void updateUser(String nickname, String password) {
+        this.nickname = nickname;
+        this.password = password;
+
+    }
 }

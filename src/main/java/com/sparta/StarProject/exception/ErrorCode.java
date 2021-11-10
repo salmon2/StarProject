@@ -17,14 +17,17 @@ public enum  ErrorCode {
 
     USERNAME_NOT_FOUND(INTERNAL_SERVER_ERROR, "아이디를 입력해주세요."),
     USERNAME_DUPLICATE(NOT_IMPLEMENTED, "사용 불가능한 유저네임 입니다."),
-    USER_NOT_FOUND(INTERNAL_SERVER_ERROR, "알 수 없는 이유로 실패하였습니다."),
+    USER_NOT_FOUND(INTERNAL_SERVER_ERROR, "유저를 찾을 수 없습니다."),
 
     NICKNAME_NOT_FOUND(INTERNAL_SERVER_ERROR, "닉네임을 입력해주세요."),
     NICKNAME_DUPLICATE(NOT_IMPLEMENTED, "사용 불가능한 닉네임입니다."),
 
     PASSWORD_FOT_FOUND(INTERNAL_SERVER_ERROR,"비밀번호를 입력해주세요."),
     PASSWORD_CHECK(NOT_IMPLEMENTED, "비밀번호가 일치 하지 않습니다."),
-    LOGIN_TOKEN_EXPIRE(INTERNAL_SERVER_ERROR, "로그인이 만료되었습니다. 재로그인 하세요.");
+    LOGIN_TOKEN_EXPIRE(INTERNAL_SERVER_ERROR, "로그인이 만료되었습니다. 재로그인 하세요."),
+
+    NotFoundBoard(INTERNAL_SERVER_ERROR, "해당 게시물이 존재하지 않습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String message;

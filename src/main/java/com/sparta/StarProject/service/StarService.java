@@ -9,6 +9,7 @@ import com.sparta.StarProject.domain.Weather;
 
 import com.sparta.StarProject.domain.board.Timestamped;
 import com.sparta.StarProject.dto.*;
+import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarInfoRepository;
 import com.sparta.StarProject.repository.StarRepository;
@@ -30,50 +31,62 @@ public class StarService {
     private final StarInfoRepository starInfoRepository;
     private final GpsToAddress gpsToAddress;
     private final API api;
-
+    private static final String localAddress = "http://3.38.101.209:8080";
 
 
     public StarInfoResponseDto getStarInfo(double latitude, double longitude) throws Exception{
-        String address = gpsToAddress.getAddress(latitude,longitude);
-        List<String> cityName = api.processAddress(address);
-        Location findLocation = locationRepository.findByCityName(cityName.get(0));
+        try{
+            String address = gpsToAddress.getAddress(latitude,longitude);
+            List<String> cityName = api.processAddress(address);
 
-        Star findStar = findLocation.getStar();
+            Location findLocation = locationRepository.findByCityName(cityName.get(0));
 
-        StarInfoResponseDto starInfoResponseDto = new StarInfoResponseDto(
-                findStar.getMoonrise(),
-                findStar.getMoonSet(),
-                findStar.getStarGazing()
-        );
-        return starInfoResponseDto;
+            Star findStar = findLocation.getStar();
+
+            StarInfoResponseDto starInfoResponseDto = new StarInfoResponseDto(
+                    findStar.getMoonrise(),
+                    findStar.getMoonSet(),
+                    findStar.getStarGazing()
+            );
+            return starInfoResponseDto;
+        }
+        catch(NullPointerException nullPointerException){
+            throw new NullPointerException(ErrorCode.NotFoundBoard.getMessage());
+        }
+
     }
 
     public StarWeatherResponseDto getWeatherInfo(Double latitude, Double longitude, String predictTime) throws Exception {
-        String address = gpsToAddress.getAddress(latitude,longitude);
-        List<String> cityName = api.processAddress(address);
-        Location findLocation = locationRepository.findByCityName(cityName.get(0));
+        try {
+            String address = gpsToAddress.getAddress(latitude, longitude);
+            List<String> cityName = api.processAddress(address);
+            Location findLocation = locationRepository.findByCityName(cityName.get(0));
 
-        List<Weather> weatherList = findLocation.getWeatherList();
-        Weather findWeather = null;
+            List<Weather> weatherList = findLocation.getWeatherList();
+            Weather findWeather = null;
 
-        for (Weather weather : weatherList) {
-            if(weather.getPredictTime().equals(predictTime)){
-                findWeather = weather;
+            for (Weather weather : weatherList) {
+                if (weather.getPredictTime().equals(predictTime)) {
+                    findWeather = weather;
+                }
             }
+
+            StarWeatherResponseDto starWeatherResponseDto = new StarWeatherResponseDto(
+                    findLocation.getCityName(),
+                    findWeather.getRainPercent(),
+                    findWeather.getHumidity(),
+                    findWeather.getWeather(),
+                    findWeather.getTemperature(),
+                    findWeather.getMaxTemperature(),
+                    findWeather.getMinTemperature(),
+                    findWeather.getDust()
+            );
+
+            return starWeatherResponseDto;
         }
-
-        StarWeatherResponseDto starWeatherResponseDto = new StarWeatherResponseDto(
-                findLocation.getCityName(),
-                findWeather.getRainPercent(),
-                findWeather.getHumidity(),
-                findWeather.getWeather(),
-                findWeather.getTemperature(),
-                findWeather.getMaxTemperature(),
-                findWeather.getMinTemperature(),
-                findWeather.getDust()
-        );
-
-        return starWeatherResponseDto;
+        catch(NullPointerException nullPointerException){
+            throw new NullPointerException(ErrorCode.NotFoundBoard.getMessage());
+        }
     }
 
 
@@ -105,24 +118,29 @@ public class StarService {
     }
 
     public StarPhotoDto getStarPhoto() {
-        List<String> currentTime = Timestamped.getCurrentTime();
-        String month = currentTime.get(2);
-        log.info("month = {}", month);
+        try {
+            List<String> currentTime = Timestamped.getCurrentTime();
+            String month = currentTime.get(2);
+            log.info("month = {}", month);
 
-        Integer intMonth = Integer.valueOf(month);
-        if(intMonth < 10){
-            if(month.length() >= 2){
-                month = month.substring(1);
+            Integer intMonth = Integer.valueOf(month);
+            if (intMonth < 10) {
+                if (month.length() >= 2) {
+                    month = month.substring(1);
+                }
             }
-        }
-        log.info("month = {}", month);
-        StarInfo starInfo = starInfoRepository.findByMonth(month);
-        StarPhotoDto starPhotoDto = new StarPhotoDto(
-                starInfo.getStarImg(),
-                starInfo.getStarName(),
-                starInfo.getComment()
-        );
+            log.info("month = {}", month);
+            StarInfo starInfo = starInfoRepository.findByMonth(month);
+            StarPhotoDto starPhotoDto = new StarPhotoDto(
+                    localAddress + starInfo.getStarImg(),
+                    starInfo.getStarName(),
+                    starInfo.getComment()
+            );
 
-        return starPhotoDto;
+            return starPhotoDto;
+        }
+        catch(NullPointerException nullPointerException){
+            throw new NullPointerException(ErrorCode.NotFoundBoard.getMessage());
+        }
     }
 }

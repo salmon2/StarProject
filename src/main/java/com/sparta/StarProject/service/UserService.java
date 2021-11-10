@@ -3,6 +3,7 @@ package com.sparta.StarProject.service;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.dto.SignUpRequestDto;
 import com.sparta.StarProject.dto.UserRequestDto;
+import com.sparta.StarProject.dto.UserUpdateDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.UserRepository;
@@ -120,4 +121,27 @@ public class UserService {
         }
     }
 
+    public void myLeave(User user) {
+        User findUser = userRepository.findById(user.getId()).orElseThrow(
+                () -> new NullPointerException(ErrorCode.USER_NOT_FOUND.getMessage())
+        );
+
+        userRepository.deleteById(findUser.getId());
+    }
+
+    public void myUpdate(User user, UserUpdateDto userUpdateDto) {
+        User findUser = userRepository.findById(user.getId()).orElseThrow(
+                () -> new NullPointerException(ErrorCode.USER_NOT_FOUND.getMessage())
+        );
+
+        if(!userUpdateDto.getPassword().equals(userUpdateDto.getPasswordCheck())){
+            throw new StarProjectException(ErrorCode.PASSWORD_CHECK);
+        }
+
+        findUser.updateUser(
+                userUpdateDto.getNickname(),
+                passwordEncoder.encode(userUpdateDto.getPassword())
+        );
+
+    }
 }

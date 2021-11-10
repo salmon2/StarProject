@@ -40,10 +40,9 @@ public class BoardController {
     @DeleteMapping("/detail/delete")
     public ResponseDto deleteDetailBoard(@RequestParam Long boardId,
                                          @AuthenticationPrincipal UserDetails userDetails){
-        int result = boardService.deleteBoard(boardId, userDetails);
-        if(result == 1)
-            return new ResponseDto(200L, "성공", null);
-        return new ResponseDto(500L, "실패", null);
+        boardService.deleteBoard(boardId, userDetails);
+
+        return new ResponseDto(200L, "성공", null);
     }
     @PostMapping("/board")
     public ResponseDto createBoard(@RequestBody BoardDto boardDto,

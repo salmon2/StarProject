@@ -12,18 +12,25 @@ public class RestApiExceptionHandler {
     public ResponseEntity<Object> handleApiRequestException(StarProjectException ex) {
 
         ErrorCode errorCode = ex.getErrorCode();
-        RestApiException restApiException = new RestApiException();
+        RestApiException restApiException = null;
 
-
+        /**
+         * 닉네임 중복 에러
+         */
         if(errorCode.equals(ErrorCode.NICKNAME_DUPLICATE)){
-            ServerError(ex, restApiException, 501L);
+          restApiException = ServerError(ex, 501L);
         }
+        /**
+         * 유저네임 중복 에러
+         */
         else if (errorCode.equals(ErrorCode.USERNAME_DUPLICATE)){
-            ServerError(ex, restApiException, 501L);
+           restApiException = ServerError(ex,  501L);
         }
+        /**
+         * 공통 에러 제어
+         */
         else {
-            //공통 에러 제어
-            ServerError(ex, restApiException, 500L);
+           restApiException = ServerError(ex, 500L);
         }
 
         return new ResponseEntity<>(
@@ -32,15 +39,31 @@ public class RestApiExceptionHandler {
         );
     }
 
+    /**
+     * Null Porint Exception
+     */
     @ExceptionHandler(value = {NullPointerException.class})
     public ResponseEntity<Object> NullPointExceptionHandler(StarProjectException ex) {
-        return null;
+        RestApiException restApiException = ServerError(ex, 500L);
+
+        return new ResponseEntity<>(
+                restApiException,
+                HttpStatus.OK
+        );
     }
 
-    private void ServerError(StarProjectException ex, RestApiException restApiException, long l) {
+
+
+
+
+    private RestApiException ServerError(StarProjectException ex, long l) {
+        RestApiException restApiException = new RestApiException();
+
         restApiException.setCode(l);
         restApiException.setData(null);
         restApiException.setMsg(ex.getErrorCode().getMessage());
+
+        return restApiException;
     }
 
 

@@ -43,7 +43,7 @@ public class BoardService {
 
     public DetailBoardDto getDetailBoard(Long id) {
         Board findBoard = boardRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("존재하는 게시글이 없습니다.")
+                () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
 
         findBoard = getCampingOrUserMake(findBoard);
@@ -88,18 +88,15 @@ public class BoardService {
         return detailBoardDto;
     }
 
-    public int deleteBoard(Long boardId, UserDetails userDetails) {
+    public void deleteBoard(Long boardId, UserDetails userDetails) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
 
-
         if(findBoard.getUser().getUsername().equals(userDetails.getUsername())){
             boardRepository.deleteById(boardId);
-            return 1;
         }
 
-        return 0;
     }
 
 
@@ -112,22 +109,30 @@ public class BoardService {
 
     private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city) {
         List<CommunityDto>  communityDtoList = new ArrayList<>();
-        if(sort.equals("star")){
-            List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
-            for (Star star : starList) {
-                Location location = star.getLocation();
-                if(city.equals("all")){
-                    addCommunityDto(communityDtoList, location);
-                }
-                else if(location.getCityName().equals(city)){
-                    addCommunityDto(communityDtoList, location);
+        try{
+            if(sort.equals("star")){
+                List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
+                for (Star star : starList) {
+                    Location location = star.getLocation();
+                    if(city.equals("all")){
+                        addCommunityDto(communityDtoList, location);
+                    }
+                    else if(location.getCityName().equals(city)){
+                        addCommunityDto(communityDtoList, location);
+                    }
                 }
             }
+
+            else if(sort.equals("like")){
+                List<Board> boardDto = boardRepository.findBoardDto();
+                log.info("boardDto = {}", boardDto);
+            }
         }
-        else if(sort.equals("like")){
-            List<Board> boardDto = boardRepository.findBoardDto();
-            log.info("boardDto = {}", boardDto);
+        catch (NullPointerException nullPointerException){
+            throw new NullPointerException("find All StarList Fail");
         }
+
+
         return communityDtoList;
     }
 
@@ -158,7 +163,7 @@ public class BoardService {
 
 
         Board saveBoard = new UserMake(
-                boardDto.getTitle(), //title
+                boardDto.getTitle(),        //title
                 boardDto.getAddress(),      //address
                 boardDto.getImg(),
                 boardDto.getContent(),
@@ -169,7 +174,10 @@ public class BoardService {
                 "유저가 만듬"
         );
 
+
         Board createBoard = boardRepository.save(saveBoard);
+
+
         return createBoard;
     }
 
@@ -178,7 +186,7 @@ public class BoardService {
     @Transactional
     public Board updateBoard(Long id, BoardDto boardDto){
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+                () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
         board.update(boardDto);
         return board;
@@ -187,27 +195,31 @@ public class BoardService {
 
     public List<MapBoardDto> getBoardMapList() {
         List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
-        List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
+        try {
+            List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
 
-        for (Star star : starList) {
-            Location location = star.getLocation();
-            List<Board> boardList = location.getBoard();
-            for (Board board : boardList) {
-               board = getCampingOrUserMake(board);
+            for (Star star : starList) {
+                Location location = star.getLocation();
+                List<Board> boardList = location.getBoard();
+                for (Board board : boardList) {
+                   board = getCampingOrUserMake(board);
 
-                MapBoardDto mapBoardDto = new MapBoardDto(
-                        board.getId(),
-                        getTypeToString(board),
-                        board.getTitle(),
-                        board.getLongitude(),
-                        board.getLatitude(),
-                        board.getAddress(),
-                        star.getStarGazing(),
-                        board.getImg()
-                );
-
-                mapBoardDtoList.add(mapBoardDto);
+                    MapBoardDto mapBoardDto = new MapBoardDto(
+                            board.getId(),
+                            getTypeToString(board),
+                            board.getTitle(),
+                            board.getLongitude(),
+                            board.getLatitude(),
+                            board.getAddress(),
+                            star.getStarGazing(),
+                            board.getImg()
+                    );
+                    mapBoardDtoList.add(mapBoardDto);
+                }
             }
+        }
+        catch(NullPointerException nullPointerException){
+            throw new NullPointerException("해당하는 게시글이 존재하지 않습니다.");
         }
 
         return mapBoardDtoList;

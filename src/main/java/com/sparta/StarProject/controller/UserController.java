@@ -4,11 +4,13 @@ import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.dto.SignUpRequestDto;
 import com.sparta.StarProject.dto.UserRequestDto;
+import com.sparta.StarProject.dto.UserUpdateDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.security.jwt.JwtTokenProvider;
 import com.sparta.StarProject.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -72,5 +74,19 @@ public class UserController {
     @GetMapping("/user/nickname/check")
     public Map<String, String> sameNickname(@RequestParam String nickname) {
         return userService.sameNickname(nickname);
+    }
+
+    @GetMapping("/my/leave")
+    public ResponseDto myLeave(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        userService.myLeave(userDetails.getUser());
+
+        return new ResponseDto(200L, "성공", null );
+    }
+
+    @PutMapping("/my/update")
+    public ResponseDto myUpdate(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                @RequestParam UserUpdateDto userUpdateDto){
+        userService.myUpdate(userDetails.getUser(), userUpdateDto);
+        return new ResponseDto(200L, "성공", null );
     }
 }

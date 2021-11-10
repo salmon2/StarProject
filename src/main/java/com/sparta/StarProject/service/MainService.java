@@ -20,26 +20,31 @@ public class MainService {
 
     public List<MainDto> mainList() {
         List<MainDto> mainDto = new ArrayList<>();
-        List<Star> mainView = starRepository.findAllByOrderByStarGazingDesc();
-        int count = 0;
+        try {
+            List<Star> mainView = starRepository.findAllByOrderByStarGazingDesc();
+            int count = 0;
 
-        for (Star star : mainView) {
-            Location location = star.getLocation();
-            List<Board> boardList = location.getBoard();
-            for (Board board : boardList) {
-                if(count >2){
-                    return mainDto;
+            for (Star star : mainView) {
+                Location location = star.getLocation();
+                List<Board> boardList = location.getBoard();
+                for (Board board : boardList) {
+                    if (count > 2) {
+                        return mainDto;
+                    }
+                    MainDto mainDtos = new MainDto(
+                            board.getTitle(),
+                            board.getAddress(),
+                            board.getContent(),
+                            star.getStarGazing(),
+                            board.getImg()
+                    );
+                    mainDto.add(mainDtos);
+                    count++;
                 }
-                MainDto mainDtos = new MainDto(
-                        board.getTitle(),
-                        board.getAddress(),
-                        board.getContent(),
-                        star.getStarGazing(),
-                        board.getImg()
-                );
-                mainDto.add(mainDtos);
-                count++;
             }
+        }
+        catch(NullPointerException nullPointerException){
+            throw new NullPointerException("해당하는 게시글이 존재하지 않습니다.");
         }
 
 
