@@ -17,12 +17,11 @@ import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.*;
 
 import com.sparta.StarProject.repository.BoardRepository;
-import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.StarRepository;
-import com.sparta.StarProject.repository.UserMakeRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +32,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final CampingRepository campingRepository;
-    private final UserMakeRepository userMakeRepository;
     private final StarRepository starRepository;
     private final API api;
     private final LocationRepository locationRepository;
@@ -105,29 +103,51 @@ public class BoardService {
     }
 
 
-    public List<CommunityDto> getBoardList() {
-        List<CommunityDto>  communityDtoList = new ArrayList<>();
-        List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
+    public List<CommunityDto> getBoardList(String sort, String cityName) {
+        List<CommunityDto> communityDtoList =
+                getBoardListOrderBySortAndCityName(sort, cityName);
 
-        for (Star star : starList) {
-            Location location = star.getLocation();
-            List<Board> boardList = location.getBoard();
-            for (Board board : boardList) {
-                CommunityDto communityDto = new CommunityDto(
-                        board.getId(),
-                        board.getUser().getNickname(),
-                        board.getTitle(),
-                        location.getCityName(),
-                        board.getImg(),
-                        3L,
-                        board.getContent(),
-                        Timestamped.TimeToString(board.getModifiedAt())
-                );
-                communityDtoList.add(communityDto);
+        return communityDtoList;
+    }
+
+    private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city) {
+        List<CommunityDto>  communityDtoList = new ArrayList<>();
+        if(sort.equals("star")){
+            List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
+            for (Star star : starList) {
+                Location location = star.getLocation();
+                if(city.equals("all")){
+                    addCommunityDto(communityDtoList, location);
+                }
+                else if(location.getCityName().equals(city)){
+                    addCommunityDto(communityDtoList, location);
+                }
             }
+        }
+        else if(sort.equals("like")){
+            List<Board> boardDto = boardRepository.findBoardDto();
+            log.info("boardDto = {}", boardDto);
         }
         return communityDtoList;
     }
+
+    private void addCommunityDto(List<CommunityDto> communityDtoList, Location location) {
+        List<Board> boardList = location.getBoard();
+        for (Board board : boardList) {
+            CommunityDto communityDto = new CommunityDto(
+                    board.getId(),
+                    board.getUser().getNickname(),
+                    board.getTitle(),
+                    location.getCityName(),
+                    board.getImg(),
+                    3L,
+                    board.getContent(),
+                    Timestamped.TimeToString(board.getModifiedAt())
+            );
+            communityDtoList.add(communityDto);
+        }
+    }
+
 
     //게시글 생성
     @Transactional
