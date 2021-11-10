@@ -70,13 +70,31 @@ public class API {
         log.info("dustCity = {}",dustCity);
         log.info("starGazingCity = {}",starGazingCity);
 
+        List<StarGazingDto> starGazing = null;
+        SunMoonDto moon = null;
+        List<WeatherApiDto2> weather = null;
+        DustApiDto dust = null;
+        GeographicDto geographicDto = null;
 
+        do{
+            starGazing = accuWeatherApi.getStarGazing(starGazingCity, count);
+        }while(starGazing == null);
 
-        List<StarGazingDto> starGazing = accuWeatherApi.getStarGazing(starGazingCity, count);
-        SunMoonDto moon = moonAPI.getMoon(moonCity);
-        List<WeatherApiDto2> weather = weatherApi.getWeather(weatherCity);
-        DustApiDto dust = dustApi.getDust(dustCity);
-        GeographicDto geographicDto = addressToGps.getAddress(address);
+        do{
+            moon = moonAPI.getMoon(moonCity);
+        }while(moon == null);
+
+        do{
+            weather = weatherApi.getWeather(weatherCity);
+        }while(weather == null);
+
+        do{
+            dust = dustApi.getDust(dustCity);
+        }while(dust == null);
+
+        do{
+            geographicDto = addressToGps.getAddress(address);
+        }while(geographicDto ==null);
 
         LocationStarMoonDustDto result = new LocationStarMoonDustDto(
                 starGazing,
@@ -96,6 +114,7 @@ public class API {
     public Location saveStarLocationWeather(LocationStarMoonDustDto result ) {
         List<String> location = processAddress(result.getAddress());
         Location newLocation = new Location(location.get(0));
+
         Location saveLocation = locationRepository.save(newLocation);
 
         Star newStar =
@@ -105,11 +124,10 @@ public class API {
                     Long.valueOf(result.getStarGazing().get(0).getValue().longValue()),
                     saveLocation
                 );
-        Star saveStar = starRepository.save(newStar);
+        starRepository.save(newStar);
 
         for (WeatherApiDto2 weatherApiDto2 : result.getWeather()) {
-            Weather newWeather =
-                    new Weather(
+            Weather newWeather = new Weather(
                             weatherApiDto2.getHumidity(),
                             weatherApiDto2.getWeather(),
                             weatherApiDto2.getTemperature(),
@@ -121,10 +139,12 @@ public class API {
                             weatherApiDto2.getBaseDate(),
                             saveLocation);
 
-            Weather saveWeather = weatherRepository.save(newWeather);
+            weatherRepository.save(newWeather);
         }
 
         return saveLocation;
     }
+
+
 
 }
