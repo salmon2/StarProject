@@ -9,17 +9,12 @@ import java.util.Collection;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-<<<<<<< HEAD
     @Query("SELECT e " +
             "FROM Board e " +
             "GROUP BY e.like " +
             "ORDER BY COUNT(e.like) DESC")
     public List<Board> findBoardDto();
-
-
-
-=======
     List<BoardDto> findByOrderByAddressDesc();
     List<Board> findByAddressStartingWith(String key);
->>>>>>> origin/boardKeyword
+
 }
