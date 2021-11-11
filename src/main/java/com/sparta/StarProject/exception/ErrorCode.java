@@ -25,7 +25,7 @@ public enum  ErrorCode {
 
     PASSWORD_FOT_FOUND(INTERNAL_SERVER_ERROR,"비밀번호를 입력해주세요."),
     PASSWORD_CHECK(NOT_IMPLEMENTED, "비밀번호가 일치 하지 않습니다."),
-    LOGIN_TOKEN_EXPIRE(INTERNAL_SERVER_ERROR, "로그인이 만료되었습니다. 재로그인 하세요.");
+    LOGIN_TOKEN_EXPIRE(INTERNAL_SERVER_ERROR, "login fail");
 
 
     private final HttpStatus httpStatus;
