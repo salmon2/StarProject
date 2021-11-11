@@ -62,6 +62,7 @@ public class AccuWeatherApi {
         log.info("stargazing = {}", starGazingDtoList);
         log.info("star count = {}", count);
 
+
         return starGazingDtoList;
     }
 

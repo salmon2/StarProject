@@ -50,6 +50,11 @@ public class Board extends Timestamped{
     private User user;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_bookmark_id")
+    @JsonIgnore
+    private User userBookMark;
+
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "location_id")
     @JsonIgnore
     private Location location;

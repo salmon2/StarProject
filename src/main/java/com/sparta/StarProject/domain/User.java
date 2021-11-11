@@ -31,6 +31,10 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Board> boardList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "userBookMark", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<Board> bookMark = new ArrayList<>();
+
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Like> like;
 
