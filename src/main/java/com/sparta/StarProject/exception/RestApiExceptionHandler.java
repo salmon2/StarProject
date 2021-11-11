@@ -12,30 +12,70 @@ public class RestApiExceptionHandler {
     public ResponseEntity<Object> handleApiRequestException(StarProjectException ex) {
 
         ErrorCode errorCode = ex.getErrorCode();
-        RestApiException restApiException = new RestApiException();
 
+        RestApiException restApiException = null;
 
+        /**
+         * 닉네임 중복 에러
+         */
         if(errorCode.equals(ErrorCode.NICKNAME_DUPLICATE)){
-            restApiException.setCode(501L);
-            restApiException.setData(null);
-            restApiException.setMsg(ex.getErrorCode().getMessage());
+          restApiException = ServerError(ex, 501L);
         }
+        /**
+         * 유저네임 중복 에러
+         */
         else if (errorCode.equals(ErrorCode.USERNAME_DUPLICATE)){
-            restApiException.setCode(501L);
-            restApiException.setData(null);
-            restApiException.setMsg(ex.getErrorCode().getMessage());
+           restApiException = ServerError(ex,  501L);
         }
+        /**
+         * 공통 에러 제어
+         */
         else {
-            //공통 에러 제어
-            restApiException.setCode(500L);
-            restApiException.setData(null);
-            restApiException.setMsg(ex.getErrorCode().getMessage());
+            restApiException = ServerError(ex, 500L);
         }
+        return new ResponseEntity<>(
+                restApiException,
+                HttpStatus.OK
+        );
+    }
+
+
+    /**
+     * Null Porint Exception
+     */
+    @ExceptionHandler(value = {NullPointerException.class})
+    public ResponseEntity<Object> NullPointExceptionHandler(Exception ex) {
+        RestApiException restApiException = ServerError(ex, 500L);
 
         return new ResponseEntity<>(
                 restApiException,
                 HttpStatus.OK
         );
+    }
+
+
+
+    /**
+     * Not Found Gps Exception
+     */
+    @ExceptionHandler(value = {NotFoundGps.class})
+    public ResponseEntity<Object> NotFoundGps(Exception ex) {
+        RestApiException restApiException = ServerError(ex, 500L);
+
+        return new ResponseEntity<>(
+                restApiException,
+                HttpStatus.OK
+        );
+    }
+
+    private RestApiException ServerError(Exception ex, long l) {
+        RestApiException restApiException = new RestApiException();
+
+        restApiException.setCode(l);
+        restApiException.setData(null);
+        restApiException.setMsg(ex.getMessage());
+
+        return restApiException;
     }
 
 

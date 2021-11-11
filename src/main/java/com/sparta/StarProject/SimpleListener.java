@@ -34,7 +34,6 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
 
     @SneakyThrows
     @Override
-    @Transactional
     public void onApplicationEvent(ApplicationStartedEvent event) {
         User user = new User("기남", "asdf", "salmon2");
         userRepository.save(user);

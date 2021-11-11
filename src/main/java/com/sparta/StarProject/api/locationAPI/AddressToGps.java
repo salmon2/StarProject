@@ -81,8 +81,9 @@ public class AddressToGps {
 
     public static void main(String[] args) throws Exception {
         AddressToGps addressToGps = new AddressToGps();
-        GeographicDto address = addressToGps.getAddress("서울특별시 마포구");
+        GeographicDto address = addressToGps.getAddress("서울 구리시");
         log.info("위도 = {}, 경도 = {}", address.getLatitude(), address.getLongitude());
+
     }
 
 }

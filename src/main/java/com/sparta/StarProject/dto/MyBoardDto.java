@@ -9,14 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DetailBoardDto {
-    private Long id;
-    private String writer;
+public class MyBoardDto {
     private String title;
-    private String address;
-    private String img;
     private String content;
-    private Double x_location;
-    private Double y_location;
-    private DetailWeatherDto weather;
+    private String img;
 }
