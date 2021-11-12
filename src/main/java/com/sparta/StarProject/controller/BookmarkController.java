@@ -25,4 +25,11 @@ public class BookmarkController {
         return bookmarkService.addBookmark(boardId, userDetails);
     }
 
+    @GetMapping("/my/bookmark")
+    public ResponseDto getMyBookMark(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<BookmarkDto> bookmarkDto = bookmarkService.getMyBookMark(userDetails.getUser());
+
+        return new ResponseDto(200L, "성공", bookmarkDto);
+    }
+
 }

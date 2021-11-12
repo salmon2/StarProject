@@ -46,4 +46,19 @@ public class BookmarkService {
         return new ResponseDto(200L, "성공", null);
     }
 
+    public List<BookmarkDto> getMyBookMark(User user) {
+        List<BookmarkDto> bookmarkDtos = new ArrayList<>();
+        List<Board> myBookmark = boardRepository.findAllByUser(user);
+
+        for(Board board : myBookmark) {
+            BookmarkDto bookmarkDto = new BookmarkDto(
+                    board.getTitle(),
+                    board.getContent(),
+                    board.getImg()
+            );
+            bookmarkDtos.add(bookmarkDto);
+        }
+        return bookmarkDtos;
+    }
+
 }
