@@ -199,7 +199,7 @@ public class BoardService {
         return board;
     }
 
-
+    //검색
     public List<MapBoardDto> getBoardMapList(String cityName) {
         try {
             List<MapBoardDto> mapBoardDtoArrayList = new ArrayList<>();
@@ -227,7 +227,19 @@ public class BoardService {
         }
 
     }
+    //자동완성
+    public List<KeywordDto> getKeyword(String cityName){
+        List<KeywordDto> keywordDtoList = new ArrayList<>();
+        List<Location> locationList = locationRepository.findByCityNameContaining(cityName);
 
+        for (Location location : locationList) {
+            KeywordDto keywordDto = new KeywordDto(
+                    location.getCityName()
+            );
+            keywordDtoList.add(keywordDto);
+        }
+        return keywordDtoList;
+    }
 
     private Board getCampingOrUserMake(Board board) {
         if (board instanceof Camping){

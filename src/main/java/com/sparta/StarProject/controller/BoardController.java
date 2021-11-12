@@ -65,10 +65,9 @@ public class BoardController {
 
 
     @GetMapping("/board/keyword")
-    public ResponseDto searchBoard(@RequestParam(value = "key") String key){
-        List<SearchBoardDto> boardDtoList = boardService.searchBoard(key);
-
-        return new ResponseDto(200L,"성공",boardDtoList);
+    public ResponseDto getKeyword(@RequestParam String cityName){
+        List<KeywordDto> keywordDtoList = boardService.getKeyword(cityName);
+        return new ResponseDto(200L, "성공", keywordDtoList);
     }
 
 
