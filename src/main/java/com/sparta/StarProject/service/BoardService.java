@@ -219,7 +219,6 @@ public class BoardService {
                 );
                 mapBoardDtoArrayList.add(mapBoardDto);
             }
-
             return mapBoardDtoArrayList;
         }
         catch(NullPointerException nullPointerException){
