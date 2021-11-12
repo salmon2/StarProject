@@ -261,24 +261,4 @@ public class BoardService {
         return "None Type";
     }
 
-    //검색 기능
-    @Transactional
-    public List<SearchBoardDto> searchBoard(String key){
-        List<SearchBoardDto> searchBoardDtoList = new ArrayList<>();
-        List<Board> boardList = boardRepository.findByAddressContaining(key);
-
-        if(boardList.isEmpty())
-            return searchBoardDtoList;
-
-        for (Board board : boardList) {
-           SearchBoardDto searchBoardDto = new SearchBoardDto(
-                   board.getAddress(),
-                   board.getTitle(),
-                   board.getContent(),
-                   board.getImg()
-           );
-           searchBoardDtoList.add(searchBoardDto);
-        }
-        return searchBoardDtoList;
-    }
 }
