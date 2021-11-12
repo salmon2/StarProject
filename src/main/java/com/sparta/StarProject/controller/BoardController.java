@@ -58,7 +58,7 @@ public class BoardController {
     }
 
     @GetMapping("/board/map/list")
-    public ResponseDto getMapList(@RequestParam String cityName){
+    public ResponseDto getMapList(@RequestParam(defaultValue = "default") String cityName){
         List<MapBoardDto> mapBoardDto = boardService.getBoardMapList(cityName);
         return new ResponseDto(200L, "성공", mapBoardDto);
     }

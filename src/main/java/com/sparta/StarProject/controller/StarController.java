@@ -7,6 +7,7 @@ import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.repository.StarInfoRepository;
 import com.sparta.StarProject.service.StarService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class StarController {
     private final StarService starService;
     private final StarInfoRepository starInfoRepository;
@@ -57,6 +59,7 @@ public class StarController {
     @GetMapping("/star/hot")
     public ResponseDto recommendStar() {
         starHotDto starHotDto = starService.recommendStar();
+        log.info("/star/hot = {}", starHotDto);
 
         return  new ResponseDto(200L, "성공", starHotDto);
     }

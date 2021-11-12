@@ -1,11 +1,13 @@
 package com.sparta.StarProject.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@Slf4j
 public class RestApiExceptionHandler {
 
     @ExceptionHandler(value = {StarProjectException.class})
@@ -33,6 +35,8 @@ public class RestApiExceptionHandler {
         else {
             restApiException = ServerError(ex, 500L);
         }
+
+        log.info(ex.getMessage());
         return new ResponseEntity<>(
                 restApiException,
                 HttpStatus.OK
@@ -46,7 +50,7 @@ public class RestApiExceptionHandler {
     @ExceptionHandler(value = {NullPointerException.class})
     public ResponseEntity<Object> NullPointExceptionHandler(Exception ex) {
         RestApiException restApiException = ServerError(ex, 500L);
-
+        log.info(ex.getMessage());
         return new ResponseEntity<>(
                 restApiException,
                 HttpStatus.OK
@@ -61,7 +65,7 @@ public class RestApiExceptionHandler {
     @ExceptionHandler(value = {NotFoundGps.class})
     public ResponseEntity<Object> NotFoundGps(Exception ex) {
         RestApiException restApiException = ServerError(ex, 500L);
-
+        log.info(ex.getMessage());
         return new ResponseEntity<>(
                 restApiException,
                 HttpStatus.OK
