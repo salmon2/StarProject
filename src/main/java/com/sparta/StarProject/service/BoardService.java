@@ -295,6 +295,23 @@ public class BoardService {
 //        }
 //    }
 
+    @Transactional
+    public boolean LikeInfo(User user, Long boardId) throws Exception{
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
+        if(LikeCheck(user,board)){
+            likeRepository.save(new Like(board,user));
+            return true;
+        }
+
+            return false;
+    }
+
+    private boolean LikeCheck(User user, Board board){
+        return likeRepository.findAllByBoardAndUser(board, user).isEmpty();
+    }
 
 
 }
