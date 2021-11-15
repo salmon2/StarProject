@@ -2,10 +2,7 @@ package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.api.API;
 import com.sparta.StarProject.api.locationAPI.AddressToGps;
-import com.sparta.StarProject.domain.Location;
-import com.sparta.StarProject.domain.Star;
-import com.sparta.StarProject.domain.User;
-import com.sparta.StarProject.domain.Weather;
+import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.domain.board.Timestamped;
@@ -29,6 +26,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -40,6 +38,7 @@ public class BoardService {
     private final API api;
     private final LocationRepository locationRepository;
     private final AddressToGps addressToGps;
+    private final LikeRepository likeRepository;
 
 
     public DetailBoardDto getDetailBoard(Long id) {
@@ -260,5 +259,42 @@ public class BoardService {
         }
         return "None Type";
     }
+//    public boolean LikeInfo(Long boardId, User user) throws Exception{
+//        Board findboard = boardRepository.findById(boardId).orElseThrow(
+//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+//        );
+//        Optional<Like> like = likeRepository.findByBoardIdAndUserId(boardId,user.getId());
+//
+//        if(like.isPresent()){
+//            likeRepository.delete(like.get());
+//            return false;
+//        }
+//        else {
+//            Like addLike = new Like(findboard, user);
+//            likeRepository.save(addLike);
+//            return true;
+//        }
+//    }
+//    public boolean likeInfo(Long boardId, User user) throws Exception{
+//        Board findBoard = boardRepository.findById(boardId).orElseThrow(
+//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+//        );
+//        List<Like> findDuplicateLike = likeRepository.findAllByBoardAndUser(findBoard, user);
+//
+//        if(findDuplicateLike.size() != 0){
+//            Like findLike = findDuplicateLike.get(0);
+//            likeRepository.delete(findLike);
+//
+//            return false;
+//        }
+//        else{
+//            Like newLike = new Like(findBoard, user);
+//            Like saveLike = likeRepository.save(newLike);
+//
+//            return true;
+//        }
+//    }
+
+
 
 }

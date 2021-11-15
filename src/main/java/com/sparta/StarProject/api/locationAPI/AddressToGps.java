@@ -1,7 +1,6 @@
 package com.sparta.StarProject.api.locationAPI;
 
 
-import com.sparta.StarProject.api.CampingList;
 import com.sparta.StarProject.dto.GeographicDto;
 import lombok.extern.slf4j.Slf4j;
 

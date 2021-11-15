@@ -69,6 +69,11 @@ public class BoardController {
         List<KeywordDto> keywordDtoList = boardService.getKeyword(cityName);
         return new ResponseDto(200L, "성공", keywordDtoList);
     }
+    @PostMapping("/board/like")
+    public ResponseDto LikeBoard(@RequestBody LikeDto likeDto,
+                                 @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
+        boolean LikeInfo = boardService.likeInfo(likeDto.getCardId(), userDetails.getUser());
 
-
+        return new ResponseDto(200L, "성공", LikeInfo);
+    }
 }

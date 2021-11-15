@@ -1,5 +1,6 @@
 package com.sparta.StarProject.repository;
 
+import com.sparta.StarProject.api.accuweatherAPI.StarGazingCity;
 import com.sparta.StarProject.domain.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
