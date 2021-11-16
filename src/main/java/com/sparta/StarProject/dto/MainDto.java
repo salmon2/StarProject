@@ -10,9 +10,11 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MainDto {
+    private Long id;
     private String title;
     private String address;
     private String contents;
     private Long StarGazing;
     private String img;
+
 }

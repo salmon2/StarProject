@@ -32,6 +32,7 @@ public class MainService {
                         return mainDto;
                     }
                     MainDto mainDtos = new MainDto(
+                            board.getId(),
                             board.getTitle(),
                             board.getAddress(),
                             board.getContent(),
