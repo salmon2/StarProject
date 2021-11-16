@@ -1,4 +1,4 @@
-#!/bin/bash
+##!/bin/bash
 
 CURRENT_PORT=$(cat /home/ec2-user/service_url.inc | grep -Po '[0-9]+' | tail -1)
 TARGET_PORT=0
@@ -20,6 +20,6 @@ if [ ! -z ${TARGET_PID} ]; then
   sudo kill -9 ${TARGET_PID}
 fi
 
-nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/star-project/build/libs/StarProject-0.0.1-SNAPSHOT.jar > /home/ec2-user/nohup.out 2>&1 &
+nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/star-project/build/libs/* > /home/ec2-user/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
