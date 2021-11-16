@@ -19,9 +19,12 @@ TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-
 
 if [ ! -z ${TARGET_PID} ]; then
   echo "> Kill WAS running at ${TARGET_PORT}."
-  sudo kill -9 ${TARGET_PID}
+  sudo kill ${TARGET_PID}
 fi
 
-sudo nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/star-project/build/libs/* > /home/ec2-user/nohup.out 2>&1 &
+nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/star-project/build/libs/* > /home/ec2-user/nohup.out 2>&1 &
+
+TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+echo "> target ${TARGET_PORT}."
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
