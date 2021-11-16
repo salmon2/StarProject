@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookmarkDto {
-    private Long cardId;
-    private Boolean bookmarkCheck;
-
+public class MyBookmarkListDto {
+    private String title;
+    private String contents;
+    private String img;
 }

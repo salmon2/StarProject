@@ -4,11 +4,9 @@ import com.sparta.StarProject.domain.Bookmark;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.BookmarkDto;
-import com.sparta.StarProject.dto.ResponseDto;
+import com.sparta.StarProject.dto.MyBookmarkListDto;
 import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.BookmarkRepository;
-import com.sparta.StarProject.repository.UserRepository;
-import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,46 +17,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkService {
 
-    private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final BookmarkRepository bookmarkRepository;
 
-    public ResponseDto addBookmark(Long boardId, UserDetailsImpl userDetails) {
-        Long id = userDetails.getUser().getId();
-        User user = userRepository.getById(id);
 
+    public BookmarkDto addBookmark(Long boardId, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new NullPointerException("게시글이 존재하지 않습니다.")
+                () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
         );
 
-        bookmarkRepository.findByUserAndBoard(user, board).ifPresent(
-                m -> {
-                    throw new IllegalArgumentException("중복된 북마크입니다.");
-                }
-        );
+        Boolean isExist = bookmarkRepository.existsByBoardAndUser(boardId, user);
 
-        Bookmark bookmark = new Bookmark(user, board);
+        BookmarkDto bookmarkDto = new BookmarkDto();
 
-        board.getBookmark().add(bookmark);
-        user.getMyBookmark().add(bookmark);
-        bookmarkRepository.save(bookmark);
-
-        return new ResponseDto(200L, "성공", null);
+        if (isExist){
+            bookmarkRepository.deleteByBoardAndUser(boardId, user);
+        } else {
+            Bookmark bookmark = new Bookmark(user, board);
+            bookmarkRepository.save(bookmark);
+        }
+        return bookmarkDto;
     }
 
-    public List<BookmarkDto> getMyBookMark(User user) {
-        List<BookmarkDto> bookmarkDtos = new ArrayList<>();
+    public List<MyBookmarkListDto> getMyBookMark(User user) {
+        List<MyBookmarkListDto> myBookmarkListDtos = new ArrayList<>();
         List<Board> myBookmark = boardRepository.findAllByUser(user);
 
         for(Board board : myBookmark) {
-            BookmarkDto bookmarkDto = new BookmarkDto(
+            MyBookmarkListDto myBookmarkListDto = new MyBookmarkListDto(
                     board.getTitle(),
                     board.getContent(),
                     board.getImg()
             );
-            bookmarkDtos.add(bookmarkDto);
+            myBookmarkListDtos.add(myBookmarkListDto);
         }
-        return bookmarkDtos;
+        return myBookmarkListDtos;
     }
-
 }
