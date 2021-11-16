@@ -1,20 +1,16 @@
 package com.sparta.StarProject.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MainDto {
-    private Long id;
+public class MyBookmarkListDto {
     private String title;
-    private String address;
     private String contents;
-    private Long StarGazing;
     private String img;
-
 }

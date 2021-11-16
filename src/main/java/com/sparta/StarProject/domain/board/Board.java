@@ -2,10 +2,7 @@ package com.sparta.StarProject.domain.board;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sparta.StarProject.domain.HashTag;
-import com.sparta.StarProject.domain.Like;
-import com.sparta.StarProject.domain.Location;
-import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.dto.BoardDto;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
@@ -50,11 +47,6 @@ public class Board extends Timestamped{
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_bookmark_id")
-    @JsonIgnore
-    private User userBookMark;
-
-    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "location_id")
     @JsonIgnore
     private Location location;
@@ -65,6 +57,10 @@ public class Board extends Timestamped{
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private List<HashTag> hashTagList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
+    @JsonIgnore
+    private List<Bookmark> bookmark;
 
     public Board(String title, String address, String content, String img, Double longitude, Double latitude, User user, Location location) {
         this.title = title;

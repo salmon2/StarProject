@@ -17,6 +17,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     public List<Board> findBoardDto();
     List<BoardDto> findByOrderByAddressDesc();
     List<Board> findByAddressContaining(String key);
+
     List<Board> findAllByUser(User user);
 
 }

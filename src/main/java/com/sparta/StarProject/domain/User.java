@@ -1,5 +1,6 @@
 package com.sparta.StarProject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.StarProject.domain.board.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,9 +32,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Board> boardList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userBookMark", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Board> bookMark = new ArrayList<>();
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Bookmark> myBookmark;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Like> like;
