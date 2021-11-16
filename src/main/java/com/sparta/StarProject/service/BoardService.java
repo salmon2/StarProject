@@ -2,10 +2,7 @@ package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.api.API;
 import com.sparta.StarProject.api.locationAPI.AddressToGps;
-import com.sparta.StarProject.domain.Location;
-import com.sparta.StarProject.domain.Star;
-import com.sparta.StarProject.domain.User;
-import com.sparta.StarProject.domain.Weather;
+import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.domain.board.Timestamped;
@@ -20,6 +17,7 @@ import com.sparta.StarProject.repository.*;
 import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.StarRepository;
 
+import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -126,7 +125,6 @@ public class BoardService {
                     }
                 }
             }
-
             else if(sort.equals("like")){
                 List<Board> boardDto = boardRepository.findBoardDto();
                 log.info("boardDto = {}", boardDto);
@@ -199,7 +197,7 @@ public class BoardService {
         return board;
     }
 
-
+    //검색
     public List<MapBoardDto> getBoardMapList(String cityName) {
         try {
             List<MapBoardDto> mapBoardDtoArrayList = new ArrayList<>();
@@ -226,7 +224,19 @@ public class BoardService {
         }
 
     }
+    //자동완성
+    public List<KeywordDto> getKeyword(String cityName){
+        List<KeywordDto> keywordDtoList = new ArrayList<>();
+        List<Location> locationList = locationRepository.findByCityNameContaining(cityName);
 
+        for (Location location : locationList) {
+            KeywordDto keywordDto = new KeywordDto(
+                    location.getCityName()
+            );
+            keywordDtoList.add(keywordDto);
+        }
+        return keywordDtoList;
+    }
 
     private Board getCampingOrUserMake(Board board) {
         if (board instanceof Camping){
@@ -247,25 +257,59 @@ public class BoardService {
         }
         return "None Type";
     }
+//    public boolean LikeInfo(Long boardId, User user) throws Exception{
+//        Board findboard = boardRepository.findById(boardId).orElseThrow(
+//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+//        );
+//        Optional<Like> like = likeRepository.findByBoardIdAndUserId(boardId,user.getId());
+//
+//        if(like.isPresent()){
+//            likeRepository.delete(like.get());
+//            return false;
+//        }
+//        else {
+//            Like addLike = new Like(findboard, user);
+//            likeRepository.save(addLike);
+//            return true;
+//        }
+//    }
+//    public boolean likeInfo(Long boardId, User user) throws Exception{
+//        Board findBoard = boardRepository.findById(boardId).orElseThrow(
+//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+//        );
+//        List<Like> findDuplicateLike = likeRepository.findAllByBoardAndUser(findBoard, user);
+//
+//        if(findDuplicateLike.size() != 0){
+//            Like findLike = findDuplicateLike.get(0);
+//            likeRepository.delete(findLike);
+//
+//            return false;
+//        }
+//        else{
+//            Like newLike = new Like(findBoard, user);
+//            Like saveLike = likeRepository.save(newLike);
+//
+//            return true;
+//        }
+//    }
 
-    //검색 기능
-    @Transactional
-    public List<SearchBoardDto> searchBoard(String key){
-        List<SearchBoardDto> searchBoardDtoList = new ArrayList<>();
-        List<Board> boardList = boardRepository.findByAddressContaining(key);
+//    @Transactional
+//    public boolean LikeInfo(User user, Long boardId) throws Exception{
+//        Board board = boardRepository.findById(boardId).orElseThrow(
+//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+//        );
+//
+//        if(LikeCheck(user,board)){
+//            likeRepository.save(new Like(board,user));
+//            return true;
+//        }
+//
+//            return false;
+//    }
+//
+//    private boolean LikeCheck(User user, Board board){
+//        return likeRepository.findAllByBoardAndUser(board, user).isEmpty();
+//    }
 
-        if(boardList.isEmpty())
-            return searchBoardDtoList;
 
-        for (Board board : boardList) {
-           SearchBoardDto searchBoardDto = new SearchBoardDto(
-                   board.getAddress(),
-                   board.getTitle(),
-                   board.getContent(),
-                   board.getImg()
-           );
-           searchBoardDtoList.add(searchBoardDto);
-        }
-        return searchBoardDtoList;
-    }
 }
