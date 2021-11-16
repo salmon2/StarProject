@@ -11,6 +11,9 @@ import java.util.Optional;
 
 @Transactional
 public interface LikeRepository extends JpaRepository<Like,Long> {
+
     List<Like> findAllByBoardAndUser(Board board, User user);
     List<Like> findAllByBoard(Board board);
+
+
 }

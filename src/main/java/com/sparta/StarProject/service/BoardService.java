@@ -17,6 +17,7 @@ import com.sparta.StarProject.repository.*;
 import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.StarRepository;
 
+import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,6 @@ public class BoardService {
     private final API api;
     private final LocationRepository locationRepository;
     private final AddressToGps addressToGps;
-    private final LikeRepository likeRepository;
 
 
     public DetailBoardDto getDetailBoard(Long id) {
@@ -295,23 +295,23 @@ public class BoardService {
 //        }
 //    }
 
-    @Transactional
-    public boolean LikeInfo(User user, Long boardId) throws Exception{
-        Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-        );
-
-        if(LikeCheck(user,board)){
-            likeRepository.save(new Like(board,user));
-            return true;
-        }
-
-            return false;
-    }
-
-    private boolean LikeCheck(User user, Board board){
-        return likeRepository.findAllByBoardAndUser(board, user).isEmpty();
-    }
+//    @Transactional
+//    public boolean LikeInfo(User user, Long boardId) throws Exception{
+//        Board board = boardRepository.findById(boardId).orElseThrow(
+//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+//        );
+//
+//        if(LikeCheck(user,board)){
+//            likeRepository.save(new Like(board,user));
+//            return true;
+//        }
+//
+//            return false;
+//    }
+//
+//    private boolean LikeCheck(User user, Board board){
+//        return likeRepository.findAllByBoardAndUser(board, user).isEmpty();
+//    }
 
 
 }

@@ -6,18 +6,20 @@ import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
+import com.sparta.StarProject.service.LikeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final LikeService likeService;
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
@@ -70,16 +72,15 @@ public class BoardController {
         return new ResponseDto(200L, "성공", keywordDtoList);
     }
 
+    //좋아요
     @PostMapping("/board/like")
-    public ResponseDto LikeBoard(@RequestBody LikeDto likeDto,
-                                 @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
-        boolean result = false;
+    public HashMap LikeInfo(@RequestParam LikeDto likeDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        String likeInfo = likeService.LikeInfo(likeDto.getCardId(), userDetails.getUser());
 
-        if (userDetails != null){
-            result = boardService.LikeInfo(userDetails.getUser(), likeDto.getCardId());
-        }
+        HashMap result = new HashMap<>();
+        result.put("msg", likeInfo);
 
-        return new ResponseDto(200L, "성공", likeDto);
-
+        return result;
     }
+
 }
