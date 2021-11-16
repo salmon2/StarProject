@@ -60,11 +60,7 @@ public class UserController {
             throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
         }
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("username", userDetails.getUser().getUsername());
-        data.put("nickname", userDetails.getUser().getNickname());
-
-        return new ResponseDto(200L, "성공", data);
+        return new ResponseDto(200L, "login success", null);
     }
 
     @GetMapping("/user/username/check")
