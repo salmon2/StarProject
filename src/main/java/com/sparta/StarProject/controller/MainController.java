@@ -4,6 +4,7 @@ import com.sparta.StarProject.dto.MainDto;
 import com.sparta.StarProject.dto.ResponseDto;
 import com.sparta.StarProject.service.MainService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MainController {
     private final MainService mainService;
-
 
     @GetMapping("/main/boardList")
     public ResponseDto mainList(){
