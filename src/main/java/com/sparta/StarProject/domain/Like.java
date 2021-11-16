@@ -28,4 +28,7 @@ public class Like {
         this.board = board;
         this.user = user;
     }
+
+
+
 }

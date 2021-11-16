@@ -16,5 +16,6 @@ public class MainDto {
     private String contents;
     private Long StarGazing;
     private String img;
+    private Boolean bookmark;
 
 }

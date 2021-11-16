@@ -16,6 +16,8 @@ public class MapBoardDto {
     private Double x_location;
     private Double y_location;
     private String address;
+    private Boolean bookmark;
     private Long starGazing;
     private String img;
+
 }

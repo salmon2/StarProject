@@ -80,7 +80,7 @@ public class AddressToGps {
 
     public static void main(String[] args) throws Exception {
         AddressToGps addressToGps = new AddressToGps();
-        GeographicDto address = addressToGps.getAddress("서울 구리시");
+        GeographicDto address = addressToGps.getAddress("서울 강남");
         log.info("위도 = {}, 경도 = {}", address.getLatitude(), address.getLongitude());
 
     }
