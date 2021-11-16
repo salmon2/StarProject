@@ -2,8 +2,12 @@ package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.domain.board.Camping;
+import com.sparta.StarProject.domain.board.Timestamped;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.BoardRepository;
+import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +17,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-
+    private final CampingRepository campingRepository;
 
 
     @GetMapping("/community/list")

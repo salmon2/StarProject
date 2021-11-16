@@ -126,7 +126,6 @@ public class BoardService {
                     }
                 }
             }
-
             else if(sort.equals("like")){
                 List<Board> boardDto = boardRepository.findBoardDto();
                 log.info("boardDto = {}", boardDto);
