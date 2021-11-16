@@ -107,6 +107,10 @@ public class BoardService {
 
     private Boolean likeCHeck(UserDetailsImpl userDetails, Board findBoard) {
         Boolean likeCheck;
+        if(userDetails == null) {
+            return false;
+        }
+
         List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(findBoard, userDetails.getUser());
         if(allByBoardAndUser.size() != 0){
             likeCheck = true;
@@ -119,7 +123,11 @@ public class BoardService {
 
     private Boolean bookmarkCheck(UserDetailsImpl userDetails, Board findBoard) {
         Boolean bookmarkCheck;
+        if(userDetails == null){
+            return false;
+        }
         List<Bookmark> bookmarkList = bookmarkRepository.findAllByBoardAndUser(findBoard, userDetails.getUser());
+
         if(bookmarkList.size() != 0){
             bookmarkCheck = true;
         }
@@ -145,24 +153,29 @@ public class BoardService {
     }
 
 
-    public List<CommunityDto> getBoardList(String sort, String cityName) {
-        List<CommunityDto> communityDtoList = getBoardListOrderBySortAndCityName(sort, cityName);
+    public List<CommunityDto> getBoardList(String sort, String cityName, UserDetailsImpl userDetails) {
+        List<CommunityDto> communityDtoList = getBoardListOrderBySortAndCityName(sort, cityName, userDetails);
 
         return communityDtoList;
     }
 
-    private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city) {
+    private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city, UserDetailsImpl userDetails) {
         List<CommunityDto>  communityDtoList = new ArrayList<>();
+
+        if(userDetails == null){
+            userDetails = new UserDetailsImpl(null);
+        }
+
         try{
             if(sort.equals("star")){
                 List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
                 for (Star star : starList) {
                     Location location = star.getLocation();
                     if(city.equals("all")){
-                        addCommunityDto(communityDtoList, location);
+                        addCommunityDto(communityDtoList, location, userDetails);
                     }
                     else if(location.getCityName().equals(city)){
-                        addCommunityDto(communityDtoList, location);
+                        addCommunityDto(communityDtoList, location, userDetails);
                     }
                 }
             }
@@ -170,10 +183,10 @@ public class BoardService {
                 List<Location> locationList = locationRepository.findAll();
                 for (Location location : locationList) {
                     if(city.equals("all")){
-                        addCommunityDto(communityDtoList, location);
+                        addCommunityDto(communityDtoList, location, userDetails);
                     }
                     else if(location.getCityName().equals(city)){
-                        addCommunityDto(communityDtoList, location);
+                        addCommunityDto(communityDtoList, location, userDetails);
                     }
                 }
                 Collections.sort(communityDtoList);
@@ -187,22 +200,36 @@ public class BoardService {
         return communityDtoList;
     }
 
-    private void addCommunityDto(List<CommunityDto> communityDtoList, Location location) {
+    private void addCommunityDto(List<CommunityDto> communityDtoList, Location location, UserDetailsImpl userDetails) {
         List<Board> boardList = location.getBoard();
         for (Board board : boardList) {
                 List<Like> allByBoard = likeRepository.findAllByBoard(board);
                 int size = allByBoard.size();
+                Boolean likeCheck = false;
+                if(userDetails.getUser() == null){
+                    likeCheck = false;
+                }
+                else{
+                    List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(board, userDetails.getUser());
+                    if(allByBoardAndUser.size() != 0){
+                        likeCheck = true;
+                    }
+                    else{
+                        likeCheck = false;
+                    }
+                }
 
                 CommunityDto communityDto = new CommunityDto(
-                        board.getId(),
-                        board.getUser().getNickname(),
-                        board.getTitle(),
-                        location.getCityName(),
-                        board.getImg(),
-                        (long) size,
-                        board.getContent(),
-                    Timestamped.TimeToString(board.getModifiedAt())
-            );
+                                        board.getId(),
+                                        board.getUser().getNickname(),
+                                        board.getTitle(),
+                                        location.getCityName(),
+                                        board.getImg(),
+                                        board.getContent(),
+                                        Timestamped.TimeToString(board.getModifiedAt()),
+                                        (long) size,
+                                        likeCheck
+                );
             communityDtoList.add(communityDto);
         }
     }
@@ -267,7 +294,7 @@ public class BoardService {
                     for (Board board : boardList) {
                         Boolean bookmark = null;
 
-                        if(userDetails.equals(null)){
+                        if(userDetails == null){
                             bookmark = false;
                         }
                         else {

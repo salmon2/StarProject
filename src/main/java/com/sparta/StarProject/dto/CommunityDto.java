@@ -15,15 +15,16 @@ public class CommunityDto  implements Comparable<CommunityDto>{
     private String title;
     private String cityName;
     private String img;
-    private Long like;
     private String contents;
     private String modifiedAt;
+    private Long likeCount;
+    private Boolean likeCheck;
 
     @Override
     public int compareTo(CommunityDto communityDto) {
-        if (communityDto.like > this.like) {
+        if (communityDto.likeCount > this.likeCount) {
             return 1;
-        } else if (communityDto.like < this.like) {
+        } else if (communityDto.likeCount < this.likeCount) {
             return -1;
         }
         return 0;

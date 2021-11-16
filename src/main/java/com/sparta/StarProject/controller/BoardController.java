@@ -26,8 +26,9 @@ public class BoardController {
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
-                                @RequestParam(defaultValue = "all") String cityName){
-        List<CommunityDto> communityDtoList = boardService.getBoardList(sort, cityName);
+                                @RequestParam(defaultValue = "all") String cityName,
+                                @AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<CommunityDto> communityDtoList = boardService.getBoardList(sort, cityName, userDetails);
         return new ResponseDto(200L, "성공", communityDtoList);
     }
 

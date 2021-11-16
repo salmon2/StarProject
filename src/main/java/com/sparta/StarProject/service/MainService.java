@@ -23,6 +23,11 @@ public class MainService {
 
     public List<MainDto> mainList(UserDetailsImpl userDetails) {
         List<MainDto> mainDto = new ArrayList<>();
+        if(userDetails == null){
+            userDetails = new UserDetailsImpl(null);
+        }
+
+
         try {
             List<Star> mainView = starRepository.findAllByOrderByStarGazingDesc();
             int count = 0;
@@ -58,6 +63,8 @@ public class MainService {
 
     private Boolean bookmarkCheck(UserDetailsImpl userDetails, Board findBoard) {
         Boolean likeCheck;
+        if(userDetails.getUser() == null)
+            return false;
         List<Bookmark> allByBoardAndUser = bookmarkRepository.findAllByBoardAndUser(findBoard, userDetails.getUser());
         if(allByBoardAndUser.size() != 0){
             likeCheck = true;
