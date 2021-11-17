@@ -4,7 +4,7 @@ import com.sparta.StarProject.domain.Like;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.LikeResponseDto;
-import com.sparta.StarProject.repository.BoardRepository;
+import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.repository.LikeRepository;
 import com.sparta.StarProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

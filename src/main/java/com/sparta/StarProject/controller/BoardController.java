@@ -4,6 +4,7 @@ import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
@@ -23,6 +24,7 @@ public class BoardController {
     private final CampingRepository campingRepository;
 
     private final LikeService likeService;
+    private final BoardRepository boardRepository;
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
@@ -92,6 +94,14 @@ public class BoardController {
         LikeResponseDto likeResponseDto = likeService.LikeInfo(cardId, userDetails.getUser());
 
         return likeResponseDto;
+    }
+
+
+    @GetMapping("/test3")
+    public List<BoardDto> Test(){
+        List<BoardDto> boardList = boardRepository.myfindBoardList();
+
+        return boardList;
     }
 
 }

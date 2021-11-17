@@ -15,9 +15,10 @@ import com.sparta.StarProject.exception.NotFoundGps;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.*;
 
-import com.sparta.StarProject.repository.BoardRepository;
+import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.repository.StarRepository;
 
+import com.sparta.StarProject.repository.bookmarkRepository.BookmarkRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
@@ -58,12 +59,10 @@ public class BoardService {
         Boolean bookmarkCheck = null;
         bookmarkCheck = bookmarkCheck(userDetails, findBoard);
 
-
         findBoard = getCampingOrUserMake(findBoard);
         List<Weather> weatherList = findBoard.getLocation().getWeatherList();
         Location findBoardLocation = findBoard.getLocation();
         Star findStar = findBoardLocation.getStar();
-
 
         List<DetailWeatherWeatherList> detailWeatherWeatherLists = new ArrayList<>();
         for (Weather weather : weatherList) {
