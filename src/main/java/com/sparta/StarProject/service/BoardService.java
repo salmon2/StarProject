@@ -296,10 +296,16 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
-    public Board updateBoard(Long id, BoardDto boardDto){
+    public Board updateBoard(Long id, BoardDto boardDto,UserDetailsImpl userDetails)throws Exception{
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
+        if(board.getUser().getUsername().equals(userDetails.getUsername())){
+            boardRepository.deleteById(id);
+        }
+        else{
+            throw new StarProjectException(ErrorCode.User_Forbidden);
+        }
         board.update(boardDto);
         return board;
     }
