@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,66 +21,6 @@ public class LikeService {
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
 
-//    public List<LikeDto> LikeInfo(Long boardId, UserDetailsImpl userDetails) throws Exception{
-//        Long id = userDetails.getUser().getId();
-//        User user = userRepository.getById(id);
-//
-//        Board board = boardRepository.findById(boardId).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//
-//        Like like = new Like(board,user);
-//
-//        board.getLike().add(like);
-//        user.getLike().add(like);
-//        likeRepository.save(like);
-//
-//        return ;
-//    }
-
-//    public boolean addLike(User user, Long boardId) throws Exception{
-//        Board board = boardRepository.findById(boardId).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//
-//        //중복 좋아요 방지
-//        if (notLike(user, board)){
-//            likeRepository.save(new Like(board,user));
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    public void deleteLike(User user, Long boardId) throws Exception{
-//        Board board = boardRepository.findById(boardId).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//
-//        //임의 예외처리
-//        Like like = likeRepository.findAllByUserAndBoard(board,user).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//        likeRepository.delete(like);
-//    }
-//    public List<String> countLike(User userDetails, Long boardId)throws Exception{
-//        Board board = boardRepository.findById(boardId).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//
-//        Integer likeCount = likeRepository.countByBoard(board).orElse(0);
-//
-//        List<String> likeDtoList = new ArrayList<>();
-//
-//        if (userDetails != null){
-//           likeDtoList.add(String.valueOf(notLike(userDetails, board)));
-//           return likeDtoList;
-//        }
-//        return likeDtoList;
-//    }
-//    //사용자가 이미 좋아요 한 게시물인지 확인
-//    private boolean notLike(User user, Board board){
-//        return likeRepository.findAllByBoardAndUser(board,user).isEmpty();
-//    }
 
     @Transactional
     public LikeResponseDto LikeInfo(Long boardId, User user){

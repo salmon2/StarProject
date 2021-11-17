@@ -174,8 +174,8 @@ public class BoardService {
                     if(city.equals("all")){
                         addCommunityDto(communityDtoList, location, userDetails);
                     }
-                    else if(location.getCityName().equals(city)){
-                        addCommunityDto(communityDtoList, location, userDetails);
+                    else {
+                        addCommunityDtoToSearch(city, userDetails, communityDtoList, location);
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class BoardService {
                         addCommunityDto(communityDtoList, location, userDetails);
                     }
                     else if(location.getCityName().equals(city)){
-                        addCommunityDto(communityDtoList, location, userDetails);
+                        addCommunityDtoToSearch(city, userDetails, communityDtoList, location);
                     }
                 }
                 Collections.sort(communityDtoList);
@@ -200,26 +200,37 @@ public class BoardService {
         return communityDtoList;
     }
 
+    private void addCommunityDtoToSearch(String city, UserDetailsImpl userDetails, List<CommunityDto> communityDtoList, Location location) {
+        List<Board> boardList = location.getBoard();
+        for (Board board : boardList) {
+            if(board.getAddress().contains(city)){
+                List<Like> allByBoard = likeRepository.findAllByBoard(board);
+                int size = allByBoard.size();
+                Boolean likeCheck = likeCheck(userDetails, board);
+
+                CommunityDto communityDto = new CommunityDto(
+                        board.getId(),
+                        board.getUser().getNickname(),
+                        board.getTitle(),
+                        location.getCityName(),
+                        board.getImg(),
+                        board.getContent(),
+                        Timestamped.TimeToString(board.getModifiedAt()),
+                        (long) size,
+                        likeCheck
+                );
+                communityDtoList.add(communityDto);}
+        }
+    }
+
     private void addCommunityDto(List<CommunityDto> communityDtoList, Location location, UserDetailsImpl userDetails) {
         List<Board> boardList = location.getBoard();
         for (Board board : boardList) {
-                List<Like> allByBoard = likeRepository.findAllByBoard(board);
-                int size = allByBoard.size();
-                Boolean likeCheck = false;
-                if(userDetails.getUser() == null){
-                    likeCheck = false;
-                }
-                else{
-                    List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(board, userDetails.getUser());
-                    if(allByBoardAndUser.size() != 0){
-                        likeCheck = true;
-                    }
-                    else{
-                        likeCheck = false;
-                    }
-                }
+            List<Like> allByBoard = likeRepository.findAllByBoard(board);
+            int size = allByBoard.size();
+            Boolean likeCheck = likeCheck(userDetails, board);
 
-                CommunityDto communityDto = new CommunityDto(
+            CommunityDto communityDto = new CommunityDto(
                                         board.getId(),
                                         board.getUser().getNickname(),
                                         board.getTitle(),
@@ -232,6 +243,23 @@ public class BoardService {
                 );
             communityDtoList.add(communityDto);
         }
+    }
+
+    private Boolean likeCheck(UserDetailsImpl userDetails, Board board) {
+        Boolean likeCheck = false;
+        if(userDetails.getUser() == null){
+            likeCheck = false;
+        }
+        else{
+            List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(board, userDetails.getUser());
+            if(allByBoardAndUser.size() != 0){
+                likeCheck = true;
+            }
+            else{
+                likeCheck = false;
+            }
+        }
+        return likeCheck;
     }
 
 
@@ -268,10 +296,16 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
-    public Board updateBoard(Long id, BoardDto boardDto){
+    public Board updateBoard(Long id, BoardDto boardDto,UserDetailsImpl userDetails)throws Exception{
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
+        if(board.getUser().getUsername().equals(userDetails.getUsername())){
+            boardRepository.deleteById(id);
+        }
+        else{
+            throw new StarProjectException(ErrorCode.User_Forbidden);
+        }
         board.update(boardDto);
         return board;
     }
@@ -281,9 +315,11 @@ public class BoardService {
      * 수정 필요
      * @param cityName
      * @param userDetails
+     * @param x_location
+     * @param y_location
      * @return
      */
-    public List<MapBoardDto> getBoardMapList(String cityName, UserDetailsImpl userDetails) {
+    public List<MapBoardDto> getBoardMapList(String cityName, UserDetailsImpl userDetails, Double x_location, Double y_location) {
             if(cityName.equals("default")){
                 List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
                 List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
@@ -292,29 +328,17 @@ public class BoardService {
                     Location location = star.getLocation();
                     List<Board> boardList = location.getBoard();
                     for (Board board : boardList) {
-                        Boolean bookmark = null;
-
-                        if(userDetails == null){
-                            bookmark = false;
+                        if(x_location == 0){
+                            addMapBoardDtoList(userDetails, mapBoardDtoList, star, board);
                         }
-                        else {
-                            bookmark = bookmarkCheck(userDetails, board);
+                        else{
+                            Double base_y = board.getLatitude();
+                            Double base_x = board.getLongitude();
+                            //위경도 1 당 111km
+                            if( Math.abs(base_y - y_location) < 0.4 && Math.abs(base_x - x_location) < 0.4){
+                                addMapBoardDtoList(userDetails, mapBoardDtoList, star, board);
+                            }
                         }
-
-                        board = getCampingOrUserMake(board);
-                        MapBoardDto mapBoardDto = new MapBoardDto(
-                                board.getId(),
-                                getTypeToString(board),
-                                board.getTitle(),
-                                board.getLongitude(),
-                                board.getLatitude(),
-                                board.getAddress(),
-                                bookmark,
-                                star.getStarGazing(),
-                                board.getImg()
-                        );
-
-                        mapBoardDtoList.add(mapBoardDto);
                     }
                 }
 
@@ -325,31 +349,71 @@ public class BoardService {
                 List<Board> boardList = boardRepository.findByAddressContaining(cityName);
 
                 for (Board board : boardList) {
-                    Boolean bookmark = null;
-
-                    if(userDetails.equals(null)){
-                        bookmark = false;
+                    if(x_location == 0){
+                        mapBoardDtoList2(userDetails, mapBoardDtoArrayList, board);
                     }
-                    else {
-                        bookmark = bookmarkCheck(userDetails, board);
+                    else{
+                        Double base_y = board.getLatitude();
+                        Double base_x = board.getLongitude();
+                        //위경도 1 당 111km
+                        if( Math.abs(base_y - y_location) < 0.4 && Math.abs(base_x - x_location) < 0.4){
+                            mapBoardDtoList2(userDetails, mapBoardDtoArrayList, board);
+                        }
                     }
-                    Star star = board.getLocation().getStar();
-                    MapBoardDto mapBoardDto = new MapBoardDto(
-                            board.getId(),
-                            getTypeToString(board),
-                            board.getTitle(),
-                            board.getLongitude(),
-                            board.getLatitude(),
-                            board.getAddress(),
-                            bookmark,
-                            star.getStarGazing(),
-                            board.getImg()
-                    );
-                    mapBoardDtoArrayList.add(mapBoardDto);
                 }
                 return mapBoardDtoArrayList;
             }
 
+    }
+
+    private void mapBoardDtoList2(UserDetailsImpl userDetails, List<MapBoardDto> mapBoardDtoArrayList, Board board) {
+        Boolean bookmark = null;
+
+        if(userDetails.equals(null)){
+            bookmark = false;
+        }
+        else {
+            bookmark = bookmarkCheck(userDetails, board);
+        }
+        Star star = board.getLocation().getStar();
+        MapBoardDto mapBoardDto = new MapBoardDto(
+                board.getId(),
+                getTypeToString(board),
+                board.getTitle(),
+                board.getLongitude(),
+                board.getLatitude(),
+                board.getAddress(),
+                bookmark,
+                star.getStarGazing(),
+                board.getImg()
+        );
+        mapBoardDtoArrayList.add(mapBoardDto);
+    }
+
+    private void addMapBoardDtoList(UserDetailsImpl userDetails, List<MapBoardDto> mapBoardDtoList, Star star, Board board) {
+        Boolean bookmark = null;
+
+        if(userDetails == null){
+            bookmark = false;
+        }
+        else {
+            bookmark = bookmarkCheck(userDetails, board);
+        }
+
+        board = getCampingOrUserMake(board);
+        MapBoardDto mapBoardDto = new MapBoardDto(
+                board.getId(),
+                getTypeToString(board),
+                board.getTitle(),
+                board.getLongitude(),
+                board.getLatitude(),
+                board.getAddress(),
+                bookmark,
+                star.getStarGazing(),
+                board.getImg()
+        );
+
+        mapBoardDtoList.add(mapBoardDto);
     }
 
 
