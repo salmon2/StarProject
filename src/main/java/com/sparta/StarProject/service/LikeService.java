@@ -3,6 +3,7 @@ package com.sparta.StarProject.service;
 import com.sparta.StarProject.domain.Like;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.dto.LikeDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.BoardRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -54,8 +54,11 @@ public class BoardController {
     }
 
     @PutMapping("/board/update")
-    public ResponseDto updateBoard(@RequestParam Long boardId,@RequestBody BoardDto boardDto){
-        Board updateBoard = boardService.updateBoard(boardId, boardDto);
+    public ResponseDto updateBoard(@RequestParam Long boardId,
+                                   @RequestBody BoardDto boardDto,
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
+
+        Board updateBoard = boardService.updateBoard(boardId, boardDto, userDetails);
         return new ResponseDto(200L,"성공",updateBoard);
     }
 
