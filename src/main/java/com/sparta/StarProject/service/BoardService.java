@@ -309,9 +309,11 @@ public class BoardService {
      * 수정 필요
      * @param cityName
      * @param userDetails
+     * @param x_location
+     * @param y_location
      * @return
      */
-    public List<MapBoardDto> getBoardMapList(String cityName, UserDetailsImpl userDetails) {
+    public List<MapBoardDto> getBoardMapList(String cityName, UserDetailsImpl userDetails, Double x_location, Double y_location) {
             if(cityName.equals("default")){
                 List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
                 List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
@@ -320,29 +322,17 @@ public class BoardService {
                     Location location = star.getLocation();
                     List<Board> boardList = location.getBoard();
                     for (Board board : boardList) {
-                        Boolean bookmark = null;
-
-                        if(userDetails == null){
-                            bookmark = false;
+                        if(x_location == 0){
+                            addMapBoardDtoList(userDetails, mapBoardDtoList, star, board);
                         }
-                        else {
-                            bookmark = bookmarkCheck(userDetails, board);
+                        else{
+                            Double base_y = board.getLatitude();
+                            Double base_x = board.getLongitude();
+                            //위경도 1 당 111km
+                            if( Math.abs(base_y - y_location) < 0.4 && Math.abs(base_x - x_location) < 0.4){
+                                addMapBoardDtoList(userDetails, mapBoardDtoList, star, board);
+                            }
                         }
-
-                        board = getCampingOrUserMake(board);
-                        MapBoardDto mapBoardDto = new MapBoardDto(
-                                board.getId(),
-                                getTypeToString(board),
-                                board.getTitle(),
-                                board.getLongitude(),
-                                board.getLatitude(),
-                                board.getAddress(),
-                                bookmark,
-                                star.getStarGazing(),
-                                board.getImg()
-                        );
-
-                        mapBoardDtoList.add(mapBoardDto);
                     }
                 }
 
@@ -353,31 +343,71 @@ public class BoardService {
                 List<Board> boardList = boardRepository.findByAddressContaining(cityName);
 
                 for (Board board : boardList) {
-                    Boolean bookmark = null;
-
-                    if(userDetails.equals(null)){
-                        bookmark = false;
+                    if(x_location == 0){
+                        mapBoardDtoList2(userDetails, mapBoardDtoArrayList, board);
                     }
-                    else {
-                        bookmark = bookmarkCheck(userDetails, board);
+                    else{
+                        Double base_y = board.getLatitude();
+                        Double base_x = board.getLongitude();
+                        //위경도 1 당 111km
+                        if( Math.abs(base_y - y_location) < 0.4 && Math.abs(base_x - x_location) < 0.4){
+                            mapBoardDtoList2(userDetails, mapBoardDtoArrayList, board);
+                        }
                     }
-                    Star star = board.getLocation().getStar();
-                    MapBoardDto mapBoardDto = new MapBoardDto(
-                            board.getId(),
-                            getTypeToString(board),
-                            board.getTitle(),
-                            board.getLongitude(),
-                            board.getLatitude(),
-                            board.getAddress(),
-                            bookmark,
-                            star.getStarGazing(),
-                            board.getImg()
-                    );
-                    mapBoardDtoArrayList.add(mapBoardDto);
                 }
                 return mapBoardDtoArrayList;
             }
 
+    }
+
+    private void mapBoardDtoList2(UserDetailsImpl userDetails, List<MapBoardDto> mapBoardDtoArrayList, Board board) {
+        Boolean bookmark = null;
+
+        if(userDetails.equals(null)){
+            bookmark = false;
+        }
+        else {
+            bookmark = bookmarkCheck(userDetails, board);
+        }
+        Star star = board.getLocation().getStar();
+        MapBoardDto mapBoardDto = new MapBoardDto(
+                board.getId(),
+                getTypeToString(board),
+                board.getTitle(),
+                board.getLongitude(),
+                board.getLatitude(),
+                board.getAddress(),
+                bookmark,
+                star.getStarGazing(),
+                board.getImg()
+        );
+        mapBoardDtoArrayList.add(mapBoardDto);
+    }
+
+    private void addMapBoardDtoList(UserDetailsImpl userDetails, List<MapBoardDto> mapBoardDtoList, Star star, Board board) {
+        Boolean bookmark = null;
+
+        if(userDetails == null){
+            bookmark = false;
+        }
+        else {
+            bookmark = bookmarkCheck(userDetails, board);
+        }
+
+        board = getCampingOrUserMake(board);
+        MapBoardDto mapBoardDto = new MapBoardDto(
+                board.getId(),
+                getTypeToString(board),
+                board.getTitle(),
+                board.getLongitude(),
+                board.getLatitude(),
+                board.getAddress(),
+                bookmark,
+                star.getStarGazing(),
+                board.getImg()
+        );
+
+        mapBoardDtoList.add(mapBoardDto);
     }
 
 

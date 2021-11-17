@@ -65,10 +65,12 @@ public class BoardController {
     }
 
     @GetMapping("/board/map/list")
-    public ResponseDto getMapList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(defaultValue = "default") String cityName){
-
-
-        List<MapBoardDto> mapBoardDto = boardService.getBoardMapList(cityName, userDetails);
+    public ResponseDto getMapList(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                  @RequestParam(defaultValue = "default") String cityName,
+                                  @RequestParam(defaultValue = "0")Double x_location,
+                                  @RequestParam(defaultValue = "0")Double y_location
+    ){
+        List<MapBoardDto> mapBoardDto = boardService.getBoardMapList(cityName, userDetails, x_location, y_location);
 
         return new ResponseDto(200L, "성공", mapBoardDto);
     }
