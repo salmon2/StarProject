@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping("/user/login/check")
     public ResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails) throws StarProjectException {
 
-        if (userDetails == null) {
+        if (userDetails.getUser() == null) {
             throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
         }
 
