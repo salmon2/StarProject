@@ -1,6 +1,7 @@
 package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.api.API;
+import com.sparta.StarProject.api.accuweatherAPI.StarGazingCity;
 import com.sparta.StarProject.api.locationAPI.AddressToGps;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.board.Board;
@@ -26,8 +27,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -39,12 +40,24 @@ public class BoardService {
     private final API api;
     private final LocationRepository locationRepository;
     private final AddressToGps addressToGps;
+    private final LikeRepository likeRepository;
+    private final BookmarkRepository bookmarkRepository;
 
 
-    public DetailBoardDto getDetailBoard(Long id) {
+    public DetailBoardDto getDetailBoard(Long id, UserDetailsImpl userDetails) {
         Board findBoard = boardRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
+
+        List<Like> allByBoard = likeRepository.findAllByBoard(findBoard);
+        int likeSize = allByBoard.size();
+
+        Boolean likeCheck = null;
+        likeCheck = likeCHeck(userDetails, findBoard);
+
+        Boolean bookmarkCheck = null;
+        bookmarkCheck = bookmarkCheck(userDetails, findBoard);
+
 
         findBoard = getCampingOrUserMake(findBoard);
         List<Weather> weatherList = findBoard.getLocation().getWeatherList();
@@ -73,6 +86,7 @@ public class BoardService {
                 findStar.getMoonSet(),
                 detailWeatherWeatherLists
         );
+
         DetailBoardDto detailBoardDto = new DetailBoardDto(
                 findBoard.getId(),
                 findBoard.getUser().getNickname(),
@@ -82,10 +96,46 @@ public class BoardService {
                 findBoard.getContent(),
                 findBoard.getLongitude(),   //경도
                 findBoard.getLatitude(),     //위도,
+                likeCheck,
+                (long) likeSize,
+                bookmarkCheck,
                 newDetailBoardDto
         );
 
         return detailBoardDto;
+    }
+
+    private Boolean likeCHeck(UserDetailsImpl userDetails, Board findBoard) {
+        Boolean likeCheck;
+        if(userDetails == null) {
+            return false;
+        }
+
+        List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(findBoard, userDetails.getUser());
+        if(allByBoardAndUser.size() != 0){
+            likeCheck = true;
+        }
+        else{
+            likeCheck = false;
+        }
+        return likeCheck;
+    }
+
+    private Boolean bookmarkCheck(UserDetailsImpl userDetails, Board findBoard) {
+        Boolean bookmarkCheck;
+        if(userDetails == null){
+            return false;
+        }
+        List<Bookmark> bookmarkList = bookmarkRepository.findAllByBoardAndUser(findBoard, userDetails.getUser());
+
+        if(bookmarkList.size() != 0){
+            bookmarkCheck = true;
+        }
+        else{
+            bookmarkCheck = false;
+        }
+
+        return bookmarkCheck;
     }
 
     public void deleteBoard(Long boardId, UserDetails userDetails) throws StarProjectException {
@@ -103,31 +153,43 @@ public class BoardService {
     }
 
 
-    public List<CommunityDto> getBoardList(String sort, String cityName) {
-        List<CommunityDto> communityDtoList =
-                getBoardListOrderBySortAndCityName(sort, cityName);
+    public List<CommunityDto> getBoardList(String sort, String cityName, UserDetailsImpl userDetails) {
+        List<CommunityDto> communityDtoList = getBoardListOrderBySortAndCityName(sort, cityName, userDetails);
 
         return communityDtoList;
     }
 
-    private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city) {
+    private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city, UserDetailsImpl userDetails) {
         List<CommunityDto>  communityDtoList = new ArrayList<>();
+
+        if(userDetails == null){
+            userDetails = new UserDetailsImpl(null);
+        }
+
         try{
             if(sort.equals("star")){
                 List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
                 for (Star star : starList) {
                     Location location = star.getLocation();
                     if(city.equals("all")){
-                        addCommunityDto(communityDtoList, location);
+                        addCommunityDto(communityDtoList, location, userDetails);
                     }
                     else if(location.getCityName().equals(city)){
-                        addCommunityDto(communityDtoList, location);
+                        addCommunityDto(communityDtoList, location, userDetails);
                     }
                 }
             }
             else if(sort.equals("like")){
-                List<Board> boardDto = boardRepository.findBoardDto();
-                log.info("boardDto = {}", boardDto);
+                List<Location> locationList = locationRepository.findAll();
+                for (Location location : locationList) {
+                    if(city.equals("all")){
+                        addCommunityDto(communityDtoList, location, userDetails);
+                    }
+                    else if(location.getCityName().equals(city)){
+                        addCommunityDto(communityDtoList, location, userDetails);
+                    }
+                }
+                Collections.sort(communityDtoList);
             }
         }
         catch (NullPointerException nullPointerException){
@@ -138,19 +200,36 @@ public class BoardService {
         return communityDtoList;
     }
 
-    private void addCommunityDto(List<CommunityDto> communityDtoList, Location location) {
+    private void addCommunityDto(List<CommunityDto> communityDtoList, Location location, UserDetailsImpl userDetails) {
         List<Board> boardList = location.getBoard();
         for (Board board : boardList) {
-            CommunityDto communityDto = new CommunityDto(
-                    board.getId(),
-                    board.getUser().getNickname(),
-                    board.getTitle(),
-                    location.getCityName(),
-                    board.getImg(),
-                    3L,
-                    board.getContent(),
-                    Timestamped.TimeToString(board.getModifiedAt())
-            );
+                List<Like> allByBoard = likeRepository.findAllByBoard(board);
+                int size = allByBoard.size();
+                Boolean likeCheck = false;
+                if(userDetails.getUser() == null){
+                    likeCheck = false;
+                }
+                else{
+                    List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(board, userDetails.getUser());
+                    if(allByBoardAndUser.size() != 0){
+                        likeCheck = true;
+                    }
+                    else{
+                        likeCheck = false;
+                    }
+                }
+
+                CommunityDto communityDto = new CommunityDto(
+                                        board.getId(),
+                                        board.getUser().getNickname(),
+                                        board.getTitle(),
+                                        location.getCityName(),
+                                        board.getImg(),
+                                        board.getContent(),
+                                        Timestamped.TimeToString(board.getModifiedAt()),
+                                        (long) size,
+                                        likeCheck
+                );
             communityDtoList.add(communityDto);
         }
     }
@@ -198,43 +277,101 @@ public class BoardService {
     }
 
     //검색
-    public List<MapBoardDto> getBoardMapList(String cityName) {
-        try {
-            List<MapBoardDto> mapBoardDtoArrayList = new ArrayList<>();
-            List<Board> boardList = boardRepository.findByAddressContaining(cityName);
+    /**
+     * 수정 필요
+     * @param cityName
+     * @param userDetails
+     * @return
+     */
+    public List<MapBoardDto> getBoardMapList(String cityName, UserDetailsImpl userDetails) {
+            if(cityName.equals("default")){
+                List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
+                List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
 
-            for (Board board : boardList) {
-                Star star = board.getLocation().getStar();
-                MapBoardDto mapBoardDto = new MapBoardDto(
-                        board.getId(),
-                        getTypeToString(board),
-                        board.getTitle(),
-                        board.getLongitude(),
-                        board.getLatitude(),
-                        board.getAddress(),
-                        star.getStarGazing(),
-                        board.getImg()
-                );
-                mapBoardDtoArrayList.add(mapBoardDto);
+                for (Star star : starList) {
+                    Location location = star.getLocation();
+                    List<Board> boardList = location.getBoard();
+                    for (Board board : boardList) {
+                        Boolean bookmark = null;
+
+                        if(userDetails == null){
+                            bookmark = false;
+                        }
+                        else {
+                            bookmark = bookmarkCheck(userDetails, board);
+                        }
+
+                        board = getCampingOrUserMake(board);
+                        MapBoardDto mapBoardDto = new MapBoardDto(
+                                board.getId(),
+                                getTypeToString(board),
+                                board.getTitle(),
+                                board.getLongitude(),
+                                board.getLatitude(),
+                                board.getAddress(),
+                                bookmark,
+                                star.getStarGazing(),
+                                board.getImg()
+                        );
+
+                        mapBoardDtoList.add(mapBoardDto);
+                    }
+                }
+
+                return mapBoardDtoList;
             }
-            return mapBoardDtoArrayList;
-        }
-        catch(NullPointerException nullPointerException){
-            throw new NullPointerException("해당하는 게시글이 존재하지 않습니다.");
-        }
+            else{
+                List<MapBoardDto> mapBoardDtoArrayList = new ArrayList<>();
+                List<Board> boardList = boardRepository.findByAddressContaining(cityName);
+
+                for (Board board : boardList) {
+                    Boolean bookmark = null;
+
+                    if(userDetails.equals(null)){
+                        bookmark = false;
+                    }
+                    else {
+                        bookmark = bookmarkCheck(userDetails, board);
+                    }
+                    Star star = board.getLocation().getStar();
+                    MapBoardDto mapBoardDto = new MapBoardDto(
+                            board.getId(),
+                            getTypeToString(board),
+                            board.getTitle(),
+                            board.getLongitude(),
+                            board.getLatitude(),
+                            board.getAddress(),
+                            bookmark,
+                            star.getStarGazing(),
+                            board.getImg()
+                    );
+                    mapBoardDtoArrayList.add(mapBoardDto);
+                }
+                return mapBoardDtoArrayList;
+            }
 
     }
+
+
     //자동완성
+
+    /**
+     * 수정 필요
+     * @param cityName
+     * @return
+     */
     public List<KeywordDto> getKeyword(String cityName){
         List<KeywordDto> keywordDtoList = new ArrayList<>();
         List<Location> locationList = locationRepository.findByCityNameContaining(cityName);
 
         for (Location location : locationList) {
-            KeywordDto keywordDto = new KeywordDto(
-                    location.getCityName()
-            );
+            StarGazingCity starGazingCityByString = StarGazingCity.getStarGazingCityByString(location.getCityName());
+
+
+            KeywordDto keywordDto = new KeywordDto(location.getCityName());
             keywordDtoList.add(keywordDto);
         }
+
         return keywordDtoList;
     }
 

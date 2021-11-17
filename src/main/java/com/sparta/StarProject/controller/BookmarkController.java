@@ -1,12 +1,9 @@
 package com.sparta.StarProject.controller;
 
-import com.sparta.StarProject.domain.Bookmark;
 import com.sparta.StarProject.dto.BookmarkDto;
 import com.sparta.StarProject.dto.MyBookmarkListDto;
 import com.sparta.StarProject.dto.ResponseDto;
-import com.sparta.StarProject.repository.BoardRepository;
-import com.sparta.StarProject.repository.BookmarkRepository;
-import com.sparta.StarProject.repository.UserRepository;
+import com.sparta.StarProject.dto.BookmarkMapList;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
@@ -28,24 +25,34 @@ public class BookmarkController {
     //북마크하기
     @PostMapping("/bookmark")
     public ResponseDto addBookmark(@RequestParam("cardId") Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        Boolean bookmarkCheck = true;
-
         BookmarkDto bookmarkDto = bookmarkService.addBookmark(boardId, userDetails.getUser());
 
-        if(bookmarkCheck){
-            return new ResponseDto(200L, "북마크 되었습니다.", bookmarkDto);
-        } else {
-            return new ResponseDto(201L, "북마크가 취소 되었습니다.", bookmarkDto);
+        if(bookmarkDto.getBookmarkCheck().equals(false)){
+            return new ResponseDto(201L, "북마크가 취소되었습니다..", bookmarkDto);
         }
+        else{
+            return new ResponseDto(200L, "북마크 되었습니다.", bookmarkDto);
+        }
+
+    }
+
+    @GetMapping("/bookmark/map/list")
+    public ResponseDto bookmarkMapList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(defaultValue = "default") String cityName){
+        List<BookmarkMapList> bookmarkMapList = bookmarkService.getBookmarkMapList(cityName, userDetails);
+
+        return new ResponseDto(200L, "성공", bookmarkMapList);
     }
 
 
     @GetMapping("/my/bookmark")
     public ResponseDto getMyBookMark(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        System.out.println("userDetails = " + userDetails);
         List<MyBookmarkListDto> myBookmarkListDto = bookmarkService.getMyBookMark(userDetails.getUser());
 
-        return new ResponseDto(200L, "북마크 추가 되었습니다.", myBookmarkListDto);
+        return new ResponseDto(200L, "성공", myBookmarkListDto);
     }
+
+
 
 }
 

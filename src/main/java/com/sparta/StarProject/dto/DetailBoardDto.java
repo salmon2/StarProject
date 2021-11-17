@@ -18,5 +18,11 @@ public class DetailBoardDto {
     private String content;
     private Double x_location;
     private Double y_location;
+
+
+    private Boolean likeCheck;
+    private Long likeCount;
+    private Boolean bookmarkCheck;
+
     private DetailWeatherDto weather;
 }
