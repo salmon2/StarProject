@@ -5,7 +5,7 @@ import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.MainDto;
-import com.sparta.StarProject.repository.BookmarkRepository;
+import com.sparta.StarProject.repository.bookmarkRepository.BookmarkRepository;
 import com.sparta.StarProject.repository.StarRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;

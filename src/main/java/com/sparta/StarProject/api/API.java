@@ -5,7 +5,6 @@ import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.Star;
 import com.sparta.StarProject.domain.Weather;
 import com.sparta.StarProject.dto.*;
-import com.sparta.StarProject.repository.BoardRepository;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarRepository;
 import com.sparta.StarProject.repository.WeatherRepository;
