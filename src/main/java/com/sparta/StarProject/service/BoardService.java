@@ -174,8 +174,8 @@ public class BoardService {
                     if(city.equals("all")){
                         addCommunityDto(communityDtoList, location, userDetails);
                     }
-                    else if(location.getCityName().equals(city)){
-                        addCommunityDto(communityDtoList, location, userDetails);
+                    else {
+                        addCommunityDtoToSearch(city, userDetails, communityDtoList, location);
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class BoardService {
                         addCommunityDto(communityDtoList, location, userDetails);
                     }
                     else if(location.getCityName().equals(city)){
-                        addCommunityDto(communityDtoList, location, userDetails);
+                        addCommunityDtoToSearch(city, userDetails, communityDtoList, location);
                     }
                 }
                 Collections.sort(communityDtoList);
@@ -200,26 +200,37 @@ public class BoardService {
         return communityDtoList;
     }
 
+    private void addCommunityDtoToSearch(String city, UserDetailsImpl userDetails, List<CommunityDto> communityDtoList, Location location) {
+        List<Board> boardList = location.getBoard();
+        for (Board board : boardList) {
+            if(board.getAddress().contains(city)){
+                List<Like> allByBoard = likeRepository.findAllByBoard(board);
+                int size = allByBoard.size();
+                Boolean likeCheck = likeCheck(userDetails, board);
+
+                CommunityDto communityDto = new CommunityDto(
+                        board.getId(),
+                        board.getUser().getNickname(),
+                        board.getTitle(),
+                        location.getCityName(),
+                        board.getImg(),
+                        board.getContent(),
+                        Timestamped.TimeToString(board.getModifiedAt()),
+                        (long) size,
+                        likeCheck
+                );
+                communityDtoList.add(communityDto);}
+        }
+    }
+
     private void addCommunityDto(List<CommunityDto> communityDtoList, Location location, UserDetailsImpl userDetails) {
         List<Board> boardList = location.getBoard();
         for (Board board : boardList) {
-                List<Like> allByBoard = likeRepository.findAllByBoard(board);
-                int size = allByBoard.size();
-                Boolean likeCheck = false;
-                if(userDetails.getUser() == null){
-                    likeCheck = false;
-                }
-                else{
-                    List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(board, userDetails.getUser());
-                    if(allByBoardAndUser.size() != 0){
-                        likeCheck = true;
-                    }
-                    else{
-                        likeCheck = false;
-                    }
-                }
+            List<Like> allByBoard = likeRepository.findAllByBoard(board);
+            int size = allByBoard.size();
+            Boolean likeCheck = likeCheck(userDetails, board);
 
-                CommunityDto communityDto = new CommunityDto(
+            CommunityDto communityDto = new CommunityDto(
                                         board.getId(),
                                         board.getUser().getNickname(),
                                         board.getTitle(),
@@ -232,6 +243,23 @@ public class BoardService {
                 );
             communityDtoList.add(communityDto);
         }
+    }
+
+    private Boolean likeCheck(UserDetailsImpl userDetails, Board board) {
+        Boolean likeCheck = false;
+        if(userDetails.getUser() == null){
+            likeCheck = false;
+        }
+        else{
+            List<Like> allByBoardAndUser = likeRepository.findAllByBoardAndUser(board, userDetails.getUser());
+            if(allByBoardAndUser.size() != 0){
+                likeCheck = true;
+            }
+            else{
+                likeCheck = false;
+            }
+        }
+        return likeCheck;
     }
 
 

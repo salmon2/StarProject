@@ -26,8 +26,6 @@ public class MainService {
         if(userDetails == null){
             userDetails = new UserDetailsImpl(null);
         }
-
-
         try {
             List<Star> mainView = starRepository.findAllByOrderByStarGazingDesc();
             int count = 0;
@@ -56,7 +54,6 @@ public class MainService {
         catch(NullPointerException nullPointerException){
             throw new NullPointerException("해당하는 게시글이 존재하지 않습니다.");
         }
-
 
         return mainDto;
     }

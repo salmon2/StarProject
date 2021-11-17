@@ -11,6 +11,7 @@ import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.security.jwt.JwtTokenProvider;
 import com.sparta.StarProject.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -56,7 +58,7 @@ public class UserController {
     @GetMapping("/user/login/check")
     public ResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails) throws StarProjectException {
 
-        if (userDetails == null) {
+        if (userDetails.getUser() == null) {
             throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
         }
 
