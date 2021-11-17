@@ -48,6 +48,7 @@ public class BoardController {
 
         return new ResponseDto(200L, "성공", null);
     }
+
     @PostMapping("/board")
     public ResponseDto createBoard(@RequestBody BoardDto boardDto,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
