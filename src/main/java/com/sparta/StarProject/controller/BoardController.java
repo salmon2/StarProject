@@ -2,8 +2,10 @@ package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.LikeRepository;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
@@ -11,28 +13,42 @@ import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    private final CampingRepository campingRepository;
-
     private final LikeService likeService;
     private final BoardRepository boardRepository;
+
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
                                 @RequestParam(defaultValue = "all") String cityName,
-                                @AuthenticationPrincipal UserDetailsImpl userDetails){
-        List<CommunityDto> communityDtoList = boardService.getBoardList(sort, cityName, userDetails);
-        return new ResponseDto(200L, "성공", communityDtoList);
+                                @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                @RequestParam(defaultValue = "1",required = false)int offset){
+        Page<CommunityDtoCustom> communityDtoList;
+
+        if(userDetails == null){
+            communityDtoList = boardService.getBoardListNoneUser(sort, cityName, offset-1);
+        }
+        else{
+            communityDtoList = boardService.getBoardListExistUser(sort,cityName, userDetails, offset-1);
+        }
+
+        PageResponseDto pageResponseDto = new PageResponseDto(communityDtoList.getNumber()+1,
+                communityDtoList.getTotalPages(), communityDtoList.getContent().size(), communityDtoList.getContent());
+
+        return new ResponseDto(200L, "성공", pageResponseDto);
     }
+
 
 
     @GetMapping("/detail")
@@ -71,14 +87,25 @@ public class BoardController {
     }
 
     @GetMapping("/board/map/list")
-    public ResponseDto getMapList(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                  @RequestParam(defaultValue = "default") String cityName,
-                                  @RequestParam(defaultValue = "0")Double x_location,
-                                  @RequestParam(defaultValue = "0")Double y_location
-    ){
-        List<MapBoardDto> mapBoardDto = boardService.getBoardMapList(cityName, userDetails, x_location, y_location);
+    public ResponseDto getMapList(
+                                  @RequestParam(defaultValue = "default", required = false) String cityName,
+                                  @RequestParam(defaultValue = "0", required = false)Double x_location,
+                                  @RequestParam(defaultValue = "0", required = false)Double y_location,
+                                  @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                  @RequestParam(defaultValue = "1", required = false) int offset){
+        Page<MapBoardDto> mapBoardDto;
 
-        return new ResponseDto(200L, "성공", mapBoardDto);
+        if(userDetails == null){
+           mapBoardDto = boardService.getBoardMapListNoneUser(cityName, x_location, y_location, offset-1);
+        }
+        else{
+            mapBoardDto = boardService.getBoardMapListExistUser(cityName, userDetails, x_location, y_location, offset-1);
+        }
+
+        PageResponseDto pageResponseDto = new PageResponseDto(mapBoardDto.getNumber()+1,
+                mapBoardDto.getTotalPages(), mapBoardDto.getContent().size(), mapBoardDto.getContent());
+
+        return new ResponseDto(200L, "성공", pageResponseDto);
     }
 
 
@@ -96,12 +123,5 @@ public class BoardController {
         return likeResponseDto;
     }
 
-
-    @GetMapping("/test3")
-    public List<BoardDto> Test(){
-        List<BoardDto> boardList = boardRepository.myfindBoardList();
-
-        return boardList;
-    }
 
 }

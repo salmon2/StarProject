@@ -23,6 +23,8 @@ import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -152,11 +154,52 @@ public class BoardService {
     }
 
 
-    public List<CommunityDto> getBoardList(String sort, String cityName, UserDetailsImpl userDetails) {
-        List<CommunityDto> communityDtoList = getBoardListOrderBySortAndCityName(sort, cityName, userDetails);
+    public Page<CommunityDtoCustom> getBoardListNoneUser(String sort, String cityName, int offset) {
+        Page<CommunityDtoCustom> communityDtoList = null;
+        PageRequest page = PageRequest.of(offset, 12);
 
-        return communityDtoList;
+        if(sort.equals("star")) {
+            if(cityName.equals("all"))
+                communityDtoList = boardRepository.findAllOrderByStarCustomNoneUser(page);
+            else
+                communityDtoList = boardRepository.findAllOrderByStarCustomContainingCityNoneUser(cityName, page);
+            return communityDtoList;
+        }
+        else if (sort.equals("like")) {
+            if(cityName.equals("all"))
+                communityDtoList = boardRepository.findAllOrderByLikeCustomNoneUser(page);
+            else
+                communityDtoList = boardRepository.findAllOrderByLikeCustomContainingCityNoneUser(cityName, page);
+            return communityDtoList;
+        }
+
+        return null;
     }
+
+    public Page<CommunityDtoCustom> getBoardListExistUser(String sort, String cityName, UserDetailsImpl userDetails, int offset) {
+        Page<CommunityDtoCustom> communityDtoList = null;
+        PageRequest page = PageRequest.of(offset, 12);
+
+        if(sort.equals("star")) {
+            if(cityName.equals("all"))
+                communityDtoList = boardRepository.findAllOrderByStarCustomExistUser(userDetails.getUser(), page);
+            else
+                communityDtoList = boardRepository.findAllOrderByStarCustomContainingCityExistUser(cityName, userDetails.getUser(), page);
+            return communityDtoList;
+        }
+        else if (sort.equals("like")) {
+            if(cityName.equals("all"))
+                communityDtoList = boardRepository.findAllOrderByLikeCustomExistUser(userDetails.getUser(), page);
+            else
+                communityDtoList = boardRepository.findAllOrderByLikeCustomContainingCityExistUser(cityName, userDetails.getUser(), page);
+            return communityDtoList;
+        }
+
+        return null;
+    }
+
+
+
 
     private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city, UserDetailsImpl userDetails) {
         List<CommunityDto>  communityDtoList = new ArrayList<>();
@@ -316,105 +359,50 @@ public class BoardService {
      * @param userDetails
      * @param x_location
      * @param y_location
+     * @param offset
      * @return
      */
-    public List<MapBoardDto> getBoardMapList(String cityName, UserDetailsImpl userDetails, Double x_location, Double y_location) {
-            if(cityName.equals("default")){
-                List<MapBoardDto> mapBoardDtoList = new ArrayList<>();
-                List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
+    public Page<MapBoardDto> getBoardMapListExistUser(String cityName, UserDetailsImpl userDetails, Double x_location, Double y_location, int offset) {
+        Page<MapBoardDto> mapBoardDtoPage = null;
+        PageRequest page = PageRequest.of(offset, 15);
 
-                for (Star star : starList) {
-                    Location location = star.getLocation();
-                    List<Board> boardList = location.getBoard();
-                    for (Board board : boardList) {
-                        if(x_location == 0){
-                            addMapBoardDtoList(userDetails, mapBoardDtoList, star, board);
-                        }
-                        else{
-                            Double base_y = board.getLatitude();
-                            Double base_x = board.getLongitude();
-                            //위경도 1 당 111km
-                            if( Math.abs(base_y - y_location) < 0.4 && Math.abs(base_x - x_location) < 0.4){
-                                addMapBoardDtoList(userDetails, mapBoardDtoList, star, board);
-                            }
-                        }
-                    }
-                }
-
-                return mapBoardDtoList;
-            }
-            else{
-                List<MapBoardDto> mapBoardDtoArrayList = new ArrayList<>();
-                List<Board> boardList = boardRepository.findByAddressContaining(cityName);
-
-                for (Board board : boardList) {
-                    if(x_location == 0){
-                        mapBoardDtoList2(userDetails, mapBoardDtoArrayList, board);
-                    }
-                    else{
-                        Double base_y = board.getLatitude();
-                        Double base_x = board.getLongitude();
-                        //위경도 1 당 111km
-                        if( Math.abs(base_y - y_location) < 0.4 && Math.abs(base_x - x_location) < 0.4){
-                            mapBoardDtoList2(userDetails, mapBoardDtoArrayList, board);
-                        }
-                    }
-                }
-                return mapBoardDtoArrayList;
-            }
-
+        if(cityName.equals("default")) {
+            if(x_location.equals(0.0))
+                mapBoardDtoPage  = boardRepository.findAllMapBoardDtoListCustomExistUser(userDetails.getUser(), page);
+            else
+                mapBoardDtoPage = boardRepository.findAllMapBoardDtoListCustomByLocationExistUser(userDetails.getUser(), x_location, y_location, page);
+            return mapBoardDtoPage;
+        }
+        else{
+            if(x_location.equals(0.0))
+                mapBoardDtoPage  = boardRepository.findAllMapBoardDtoListCustomByCityNameExistUser(cityName, userDetails.getUser(),page);
+            else
+                mapBoardDtoPage = boardRepository.findAllMapBoardDtoListCustomByLocationAndCityNameExistUser(cityName, userDetails.getUser(), x_location, y_location , page);
+            return mapBoardDtoPage;
+        }
     }
 
-    private void mapBoardDtoList2(UserDetailsImpl userDetails, List<MapBoardDto> mapBoardDtoArrayList, Board board) {
-        Boolean bookmark = null;
 
-        if(userDetails.equals(null)){
-            bookmark = false;
+    public Page<MapBoardDto> getBoardMapListNoneUser(String cityName, Double x_location, Double y_location, int offset) {
+        Page<MapBoardDto> mapBoardDtoPage = null;
+        PageRequest pageRequest = PageRequest.of(offset, 15);
+
+        if(cityName.equals("default")) {
+            if(x_location.equals(0.0))
+                mapBoardDtoPage  = boardRepository.findAllMapBoardDtoListCustomNoneUser(pageRequest);
+            else
+                mapBoardDtoPage = boardRepository.findAllMapBoardDtoListCustomByLocationNoneUser(x_location, y_location, pageRequest);
+            return mapBoardDtoPage;
         }
-        else {
-            bookmark = bookmarkCheck(userDetails, board);
+        else{
+            if(x_location.equals(0.0))
+                mapBoardDtoPage  = boardRepository.findAllMapBoardDtoListCustomByCityNameNoneUser(cityName, pageRequest);
+            else
+                mapBoardDtoPage =
+                        boardRepository.findAllMapBoardDtoListCustomByLocationAndCityNameNoneUser(cityName, x_location, y_location, pageRequest);
+            return mapBoardDtoPage;
         }
-        Star star = board.getLocation().getStar();
-        MapBoardDto mapBoardDto = new MapBoardDto(
-                board.getId(),
-                getTypeToString(board),
-                board.getTitle(),
-                board.getLongitude(),
-                board.getLatitude(),
-                board.getAddress(),
-                bookmark,
-                star.getStarGazing(),
-                board.getImg()
-        );
-        mapBoardDtoArrayList.add(mapBoardDto);
     }
-
-    private void addMapBoardDtoList(UserDetailsImpl userDetails, List<MapBoardDto> mapBoardDtoList, Star star, Board board) {
-        Boolean bookmark = null;
-
-        if(userDetails == null){
-            bookmark = false;
-        }
-        else {
-            bookmark = bookmarkCheck(userDetails, board);
-        }
-
-        board = getCampingOrUserMake(board);
-        MapBoardDto mapBoardDto = new MapBoardDto(
-                board.getId(),
-                getTypeToString(board),
-                board.getTitle(),
-                board.getLongitude(),
-                board.getLatitude(),
-                board.getAddress(),
-                bookmark,
-                star.getStarGazing(),
-                board.getImg()
-        );
-
-        mapBoardDtoList.add(mapBoardDto);
-    }
-
 
     //자동완성
 
@@ -457,59 +445,6 @@ public class BoardService {
         }
         return "None Type";
     }
-//    public boolean LikeInfo(Long boardId, User user) throws Exception{
-//        Board findboard = boardRepository.findById(boardId).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//        Optional<Like> like = likeRepository.findByBoardIdAndUserId(boardId,user.getId());
-//
-//        if(like.isPresent()){
-//            likeRepository.delete(like.get());
-//            return false;
-//        }
-//        else {
-//            Like addLike = new Like(findboard, user);
-//            likeRepository.save(addLike);
-//            return true;
-//        }
-//    }
-//    public boolean likeInfo(Long boardId, User user) throws Exception{
-//        Board findBoard = boardRepository.findById(boardId).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//        List<Like> findDuplicateLike = likeRepository.findAllByBoardAndUser(findBoard, user);
-//
-//        if(findDuplicateLike.size() != 0){
-//            Like findLike = findDuplicateLike.get(0);
-//            likeRepository.delete(findLike);
-//
-//            return false;
-//        }
-//        else{
-//            Like newLike = new Like(findBoard, user);
-//            Like saveLike = likeRepository.save(newLike);
-//
-//            return true;
-//        }
-//    }
-
-//    @Transactional
-//    public boolean LikeInfo(User user, Long boardId) throws Exception{
-//        Board board = boardRepository.findById(boardId).orElseThrow(
-//                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
-//        );
-//
-//        if(LikeCheck(user,board)){
-//            likeRepository.save(new Like(board,user));
-//            return true;
-//        }
-//
-//            return false;
-//    }
-//
-//    private boolean LikeCheck(User user, Board board){
-//        return likeRepository.findAllByBoardAndUser(board, user).isEmpty();
-//    }
 
 
 }

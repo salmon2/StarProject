@@ -1,12 +1,10 @@
 package com.sparta.StarProject.controller;
 
-import com.sparta.StarProject.dto.BookmarkDto;
-import com.sparta.StarProject.dto.MyBookmarkListDto;
-import com.sparta.StarProject.dto.ResponseDto;
-import com.sparta.StarProject.dto.BookmarkMapList;
+import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,20 +34,16 @@ public class BookmarkController {
 
     }
 
-    @GetMapping("/bookmark/map/list")
-    public ResponseDto bookmarkMapList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(defaultValue = "default") String cityName){
-        List<BookmarkMapList> bookmarkMapList = bookmarkService.getBookmarkMapList(cityName, userDetails);
-
-        return new ResponseDto(200L, "성공", bookmarkMapList);
-    }
-
-
     @GetMapping("/my/bookmark")
-    public ResponseDto getMyBookMark(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        System.out.println("userDetails = " + userDetails);
-        List<MyBookmarkListDto> myBookmarkListDto = bookmarkService.getMyBookMark(userDetails.getUser());
+    public ResponseDto getMyBookMark(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                     @RequestParam(defaultValue = "1", required = false) int offset
+    ){
+        Page<MyBookmarkListDto> myBookmarkListDto = bookmarkService.getMyBookMark(userDetails.getUser(), offset-1);
 
-        return new ResponseDto(200L, "성공", myBookmarkListDto);
+        PageResponseDto pageResponseDto = new PageResponseDto(myBookmarkListDto.getNumber()+1,
+                myBookmarkListDto.getTotalPages(), myBookmarkListDto.getContent().size(), myBookmarkListDto.getContent());
+
+        return new ResponseDto(200L, "성공", pageResponseDto);
     }
 
 

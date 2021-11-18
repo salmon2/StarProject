@@ -13,6 +13,7 @@ import com.sparta.StarProject.security.jwt.JwtTokenProvider;
 import com.sparta.StarProject.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,12 +92,17 @@ public class UserController {
     }
 
     @GetMapping("/my/writeList")
-    public ResponseDto getBoardList(@AuthenticationPrincipal UserDetailsImpl userDetails) throws StarProjectException {
+    public ResponseDto getBoardList(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                    @RequestParam(defaultValue = "1",required = false)int offset ) throws StarProjectException {
         if(userDetails == null){
             throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
         }
-        List<MyBoardDto> boardDto = userService.getBoardList(userDetails.getUser());
-        return new ResponseDto(200L, "성공", boardDto);
 
+        Page<MyBoardDto> boardDto = userService.getMyBoardDtoList(userDetails.getUser(), offset -1);
+        PageResponseDto pageResponseDto = new PageResponseDto(boardDto.getNumber()+1,
+                boardDto.getTotalPages(), boardDto.getContent().size(), boardDto.getContent());
+        return new ResponseDto(200L, "성공", pageResponseDto);
     }
+
+
 }

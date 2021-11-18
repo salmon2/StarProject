@@ -33,6 +33,7 @@ public class LikeService {
         if(findDuplicateLike.size() != 0){
             Like findLike = findDuplicateLike.get(0);
             likeRepository.delete(findLike);
+            findBoard.setLikeCount(findBoard.getLikeCount()-1);
             LikeResponseDto likeResponseDto = new LikeResponseDto(boardId, false, new Long(size - 1));
             return likeResponseDto;
         }
@@ -41,6 +42,7 @@ public class LikeService {
         else{
             Like newLike = new Like(findBoard,user);
             Like saveLike = likeRepository.save(newLike);
+            findBoard.setLikeCount(findBoard.getLikeCount()+1);
             LikeResponseDto likeResponseDto = new LikeResponseDto(boardId, true, new Long(size + 1));
             return likeResponseDto;
         }

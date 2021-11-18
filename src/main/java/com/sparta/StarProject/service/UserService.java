@@ -11,6 +11,8 @@ import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -152,19 +154,11 @@ public class UserService {
 
     }
 
-    public List<MyBoardDto> getBoardList(User user) {
-        List<MyBoardDto> boardDtos = new ArrayList<>();
-        List<Board> myBoardList = boardRepository.findAllByUser(user);
+    public Page<MyBoardDto> getMyBoardDtoList(User user, int offset) {
+        PageRequest pageRequest = PageRequest.of(offset, 4);
+        Page<MyBoardDto> result = boardRepository.findAllByUserCustom(user, pageRequest);
 
-        for(Board board : myBoardList){
-            MyBoardDto boardDto = new MyBoardDto(
-                    board.getTitle(),
-                    board.getContent(),
-                    board.getImg()
-            );
-            boardDtos.add(boardDto);
-        }
-        return boardDtos;
+        return result;
     }
 
 

@@ -1,5 +1,6 @@
 package com.sparta.StarProject.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class MapBoardDto {
     private Long id;
@@ -20,4 +20,16 @@ public class MapBoardDto {
     private Long starGazing;
     private String img;
 
+    @QueryProjection
+    public MapBoardDto(Long id, String dtype, String title, Double x_location, Double y_location, String address, Boolean bookmark, Long starGazing, String img) {
+        this.id = id;
+        this.dtype = dtype;
+        this.title = title;
+        this.x_location = x_location;
+        this.y_location = y_location;
+        this.address = address;
+        this.bookmark = bookmark;
+        this.starGazing = starGazing;
+        this.img = img;
+    }
 }

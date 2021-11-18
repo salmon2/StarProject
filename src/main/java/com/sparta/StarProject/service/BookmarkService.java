@@ -13,6 +13,8 @@ import com.sparta.StarProject.repository.bookmarkRepository.BookmarkRepository;
 import com.sparta.StarProject.repository.StarRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -50,20 +52,14 @@ public class BookmarkService {
         return bookmarkDto;
     }
 
-    public List<MyBookmarkListDto> getMyBookMark(User user) {
-        List<MyBookmarkListDto> myBookmarkListDtos = new ArrayList<>();
-        List<Bookmark> bookmarkList = bookmarkRepository.findAllByUser(user);
+    public Page<MyBookmarkListDto> getMyBookMark(User user, int offset) {
 
-        for(Bookmark bookmark : bookmarkList) {
-            Board board = bookmark.getBoard();
+        PageRequest pageRequest = PageRequest.of(offset, 4);
 
-            MyBookmarkListDto myBookmarkListDto = new MyBookmarkListDto(
-                    board.getTitle(),
-                    board.getContent(),
-                    board.getImg()
-            );
-            myBookmarkListDtos.add(myBookmarkListDto);
-        }
+        Page<MyBookmarkListDto> myBookmarkListDtos =
+                boardRepository.findAllBookmarkByUserCustom(user, pageRequest);
+
+
         return myBookmarkListDtos;
     }
 

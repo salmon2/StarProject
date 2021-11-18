@@ -40,6 +40,10 @@ public class Board extends Timestamped{
     private Double longitude;
     private Double latitude;
 
+    private Long likeCount;
+
+    private String type;
+
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
