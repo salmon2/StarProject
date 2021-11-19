@@ -193,6 +193,4 @@ public enum StarGazingCity {
         return null;
     }
 
-
-
 }

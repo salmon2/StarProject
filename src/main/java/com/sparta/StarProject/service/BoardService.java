@@ -416,9 +416,6 @@ public class BoardService {
         List<Location> locationList = locationRepository.findByCityNameContaining(cityName);
 
         for (Location location : locationList) {
-            StarGazingCity starGazingCityByString = StarGazingCity.getStarGazingCityByString(location.getCityName());
-
-
             KeywordDto keywordDto = new KeywordDto(location.getCityName());
             keywordDtoList.add(keywordDto);
         }
