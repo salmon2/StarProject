@@ -78,12 +78,15 @@ public class API {
         do{
             starGazing = accuWeatherApi.getStarGazing(starGazingCity, count);
         }while(starGazing == null);
+
         do{
             moon = moonAPI.getMoon(moonCity);
         }while(moon == null);
+
         do{
             weather = weatherApi.getWeather(weatherCity);
         }while(weather == null);
+
         do{
             dust = dustApi.getDust(dustCity);
         }while(dust == null);
@@ -91,6 +94,7 @@ public class API {
         do{
             geographicDto = addressToGps.getAddress(address);
         }while(geographicDto ==null);
+
 
         LocationStarMoonDustDto result = new LocationStarMoonDustDto(
                 starGazing,

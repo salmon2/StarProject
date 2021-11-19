@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GeographicDto {
-    private String latitude;    //위도
-    private String longitude;   //경도
+    private String y_location;    //위도
+    private String x_location;   //경도
 }

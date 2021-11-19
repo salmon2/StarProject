@@ -22,7 +22,8 @@ public class BookmarkController {
 
     //북마크하기
     @PostMapping("/bookmark")
-    public ResponseDto addBookmark(@RequestParam("cardId") Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseDto addBookmark(@RequestParam("cardId") Long boardId,
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails){
         BookmarkDto bookmarkDto = bookmarkService.addBookmark(boardId, userDetails.getUser());
 
         if(bookmarkDto.getBookmarkCheck().equals(false)){
@@ -36,8 +37,7 @@ public class BookmarkController {
 
     @GetMapping("/my/bookmark")
     public ResponseDto getMyBookMark(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                     @RequestParam(defaultValue = "1", required = false) int offset
-    ){
+                                     @RequestParam(defaultValue = "1", required = false) int offset ){
         Page<MyBookmarkListDto> myBookmarkListDto = bookmarkService.getMyBookMark(userDetails.getUser(), offset-1);
 
         PageResponseDto pageResponseDto = new PageResponseDto(myBookmarkListDto.getNumber()+1,
@@ -45,8 +45,6 @@ public class BookmarkController {
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
-
-
 
 }
 

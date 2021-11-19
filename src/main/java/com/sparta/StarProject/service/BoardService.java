@@ -1,7 +1,6 @@
 package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.api.API;
-import com.sparta.StarProject.api.accuweatherAPI.StarGazingCity;
 import com.sparta.StarProject.api.locationAPI.AddressToGps;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.board.Board;
@@ -45,6 +44,7 @@ public class BoardService {
     private final AddressToGps addressToGps;
     private final LikeRepository likeRepository;
     private final BookmarkRepository bookmarkRepository;
+
 
 
     public DetailBoardDto getDetailBoard(Long id, UserDetailsImpl userDetails) {
@@ -311,7 +311,7 @@ public class BoardService {
         List<String> strings = api.processAddress(boardDto.getAddress()); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
         Location findLocation = locationRepository.findByCityName(strings.get(0));
         GeographicDto address = addressToGps.getAddress(boardDto.getAddress());
-        if(address.getLatitude().equals("")){
+        if(address.getY_location().equals("")){
             throw new NotFoundGps(ErrorCode.NotFoundGps.getMessage());
         }
 
@@ -321,8 +321,8 @@ public class BoardService {
                 boardDto.getAddress(),      //address
                 boardDto.getImg(),
                 boardDto.getContent(),
-                Double.valueOf(address.getLongitude()),
-                Double.valueOf(address.getLatitude()),
+                Double.valueOf(address.getX_location()),
+                Double.valueOf(address.getY_location()),
                 user,
                 findLocation,
                 "유저가 만듬"
@@ -404,8 +404,6 @@ public class BoardService {
         }
     }
 
-    //자동완성
-
     /**
      * 수정 필요
      * @param cityName
@@ -442,6 +440,19 @@ public class BoardService {
         }
         return "None Type";
     }
+
+
+    public GeographicDto addressCheck(String address) throws Exception {
+        AddressToGps addressToGps = new AddressToGps();
+        GeographicDto geographicDto = addressToGps.getAddress(address);
+        if(geographicDto.getX_location().equals(""))
+            throw new NotFoundGps(ErrorCode.NotFoundGps.getMessage());
+
+
+        return geographicDto;
+    }
+
+
 
 
 }

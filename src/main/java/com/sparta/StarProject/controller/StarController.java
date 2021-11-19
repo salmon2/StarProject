@@ -41,7 +41,8 @@ public class StarController {
     }
 
     @GetMapping("/star/info")
-    public ResponseDto getStarInfo(@RequestParam double latitude, @RequestParam double longitude) throws Exception {
+    public ResponseDto getStarInfo(@RequestParam double latitude,
+                                   @RequestParam double longitude ) throws Exception {
         StarInfoResponseDto starInfoResponseDto = starService.getStarInfo(latitude, longitude);
 
         return new ResponseDto(200L, "성공", starInfoResponseDto);
@@ -55,7 +56,6 @@ public class StarController {
         return new ResponseDto(200L, "성공", starWeatherResponseDto);
     }
 
-
     @GetMapping("/star/hot")
     public ResponseDto recommendStar() {
         starHotDto starHotDto = starService.recommendStar();
@@ -63,6 +63,5 @@ public class StarController {
 
         return  new ResponseDto(200L, "성공", starHotDto);
     }
-
 
 }
