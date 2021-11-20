@@ -37,15 +37,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class BoardService {
+
     private final BoardRepository boardRepository;
-    private final StarRepository starRepository;
-    private final API api;
     private final LocationRepository locationRepository;
     private final AddressToGps addressToGps;
     private final LikeRepository likeRepository;
     private final BookmarkRepository bookmarkRepository;
-
-
+    private final API api;
 
     public DetailBoardDto getDetailBoard(Long id, UserDetailsImpl userDetails) {
         Board findBoard = boardRepository.findById(id).orElseThrow(
@@ -67,6 +65,7 @@ public class BoardService {
         Star findStar = findBoardLocation.getStar();
 
         List<DetailWeatherWeatherList> detailWeatherWeatherLists = new ArrayList<>();
+
         for (Weather weather : weatherList) {
             DetailWeatherWeatherList detailWeatherWeatherList = new DetailWeatherWeatherList(
                     weather.getPredictTime(),
@@ -76,6 +75,7 @@ public class BoardService {
                     Long.valueOf(weather.getTemperature()),
                     Long.valueOf(weather.getDust())
             );
+
             detailWeatherWeatherLists.add(detailWeatherWeatherList);
         }
 
@@ -159,8 +159,9 @@ public class BoardService {
         PageRequest page = PageRequest.of(offset, 12);
 
         if(sort.equals("star")) {
-            if(cityName.equals("all"))
+            if(cityName.equals("all")) {
                 communityDtoList = boardRepository.findAllOrderByStarCustomNoneUser(page);
+            }
             else
                 communityDtoList = boardRepository.findAllOrderByStarCustomContainingCityNoneUser(cityName, page);
             return communityDtoList;
@@ -170,6 +171,13 @@ public class BoardService {
                 communityDtoList = boardRepository.findAllOrderByLikeCustomNoneUser(page);
             else
                 communityDtoList = boardRepository.findAllOrderByLikeCustomContainingCityNoneUser(cityName, page);
+            return communityDtoList;
+        }
+        else if (sort.equals("latest")){
+            if(cityName.equals("all"))
+                communityDtoList = boardRepository.findAllOrderByLatestCustomNoneUser(page);
+            else
+                communityDtoList = boardRepository.findAllOrderByLatestCustomContainingCityNoneUser(cityName, page);
             return communityDtoList;
         }
 
@@ -194,52 +202,16 @@ public class BoardService {
                 communityDtoList = boardRepository.findAllOrderByLikeCustomContainingCityExistUser(cityName, userDetails.getUser(), page);
             return communityDtoList;
         }
+        else if (sort.equals("latest")){
+            if(cityName.equals("all"))
+                communityDtoList = boardRepository.findAllOrderByLatestCustomExistUser(userDetails.getUser(),page);
+            else
+                communityDtoList = boardRepository.findAllOrderByLatestCustomContainingCityExistUser(cityName, userDetails.getUser(), page);
+            return communityDtoList;
+        }
+
 
         return null;
-    }
-
-
-
-
-    private List<CommunityDto> getBoardListOrderBySortAndCityName(String sort, String city, UserDetailsImpl userDetails) {
-        List<CommunityDto>  communityDtoList = new ArrayList<>();
-
-        if(userDetails == null){
-            userDetails = new UserDetailsImpl(null);
-        }
-
-        try{
-            if(sort.equals("star")){
-                List<Star> starList = starRepository.findAllByOrderByStarGazingDesc();
-                for (Star star : starList) {
-                    Location location = star.getLocation();
-                    if(city.equals("all")){
-                        addCommunityDto(communityDtoList, location, userDetails);
-                    }
-                    else {
-                        addCommunityDtoToSearch(city, userDetails, communityDtoList, location);
-                    }
-                }
-            }
-            else if(sort.equals("like")){
-                List<Location> locationList = locationRepository.findAll();
-                for (Location location : locationList) {
-                    if(city.equals("all")){
-                        addCommunityDto(communityDtoList, location, userDetails);
-                    }
-                    else if(location.getCityName().equals(city)){
-                        addCommunityDtoToSearch(city, userDetails, communityDtoList, location);
-                    }
-                }
-                Collections.sort(communityDtoList);
-            }
-        }
-        catch (NullPointerException nullPointerException){
-            throw new NullPointerException("find All StarList Fail");
-        }
-
-
-        return communityDtoList;
     }
 
     private void addCommunityDtoToSearch(String city, UserDetailsImpl userDetails, List<CommunityDto> communityDtoList, Location location) {
@@ -273,16 +245,16 @@ public class BoardService {
             Boolean likeCheck = likeCheck(userDetails, board);
 
             CommunityDto communityDto = new CommunityDto(
-                                        board.getId(),
-                                        board.getUser().getNickname(),
-                                        board.getTitle(),
-                                        location.getCityName(),
-                                        board.getImg(),
-                                        board.getContent(),
-                                        Timestamped.TimeToString(board.getModifiedAt()),
-                                        (long) size,
-                                        likeCheck
-                );
+                        board.getId(),
+                        board.getUser().getNickname(),
+                        board.getTitle(),
+                        location.getCityName(),
+                        board.getImg(),
+                        board.getContent(),
+                        Timestamped.TimeToString(board.getModifiedAt()),
+                        (long) size,
+                        likeCheck
+                    );
             communityDtoList.add(communityDto);
         }
     }
@@ -451,7 +423,6 @@ public class BoardService {
 
         return geographicDto;
     }
-
 
 
 

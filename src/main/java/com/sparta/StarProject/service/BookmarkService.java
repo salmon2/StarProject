@@ -108,6 +108,7 @@ public class BookmarkService {
     private Boolean bookmarkCheck(UserDetailsImpl userDetails, Board findBoard) {
         Boolean bookmarkCheck;
         List<Bookmark> bookmarkList = bookmarkRepository.findAllByBoardAndUser(findBoard, userDetails.getUser());
+
         if(bookmarkList.size() != 0){
             bookmarkCheck = true;
         }

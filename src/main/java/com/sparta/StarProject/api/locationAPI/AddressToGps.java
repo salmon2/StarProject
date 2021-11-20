@@ -82,7 +82,6 @@ public class AddressToGps {
         AddressToGps addressToGps = new AddressToGps();
         GeographicDto address = addressToGps.getAddress("서울 구리시");
         log.info("위도 = {}, 경도 = {}", address.getY_location(), address.getX_location());
-
     }
 
 }

@@ -335,6 +335,157 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     }
 
     @Override
+    public Page<CommunityDtoCustom> findAllOrderByLatestCustomExistUser(User user, PageRequest pageRequest) {
+        List<CommunityDtoCustom> result = queryFactory
+                .select(
+                        new QCommunityDtoCustom(
+                                board.id,
+                                QUser.user.username,
+                                board.title,
+                                location.cityName,
+                                board.address,
+                                board.img,
+                                board.content,
+                                board.modifiedAt,
+                                JPAExpressions
+                                        .select(like.count())
+                                        .from(like)
+                                        .where(boardIdEqLikeBoardId()),
+                                JPAExpressions
+                                        .select(like)
+                                        .from(like)
+                                        .where(userIdEqLikeUserId(user).and(boardIdEqLikeBoardId()))
+                                        .exists()
+                        )
+                )
+                .from(board)
+                .join(board.user, QUser.user)
+                .join(board.location, location)
+                .join(location.star, star)
+                .orderBy(board.createdAt.desc())
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
+                .fetch();
+
+        JPAQuery<Board> countQuery = countCommunityDtoCustomListQuery();
+
+
+        return PageableExecutionUtils.getPage(result, pageRequest, countQuery::fetchCount);
+
+    }
+
+    @Override
+    public Page<CommunityDtoCustom> findAllOrderByLatestCustomNoneUser(PageRequest pageRequest) {
+        List<CommunityDtoCustom> result = queryFactory
+                .select(
+                        new QCommunityDtoCustom(
+                                board.id,
+                                QUser.user.username,
+                                board.title,
+                                location.cityName,
+                                board.address,
+                                board.img,
+                                board.content,
+                                board.modifiedAt,
+                                JPAExpressions
+                                        .select(like.count())
+                                        .from(like)
+                                        .where(boardIdEqLikeBoardId()),
+                                Expressions.asBoolean(false)
+                        )
+                )
+                .from(board)
+                .join(board.user, QUser.user)
+                .join(board.location, location)
+                .join(location.star, star)
+                .orderBy(board.createdAt.desc())
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
+                .fetch();
+
+        JPAQuery<Board> countQuery = countCommunityDtoCustomListQuery();
+
+
+        return PageableExecutionUtils.getPage(result, pageRequest, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<CommunityDtoCustom> findAllOrderByLatestCustomContainingCityNoneUser(String cityName, PageRequest pageRequest) {
+        List<CommunityDtoCustom> result = queryFactory
+                .select(
+                        new QCommunityDtoCustom(
+                                board.id,
+                                QUser.user.username,
+                                board.title,
+                                location.cityName,
+                                board.address,
+                                board.img,
+                                board.content,
+                                board.modifiedAt,
+                                JPAExpressions
+                                        .select(like.count())
+                                        .from(like)
+                                        .where(boardIdEqLikeBoardId()),
+                                Expressions.asBoolean(false)
+                        )
+                )
+                .from(board)
+                .join(board.user, QUser.user)
+                .join(board.location, location)
+                .join(location.star, star)
+                .orderBy(board.createdAt.desc())
+                .where(board.address.contains(cityName))
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
+                .fetch();
+
+        JPAQuery<Board> countQuery = countCommunityDtoCustomContainingCityListQuery(cityName);
+
+
+        return PageableExecutionUtils.getPage(result, pageRequest, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<CommunityDtoCustom> findAllOrderByLatestCustomContainingCityExistUser(String cityName, User user, PageRequest pageRequest) {
+        List<CommunityDtoCustom> result = queryFactory
+                .select(
+                        new QCommunityDtoCustom(
+                                board.id,
+                                QUser.user.username,
+                                board.title,
+                                location.cityName,
+                                board.address,
+                                board.img,
+                                board.content,
+                                board.modifiedAt,
+                                JPAExpressions
+                                        .select(like.count())
+                                        .from(like)
+                                        .where(boardIdEqLikeBoardId()),
+                                JPAExpressions
+                                        .select(like)
+                                        .from(like)
+                                        .where(userIdEqLikeUserId(user).and(boardIdEqLikeBoardId()))
+                                        .exists()
+                        )
+                )
+                .from(board)
+                .join(board.user, QUser.user)
+                .join(board.location, location)
+                .join(location.star, star)
+                .orderBy(board.createdAt.desc())
+                .where(board.address.contains(cityName))
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
+                .fetch();
+
+        JPAQuery<Board> countQuery = countCommunityDtoCustomContainingCityListQuery(cityName);
+
+
+        return PageableExecutionUtils.getPage(result, pageRequest, countQuery::fetchCount);
+    }
+
+    @Override
     public Page<MapBoardDto> findAllMapBoardDtoListCustomExistUser(User user, PageRequest pageRequest) {
         List<MapBoardDto> result = queryFactory
                 .select(

@@ -4,7 +4,6 @@ import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
-import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
