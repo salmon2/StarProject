@@ -17,8 +17,8 @@ public class Camping extends Board{
 
     private String campingData;
 
-    public Camping(String locationName, String address, String content, String img, Double longitude, Double latitude, User user, Location location, String campingData) {
-        super(locationName, address, content, img, longitude, latitude, user, location);
+    public Camping(String locationName, String address, String content, String img, Double longitude, Double latitude, User user, Location location, String campingData, String type) {
+        super(locationName, address, content, img, longitude, latitude, user, location, type);
         this.campingData = campingData;
     }
 }

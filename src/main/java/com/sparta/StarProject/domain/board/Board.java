@@ -36,12 +36,9 @@ public class Board extends Timestamped{
     private String content;
     @Column( length = 100000 )
     private String img;
-
     private Double longitude;
     private Double latitude;
-
     private Long likeCount;
-
     private String type;
 
 
@@ -66,7 +63,7 @@ public class Board extends Timestamped{
     @JsonIgnore
     private List<Bookmark> bookmark;
 
-    public Board(String title, String address, String content, String img, Double longitude, Double latitude, User user, Location location) {
+    public Board(String title, String address, String content, String img, Double longitude, Double latitude, User user, Location location, String type) {
         this.title = title;
         this.address = address;
         this.content = content;
@@ -75,6 +72,8 @@ public class Board extends Timestamped{
         this.latitude = latitude;
         this.user = user;
         this.location = location;
+        this.likeCount = 0L;
+        this.type = type;
     }
 
     public Board(String address,String content,String img,String title, User user){

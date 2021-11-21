@@ -2,8 +2,11 @@ package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.UserMakeRepository;
+import com.sparta.StarProject.repository.UserRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
@@ -14,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -21,6 +25,19 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
+    private final UserMakeRepository userMakeRepository;
+
+    @GetMapping("/test12")
+    @Transactional
+    public void addUser(){
+        List<UserMake> all = userMakeRepository.findAll();
+        for (UserMake userMake : all) {
+            userMake.setLikeCount(0L);
+            userMake.setType("userMake");
+        }
+    }
+
+
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
@@ -101,7 +118,6 @@ public class BoardController {
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
 
-
     @GetMapping("/board/keyword")
     public ResponseDto getKeyword(@RequestParam String cityName){
         List<KeywordDto> keywordDtoList = boardService.getKeyword(cityName);
@@ -120,7 +136,6 @@ public class BoardController {
     @GetMapping("/address/check")
     public ResponseDto addressCheck(@RequestParam String address) throws Exception {
         GeographicDto geographicDto = boardService.addressCheck(address);
-
 
         return new ResponseDto(200L, "성공", geographicDto);
     }

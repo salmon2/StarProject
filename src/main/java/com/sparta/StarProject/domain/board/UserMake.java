@@ -18,8 +18,15 @@ import javax.persistence.Entity;
 public class UserMake extends Board{
     private String userdata;
 
-    public UserMake(String locationName, String address, String content, String img, Double longitude, Double latitude, User user, Location location, String userdata) {
-        super(locationName, address, content, img, longitude, latitude, user, location);
+    public UserMake(String locationName, String address, String content,
+                    String img, Double longitude, Double latitude,
+                    User user, Location location, String userdata, String type) {
+        super(locationName, address, content, img, longitude, latitude, user, location, type);
+
         this.userdata = userdata;
     }
+
 }
+
+
+

@@ -283,21 +283,22 @@ public class BoardService {
         List<String> strings = api.processAddress(boardDto.getAddress()); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
         Location findLocation = locationRepository.findByCityName(strings.get(0));
         GeographicDto address = addressToGps.getAddress(boardDto.getAddress());
+
         if(address.getY_location().equals("")){
             throw new NotFoundGps(ErrorCode.NotFoundGps.getMessage());
         }
 
-
         Board saveBoard = new UserMake(
                 boardDto.getTitle(),        //title
                 boardDto.getAddress(),      //address
-                boardDto.getImg(),
                 boardDto.getContent(),
+                boardDto.getImg(),
                 Double.valueOf(address.getX_location()),
                 Double.valueOf(address.getY_location()),
                 user,
                 findLocation,
-                "유저가 만듬"
+                "userMake",
+                "userMake"
         );
 
 

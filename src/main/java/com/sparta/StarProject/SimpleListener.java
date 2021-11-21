@@ -53,7 +53,7 @@ public class SimpleListener implements ApplicationListener<ApplicationStartedEve
             Location findLocation = locationRepository.findByCityName(strings.get(0));
 
             Camping campingData = new Camping(value.getName(), value.getAddress(),
-                    value.getAddress(), value.getImgSrc(), value.getLocationX(), value.getLocationY(), user, findLocation, "campingData");
+                    value.getAddress(), value.getImgSrc(), value.getLocationX(), value.getLocationY(), user, findLocation, "campingData", "campingData");
             campingRepository.save(campingData);
             count2++;
         }

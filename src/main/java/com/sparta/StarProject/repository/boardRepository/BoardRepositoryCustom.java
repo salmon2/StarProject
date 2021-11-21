@@ -26,8 +26,6 @@ public interface BoardRepositoryCustom {
     Page<CommunityDtoCustom> findAllOrderByLatestCustomContainingCityExistUser(String cityName, User user, PageRequest page);
 
 
-
-
     Page<MapBoardDto> findAllMapBoardDtoListCustomExistUser(User user, PageRequest page);
     Page<MapBoardDto> findAllMapBoardDtoListCustomByLocationExistUser(User user, Double x_location, Double y_location, PageRequest page);
     Page<MapBoardDto> findAllMapBoardDtoListCustomByCityNameExistUser(String cityName, User user, PageRequest pageRequest);
