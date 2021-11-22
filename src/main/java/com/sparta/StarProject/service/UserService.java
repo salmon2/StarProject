@@ -2,10 +2,7 @@ package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
-import com.sparta.StarProject.dto.MyBoardDto;
-import com.sparta.StarProject.dto.SignUpRequestDto;
-import com.sparta.StarProject.dto.UserRequestDto;
-import com.sparta.StarProject.dto.UserUpdateDto;
+import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
@@ -26,6 +23,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
+
 
 //    @Autowired
 //    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {

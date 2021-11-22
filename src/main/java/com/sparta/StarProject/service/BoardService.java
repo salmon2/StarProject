@@ -15,7 +15,6 @@ import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.*;
 
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
-import com.sparta.StarProject.repository.StarRepository;
 
 import com.sparta.StarProject.repository.bookmarkRepository.BookmarkRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -426,5 +424,7 @@ public class BoardService {
     }
 
 
-
+    public long getBoardCount() {
+        return boardRepository.count();
+    }
 }

@@ -806,6 +806,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.bookmark, bookmark)
                 .join(bookmark.user, QUser.user)
                 .where(QUser.user.id.eq(user.getId()));
+
     }
 
 

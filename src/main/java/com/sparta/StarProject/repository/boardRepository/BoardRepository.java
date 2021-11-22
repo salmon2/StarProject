@@ -11,5 +11,4 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
     List<Board> findByAddressContaining(String key);
     List<Board> findAllByUser(User user);
-
 }

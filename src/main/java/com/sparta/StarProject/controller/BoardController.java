@@ -114,8 +114,10 @@ public class BoardController {
             mapBoardDto = boardService.getBoardMapListExistUser(cityName, userDetails, x_location, y_location, offset-1);
         }
 
+        long boardCount = boardService.getBoardCount();
+
         PageResponseDto pageResponseDto = new PageResponseDto(mapBoardDto.getNumber()+1,
-                mapBoardDto.getTotalPages(), mapBoardDto.getContent().size(), mapBoardDto.getContent());
+                mapBoardDto.getTotalPages(),  Long.valueOf(boardCount).intValue(), mapBoardDto.getContent());
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }

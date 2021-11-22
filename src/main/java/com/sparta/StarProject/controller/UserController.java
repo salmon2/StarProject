@@ -61,8 +61,9 @@ public class UserController {
         if (userDetails.getUser() == null) {
             throw new StarProjectException(ErrorCode.LOGIN_TOKEN_EXPIRE);
         }
+        UserDto userDto = new UserDto(userDetails.getUser().getNickname(), userDetails.getUsername());
 
-        return new ResponseDto(200L, "login success", null);
+        return new ResponseDto(200L, "login success", userDto);
     }
 
     @GetMapping("/user/username/check")
