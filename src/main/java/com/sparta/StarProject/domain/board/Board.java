@@ -33,9 +33,13 @@ public class Board extends Timestamped{
 
     private String title;
     private String address;
+
+    @Column( length = 10000000)
     private String content;
+
     @Column( length = 100000 )
     private String img;
+
     private Double longitude;
     private Double latitude;
     private Long likeCount;

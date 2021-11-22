@@ -30,12 +30,24 @@ public class CommunityDtoCustom {
     @QueryProjection
     public CommunityDtoCustom(Long id, String writer, String title, String cityName, String address, String img, String contents, LocalDateTime modifiedAt, Long likeCount, Boolean likeCheck) {
         String[] sliceAddress = address.split(" ");
+        String result = null;
+
+        for (int i = 0; i < sliceAddress.length; i++) {
+            if(i>1)
+                break;
+            result = sliceAddress[i] + " ";
+        }
+
 
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.cityName = cityName;
-        this.address = sliceAddress[0] +" "+sliceAddress[1];
+
+
+        this.address = result;
+
+
         this.img = img;
         this.contents = contents;
         this.modifiedAt = Timestamped.TimeToString(modifiedAt);

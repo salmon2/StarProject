@@ -32,8 +32,10 @@ public class BoardController {
     public void addUser(){
         List<UserMake> all = userMakeRepository.findAll();
         for (UserMake userMake : all) {
-            userMake.setLikeCount(0L);
-            userMake.setType("userMake");
+            String content = userMake.getContent();
+
+            userMake.setContent(userMake.getImg());
+            userMake.setImg(content);
         }
     }
 
