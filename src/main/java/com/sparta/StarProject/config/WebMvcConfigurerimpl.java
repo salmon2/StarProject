@@ -13,7 +13,10 @@ public class WebMvcConfigurerimpl implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://startprojecttest.s3-website.ap-northeast-2.amazonaws.com",
                         "http://localhost:3000",
-                        "http://localhost:8080")
+                        "http://localhost:8080",
+                        "https://stellakorea.co.kr",
+                        "https://www.stellakorea.co.kr")
+
                 .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowCredentials(true);
     }

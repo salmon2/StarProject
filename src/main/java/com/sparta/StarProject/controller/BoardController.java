@@ -6,7 +6,6 @@ import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.UserMakeRepository;
-import com.sparta.StarProject.repository.UserRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
