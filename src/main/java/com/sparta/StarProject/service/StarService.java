@@ -31,7 +31,6 @@ public class StarService {
     private final StarInfoRepository starInfoRepository;
     private final GpsToAddress gpsToAddress;
     private final API api;
-    private static final String localAddress = "http://3.38.101.209:8080";
 
 
     public StarInfoResponseDto getStarInfo(double latitude, double longitude) throws Exception{
@@ -132,7 +131,7 @@ public class StarService {
             log.info("month = {}", month);
             StarInfo starInfo = starInfoRepository.findByMonth(month);
             StarPhotoDto starPhotoDto = new StarPhotoDto(
-                    localAddress + starInfo.getStarImg(),
+                    starInfo.getStarImg(),
                     starInfo.getStarName(),
                     starInfo.getComment()
             );
