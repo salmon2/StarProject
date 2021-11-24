@@ -427,4 +427,38 @@ public class BoardService {
     public long getBoardCount() {
         return boardRepository.count();
     }
+
+    public MapBoardDto boardMapSearchByIdNoneUser(Long id) {
+
+        Board board = boardRepository.findById(id).orElseThrow(
+                () -> new NullPointerException(ErrorCode.NotFoundBoard.getMessage())
+        );
+
+
+        MapBoardDto mapBoardDto = new MapBoardDto(board.getId(), board.getType(), board.getTitle(), board.getLongitude(), board.getLatitude(), board.getAddress(), false, board.getLocation().getStar().getStarGazing(), board.getImg());
+        return mapBoardDto;
+    }
+
+    public MapBoardDto boardMapSearchByIdExistUser(Long id, UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+
+        Board board = boardRepository.findById(id).orElseThrow(
+                () -> new NullPointerException(ErrorCode.NotFoundBoard.getMessage())
+        );
+
+        Boolean bookmarkCheck = null;
+        List<Bookmark> allByBoardAndUser = bookmarkRepository.findAllByBoardAndUser(board, user);
+
+        if(allByBoardAndUser.size() != 0){
+            bookmarkCheck = true;
+        }
+        else {
+            bookmarkCheck = false;
+        }
+
+
+        MapBoardDto mapBoardDto = new MapBoardDto(board.getId(), board.getType(), board.getTitle(), board.getLongitude(), board.getLatitude(), board.getAddress(), bookmarkCheck, board.getLocation().getStar().getStarGazing(), board.getImg());
+
+        return mapBoardDto;
+    }
 }

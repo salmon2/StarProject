@@ -1,17 +1,16 @@
 package com.sparta.StarProject.controller;
 
-import com.sparta.StarProject.domain.StarInfo;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
-import com.sparta.StarProject.domain.board.UserMake;
+import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.StarInfoRepository;
 import com.sparta.StarProject.repository.UserMakeRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
-import com.sparta.StarProject.service.StarService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -30,15 +29,23 @@ public class BoardController {
     private final LikeService likeService;
     private final UserMakeRepository userMakeRepository;
     private final StarInfoRepository starInfoRepository;
+    private final CampingRepository campingRepository;
 
     @GetMapping("/test12")
     @Transactional
     public void addUser(){
-        List<StarInfo> all = starInfoRepository.findAll();
-        for (StarInfo starInfo : all) {
-            String starImg = starInfo.getStarImg();
-            starImg = starImg.replace("/image/starPhotos/", "https://stella-image-storage.s3.ap-northeast-2.amazonaws.com/");
-            starInfo.setStarImg(starImg);
+        List<Camping> all = campingRepository.findAll();
+
+        for (Camping camping : all) {
+            String url = "https://stella-image-storage.s3.ap-northeast-2.amazonaws.com/camping" +
+                    camping.getId() +
+                    ".png";
+            camping.setImg(url);
+            camping.setContent("<p><img src=" +
+                    url +
+                    "></p>" +
+                    "<p></p>"+
+                    "<p>*운영진이 제공하는 정보입니다.</p>");
         }
     }
 
@@ -63,6 +70,7 @@ public class BoardController {
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
+
 
 
 
@@ -124,6 +132,17 @@ public class BoardController {
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
+
+    @GetMapping("/board/map/search")
+    public ResponseDto boardMapSearch(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        MapBoardDto mapBoardDto = null;
+        if(userDetails == null)
+            mapBoardDto = boardService.boardMapSearchByIdNoneUser(id);
+        else
+            mapBoardDto = boardService.boardMapSearchByIdExistUser(id, userDetails);
+        return new ResponseDto(200L, "성공", mapBoardDto);
+    }
+
 
     @GetMapping("/board/keyword")
     public ResponseDto getKeyword(@RequestParam String cityName){
