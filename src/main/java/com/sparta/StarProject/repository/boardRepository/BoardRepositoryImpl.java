@@ -134,7 +134,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.location, location)
                 .join(location.star, star)
                 .orderBy(star.starGazing.desc())
-                .where(board.address.contains(cityName))
+                .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -171,7 +171,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.location, location)
                 .join(location.star, star)
                 .orderBy(star.starGazing.desc())
-                .where(board.address.contains(cityName))
+                .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -180,6 +180,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
 
         return PageableExecutionUtils.getPage(result, pageRequest, countQuery::fetchCount);
+    }
+
+    private BooleanExpression likeAddressOrTitle(String cityName) {
+        return board.address.contains(cityName).or(board.title.contains(cityName));
     }
 
     @Override
@@ -281,7 +285,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.location, location)
                 .join(location.star, star)
                 .orderBy(board.likeCount.desc())
-                .where(board.address.contains(cityName))
+                .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -321,7 +325,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.location, location)
                 .join(location.star, star)
                 .orderBy(board.likeCount.desc())
-                .where(board.address.contains(cityName))
+                .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -433,7 +437,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.location, location)
                 .join(location.star, star)
                 .orderBy(board.createdAt.desc())
-                .where(board.address.contains(cityName))
+                .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -473,7 +477,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.location, location)
                 .join(location.star, star)
                 .orderBy(board.createdAt.desc())
-                .where(board.address.contains(cityName))
+                .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -579,7 +583,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .limit(pageRequest.getPageSize())
                 .orderBy(star.starGazing.desc())
                 .where(
-                        board.address.contains(cityName)
+                        likeAddressOrTitle(cityName)
                 )
                 .fetch();
 
@@ -615,7 +619,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .limit(pageRequest.getPageSize())
                 .orderBy(star.starGazing.desc())
                 .where(
-                        board.address.contains(cityName).and(
+                        likeAddressOrTitle(cityName).and(
                                 board.longitude.subtract(Expressions.asNumber(x_location)).abs().loe(0.6).and(
                                         board.latitude.subtract(Expressions.asNumber(y_location)).abs().loe(0.6))
                         )
@@ -710,7 +714,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .limit(pageRequest.getPageSize())
                 .orderBy(star.starGazing.desc())
                 .where(
-                        board.address.contains(cityName)
+                        likeAddressOrTitle(cityName)
                 )
                 .fetch();
 
@@ -741,7 +745,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .limit(pageRequest.getPageSize())
                 .orderBy(star.starGazing.desc())
                 .where(
-                        board.address.contains(cityName).and(
+                        likeAddressOrTitle(cityName).and(
                                 board.longitude.subtract(Expressions.asNumber(x_location)).abs().loe(0.6).and(
                                         board.latitude.subtract(Expressions.asNumber(y_location)).abs().loe(0.6))
                         )

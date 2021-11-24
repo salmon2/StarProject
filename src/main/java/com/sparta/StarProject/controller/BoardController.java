@@ -2,7 +2,6 @@ package com.sparta.StarProject.controller;
 
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
-import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.CampingRepository;
@@ -56,7 +55,7 @@ public class BoardController {
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
                                 @RequestParam(defaultValue = "all") String cityName,
                                 @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                @RequestParam(defaultValue = "1",required = false)int offset){
+                                @RequestParam(defaultValue = "1", required = false)int offset){
         Page<CommunityDtoCustom> communityDtoList;
 
         if(userDetails == null){
