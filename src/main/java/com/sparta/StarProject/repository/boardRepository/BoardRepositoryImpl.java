@@ -39,7 +39,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -77,7 +77,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -111,7 +111,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -152,7 +152,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -188,7 +188,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -227,7 +227,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -262,7 +262,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -298,7 +298,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -338,7 +338,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -378,7 +378,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -407,13 +407,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
         return PageableExecutionUtils.getPage(result, pageRequest, countQuery::fetchCount);
     }
 
+
     @Override
     public Page<CommunityDtoCustom> findAllOrderByLatestCustomContainingCityNoneUser(String cityName, PageRequest pageRequest) {
         List<CommunityDtoCustom> result = queryFactory
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,
@@ -449,7 +450,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QCommunityDtoCustom(
                                 board.id,
-                                QUser.user.username,
+                                QUser.user.nickname,
                                 board.title,
                                 location.cityName,
                                 board.address,

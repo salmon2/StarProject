@@ -31,23 +31,24 @@ public class BoardController {
     private final StarInfoRepository starInfoRepository;
     private final CampingRepository campingRepository;
 
-    @GetMapping("/test12")
-    @Transactional
-    public void addUser(){
-        List<Camping> all = campingRepository.findAll();
-
-        for (Camping camping : all) {
-            String url = "https://stella-image-storage.s3.ap-northeast-2.amazonaws.com/camping" +
-                    camping.getId() +
-                    ".png";
-            camping.setImg(url);
-            camping.setContent("<p><img src=" +
-                    url +
-                    "></p>" +
-                    "<p></p>"+
-                    "<p>*운영진이 제공하는 정보입니다.</p>");
-        }
-    }
+//    @GetMapping("/test12")
+//    @Transactional
+//    public void addUser(){
+//        List<Camping> all = campingRepository.findAll();
+//
+//        for (Camping camping : all) {
+//            String url = "https://stella-image-storage.s3.ap-northeast-2.amazonaws.com/camping" +
+//                    camping.getId() +
+//                    ".png";
+//            camping.setImg(url);
+//            camping.setContent("<p><img src=" +
+//                    url +
+//                    " style=\"width:720px; height:580px;\"" +
+//                    "></p>" +
+//                    "<p></p>"+
+//                    "<p>*운영진이 제공하는 정보입니다.</p>");
+//        }
+//    }
 
 
 
