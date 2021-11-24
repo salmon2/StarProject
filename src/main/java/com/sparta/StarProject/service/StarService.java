@@ -102,7 +102,8 @@ public class StarService {
             RecommendStarResponseDto recommendStarResponseDto = new RecommendStarResponseDto(
                     location.getCityName(),
                     star.getStarGazing(),
-                    weather.getTemperature()
+                    weather.getTemperature(),
+                    location.getImg()
             );
 
             recommendStarResponseDtos.add(recommendStarResponseDto);

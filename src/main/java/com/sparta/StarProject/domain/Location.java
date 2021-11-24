@@ -19,6 +19,9 @@ public class Location {
 
     private String cityName;
 
+    private String state;
+    private String img;
+
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Board> board = new ArrayList<>();
 
