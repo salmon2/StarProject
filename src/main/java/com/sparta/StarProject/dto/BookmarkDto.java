@@ -12,5 +12,4 @@ import lombok.Setter;
 public class BookmarkDto {
     private Long cardId;
     private Boolean bookmarkCheck;
-
 }

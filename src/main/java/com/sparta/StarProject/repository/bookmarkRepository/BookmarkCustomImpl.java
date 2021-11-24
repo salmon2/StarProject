@@ -15,5 +15,4 @@ import static com.sparta.StarProject.domain.QBookmark.bookmark;
 @RequiredArgsConstructor
 public class BookmarkCustomImpl implements BookmarkCustom{
 
-
 }
