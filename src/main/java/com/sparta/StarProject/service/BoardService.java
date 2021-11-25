@@ -381,10 +381,10 @@ public class BoardService {
      */
     public List<KeywordDto> getKeyword(String cityName){
         List<KeywordDto> keywordDtoList = new ArrayList<>();
-        List<Location> locationList = locationRepository.findByCityNameOrStateContaining(cityName);
+        List<Location> locationList = locationRepository.findByCityNameContaining(cityName);
 
         for (Location location : locationList) {
-            KeywordDto keywordDto = new KeywordDto(location.getCityName(),location.getState());
+            KeywordDto keywordDto = new KeywordDto(location.getCityName());
             keywordDtoList.add(keywordDto);
         }
 
