@@ -11,4 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class KeywordDto {
     private String cityName;
+    private String state;
 }

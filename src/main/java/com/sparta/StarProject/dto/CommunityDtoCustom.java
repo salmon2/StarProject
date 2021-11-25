@@ -26,9 +26,10 @@ public class CommunityDtoCustom {
     private String modifiedAt;
     private Long likeCount;
     private Boolean likeCheck;
+    private Boolean bookmarkCheck;
 
     @QueryProjection
-    public CommunityDtoCustom(Long id, String writer, String title, String cityName, String address, String img, String contents, LocalDateTime modifiedAt, Long likeCount, Boolean likeCheck) {
+    public CommunityDtoCustom(Long id, String writer, String title, String cityName, String address, String img, String contents, LocalDateTime modifiedAt, Long likeCount, Boolean likeCheck, Boolean bookmarkCheck) {
         String[] sliceAddress = address.split(" ");
         String imgResult = "";
 
@@ -50,5 +51,6 @@ public class CommunityDtoCustom {
         this.modifiedAt = Timestamped.TimeToString(modifiedAt);
         this.likeCount = likeCount;
         this.likeCheck = likeCheck;
+        this.bookmarkCheck = bookmarkCheck;
     }
 }
