@@ -314,12 +314,11 @@ public class BoardService {
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
         if(board.getUser().getUsername().equals(userDetails.getUsername())){
-            boardRepository.deleteById(id);
+            board.update(boardDto);
         }
         else{
             throw new StarProjectException(ErrorCode.User_Forbidden);
         }
-        board.update(boardDto);
         return board;
     }
 

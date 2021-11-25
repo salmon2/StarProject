@@ -52,7 +52,6 @@ public class StarService {
         catch(NullPointerException nullPointerException){
             throw new NullPointerException(ErrorCode.NotFoundBoard.getMessage());
         }
-
     }
 
     public StarWeatherResponseDto getWeatherInfo(Double latitude, Double longitude, String predictTime) throws Exception {

@@ -407,7 +407,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
         JPAQuery<Board> countQuery = countCommunityDtoCustomListQuery();
 
-
         return PageableExecutionUtils.getPage(result, pageRequest, countQuery::fetchCount);
     }
 

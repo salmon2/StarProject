@@ -14,7 +14,6 @@ public class RestApiExceptionHandler {
     public ResponseEntity<Object> handleApiRequestException(StarProjectException ex) {
 
         ErrorCode errorCode = ex.getErrorCode();
-
         RestApiException restApiException = null;
 
         /**
@@ -56,9 +55,7 @@ public class RestApiExceptionHandler {
                 HttpStatus.OK
         );
     }
-
-
-
+    
     /**
      * Not Found Gps Exception
      */
