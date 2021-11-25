@@ -175,11 +175,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                                         .from(like)
                                         .where(boardIdEqLikeBoardId()),
                                 Expressions.asBoolean(false),
-                                JPAExpressions
-                                        .select(bookmark)
-                                        .from(bookmark)
-                                        .where(boardIdEqBookmarkBoardId())
-                                        .exists()
+                                Expressions.asBoolean(false)
                         )
                 )
                 .from(board)
@@ -264,11 +260,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                                         .from(like)
                                         .where(boardIdEqLikeBoardId()),
                                 Expressions.asBoolean(false),
-                                JPAExpressions
-                                        .select(bookmark)
-                                        .from(bookmark)
-                                        .where(boardIdEqBookmarkBoardId())
-                                        .exists()
+                                Expressions.asBoolean(false)
                         )
                 )
                 .from(board)
@@ -304,11 +296,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                                         .from(like)
                                         .where(boardIdEqLikeBoardId()),
                                 Expressions.asBoolean(false),
-                                JPAExpressions
-                                        .select(bookmark)
-                                        .from(bookmark)
-                                        .where(boardIdEqBookmarkBoardId())
-                                        .exists()
+                                Expressions.asBoolean(false)
                         )
                 )
                 .from(board)
@@ -435,11 +423,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                                         .from(like)
                                         .where(boardIdEqLikeBoardId()),
                                 Expressions.asBoolean(false),
-                                JPAExpressions
-                                        .select(bookmark)
-                                        .from(bookmark)
-                                        .where(boardIdEqBookmarkBoardId())
-                                        .exists()
+                                Expressions.asBoolean(false)
                         )
                 )
                 .from(board)
@@ -475,11 +459,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                                         .from(like)
                                         .where(boardIdEqLikeBoardId()),
                                 Expressions.asBoolean(false),
-                                JPAExpressions
-                                        .select(bookmark)
-                                        .from(bookmark)
-                                        .where(boardIdEqBookmarkBoardId())
-                                        .exists()
+                                Expressions.asBoolean(false)
                         )
                 )
                 .from(board)
