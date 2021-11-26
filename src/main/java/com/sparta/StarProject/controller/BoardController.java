@@ -53,7 +53,6 @@ public class BoardController {
         else{
             communityDtoList = boardService.getBoardListExistUser(sort,cityName, userDetails, offset-1);
         }
-
         PageResponseDto pageResponseDto = new PageResponseDto(communityDtoList.getNumber()+1,
                 communityDtoList.getTotalPages(), communityDtoList.getContent().size(), communityDtoList.getContent());
 
@@ -114,8 +113,16 @@ public class BoardController {
         long boardCount = boardService.getBoardCount();
 
 
-        PageResponseDto pageResponseDto = new PageResponseDto(mapBoardDto.getNumber()+1,
-                mapBoardDto.getTotalPages(),  mapBoardDto.getSize(), mapBoardDto.getContent());
+        PageResponseDto pageResponseDto= null;
+
+        if(cityName.equals("default") && x_location.equals(0.0) && y_location.equals(0.0)){
+             pageResponseDto = new PageResponseDto(mapBoardDto.getNumber()+1,
+                    mapBoardDto.getTotalPages(), Long.valueOf(boardCount).intValue(), mapBoardDto.getContent());
+        }
+        else{
+            pageResponseDto= new PageResponseDto(mapBoardDto.getNumber()+1,
+                    mapBoardDto.getTotalPages(),  mapBoardDto.getContent().size(), mapBoardDto.getContent());
+        }
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
@@ -152,5 +159,6 @@ public class BoardController {
 
         return new ResponseDto(200L, "성공", geographicDto);
     }
+
 
 }
