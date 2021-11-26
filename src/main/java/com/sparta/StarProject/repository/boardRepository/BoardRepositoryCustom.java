@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 public interface BoardRepositoryCustom {
-
     Page<CommunityDtoCustom> findAllOrderByStarCustomExistUser(User user, PageRequest pageRequest);
     Page<CommunityDtoCustom> findAllOrderByStarCustomNoneUser(PageRequest pageRequest);
     Page<CommunityDtoCustom> findAllOrderByStarCustomContainingCityExistUser(String cityName, User user, PageRequest page);
@@ -25,7 +24,6 @@ public interface BoardRepositoryCustom {
     Page<CommunityDtoCustom> findAllOrderByLatestCustomContainingCityNoneUser(String cityName, PageRequest page);
     Page<CommunityDtoCustom> findAllOrderByLatestCustomContainingCityExistUser(String cityName, User user, PageRequest page);
 
-
     Page<MapBoardDto> findAllMapBoardDtoListCustomExistUser(User user, PageRequest page);
     Page<MapBoardDto> findAllMapBoardDtoListCustomByLocationExistUser(User user, Double x_location, Double y_location, PageRequest page);
     Page<MapBoardDto> findAllMapBoardDtoListCustomByCityNameExistUser(String cityName, User user, PageRequest pageRequest);
@@ -38,6 +36,4 @@ public interface BoardRepositoryCustom {
 
     Page<MyBoardDto> findAllByUserCustom(User user, PageRequest pageRequest);
     Page<MyBookmarkListDto> findAllBookmarkByUserCustom(User user, PageRequest pageRequest);
-
-
 }

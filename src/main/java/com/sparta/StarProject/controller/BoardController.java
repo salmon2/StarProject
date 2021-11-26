@@ -37,8 +37,8 @@ public class BoardController {
         for (Board board : all) {
             board.setLikeCount(0L);
         }
+        likeRepository.deleteAll();
     }
-
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
@@ -159,6 +159,5 @@ public class BoardController {
 
         return new ResponseDto(200L, "성공", geographicDto);
     }
-
 
 }

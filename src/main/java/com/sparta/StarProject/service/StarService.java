@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 
 @Service
@@ -118,18 +120,11 @@ public class StarService {
 
     public StarPhotoDto getStarPhoto() {
         try {
-            List<String> currentTime = Timestamped.getCurrentTime();
-            String month = currentTime.get(2);
-            log.info("month = {}", month);
+            Random random = new Random();
+            int index = random.nextInt(12) + 1;
+            String StringIndex =  Integer.toString(index);
 
-            Integer intMonth = Integer.valueOf(month);
-            if (intMonth < 10) {
-                if (month.length() >= 2) {
-                    month = month.substring(1);
-                }
-            }
-            log.info("month = {}", month);
-            StarInfo starInfo = starInfoRepository.findByMonth(month);
+            StarInfo starInfo = starInfoRepository.findByMonth(StringIndex);
             StarPhotoDto starPhotoDto = new StarPhotoDto(
                     starInfo.getStarImg(),
                     starInfo.getStarName(),

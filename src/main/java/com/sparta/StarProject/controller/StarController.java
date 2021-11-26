@@ -22,15 +22,6 @@ public class StarController {
     private final StarService starService;
     private final StarInfoRepository starInfoRepository;
 
-    @GetMapping("/star/photo/saveData")
-    public ResponseDto saveStarPhoto(){
-        starInfoRepository.deleteAll();
-        for (StellaList value : StellaList.values()) {
-            StarInfo starInfo = new StarInfo(value.getImg(), value.getName(), value.getComment(), value.getMonth().toString());
-            starInfoRepository.save(starInfo);
-        }
-        return null;
-    }
 
 
     @GetMapping("/star/photo")

@@ -41,6 +41,7 @@ public class CommunityDtoCustom {
 
         String contentResult = contents.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 
+
         this.id = id;
         this.writer = writer;
         this.title = title;
