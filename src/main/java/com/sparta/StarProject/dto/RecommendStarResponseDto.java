@@ -18,4 +18,5 @@ public class RecommendStarResponseDto {
         this.starGazing = starGazing;
         this.temperature = temperature;
     }
+
 }

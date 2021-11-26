@@ -112,8 +112,9 @@ public class BoardController {
 
         long boardCount = boardService.getBoardCount();
 
+
         PageResponseDto pageResponseDto = new PageResponseDto(mapBoardDto.getNumber()+1,
-                mapBoardDto.getTotalPages(),  Long.valueOf(boardCount).intValue(), mapBoardDto.getContent());
+                mapBoardDto.getTotalPages(),  mapBoardDto.getSize(), mapBoardDto.getContent());
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
