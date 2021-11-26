@@ -2,6 +2,7 @@ package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.api.API;
 import com.sparta.StarProject.api.locationAPI.AddressToGps;
+import com.sparta.StarProject.api.locationAPI.GpsToAddress;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
@@ -42,6 +43,7 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final BookmarkRepository bookmarkRepository;
     private final API api;
+    private final GpsToAddress gpsToAddress;
 
     public DetailBoardDto getDetailBoard(Long id, UserDetailsImpl userDetails) {
         Board findBoard = boardRepository.findById(id).orElseThrow(
@@ -278,11 +280,13 @@ public class BoardService {
     //게시글 생성
     @Transactional
     public Board createBoard(BoardDto boardDto, User user) throws Exception {
-        List<String> strings = api.processAddress(boardDto.getAddress()); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
-        Location findLocation = locationRepository.findByCityName(strings.get(0));
-        GeographicDto address = addressToGps.getAddress(boardDto.getAddress());
+        GeographicDto gps = addressToGps.getAddress(boardDto.getAddress());
 
-        if(address.getY_location().equals("")){
+        String address = gpsToAddress.getAddress(Double.valueOf(gps.getY_location()), Double.valueOf(gps.getX_location()));
+        List<String> strings = api.processAddress(address); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
+        Location findLocation = locationRepository.findByCityName(strings.get(0));
+
+        if(gps.getY_location().equals("")){
             throw new NotFoundGps(ErrorCode.NotFoundGps.getMessage());
         }
 
@@ -291,8 +295,8 @@ public class BoardService {
                 boardDto.getAddress(),      //address
                 boardDto.getContent(),
                 boardDto.getImg(),
-                Double.valueOf(address.getX_location()),
-                Double.valueOf(address.getY_location()),
+                Double.valueOf(gps.getX_location()),
+                Double.valueOf(gps.getY_location()),
                 user,
                 findLocation,
                 "userMake",
@@ -310,11 +314,19 @@ public class BoardService {
     //게시글 수정
     @Transactional
     public Board updateBoard(Long id, UpdateBoardDto boardDto,UserDetailsImpl userDetails)throws Exception{
-        List<String> strings = api.processAddress(boardDto.getAddress()); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
-        Location findLocation = locationRepository.findByCityName(strings.get(0));
-        GeographicDto address = addressToGps.getAddress(boardDto.getAddress());
+        GeographicDto gps = addressToGps.getAddress(boardDto.getAddress());
+        String address = gpsToAddress.getAddress(Double.valueOf(gps.getY_location()), Double.valueOf(gps.getX_location()));
 
-        if(address.getY_location().equals("")){
+
+        List<String> strings = api.processAddress(address); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
+        Location findLocation = locationRepository.findByCityName(strings.get(0));
+
+
+        if(findLocation == null){
+            throw new NullPointerException(ErrorCode.NOtFoundLocation.getMessage());
+        }
+
+        if(gps.getY_location().equals("")){
             throw new NotFoundGps(ErrorCode.NotFoundGps.getMessage());
         }
 
@@ -322,13 +334,9 @@ public class BoardService {
                 () -> new NullPointerException("해당하는 게시글이 존재하지 않습니다.")
         );
 
-        if(findLocation == null){
-            throw new NullPointerException(ErrorCode.NOtFoundLocation.getMessage());
-        }
-
 
         if(board.getUser().getUsername().equals(userDetails.getUsername())){
-            board.update(boardDto, address, findLocation);
+            board.update(boardDto, gps, findLocation);
         }
         else{
             throw new StarProjectException(ErrorCode.User_Forbidden);

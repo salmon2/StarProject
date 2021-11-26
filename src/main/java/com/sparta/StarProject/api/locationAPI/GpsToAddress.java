@@ -50,8 +50,8 @@ public class GpsToAddress {
 
 
     public static void main(String[] args) throws Exception {
-        double latitude = 37.3645764;   //위도
-        double longitude = 127.8340380; //경도
+        double latitude = 37.4363177;   //위도
+        double longitude = 127.550802; //경도
 
         GpsToAddress gps = new GpsToAddress();
         String address = gps.getAddress(latitude, longitude);
