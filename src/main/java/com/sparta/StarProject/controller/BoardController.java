@@ -91,7 +91,7 @@ public class BoardController {
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
 
         Board updateBoard = boardService.updateBoard(boardId, boardDto, userDetails);
-        return new ResponseDto(200L,"성공",updateBoard);
+        return new ResponseDto(200L,"성공",null);
     }
 
     @GetMapping("/board/map/list")

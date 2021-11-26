@@ -95,9 +95,9 @@ public class Board extends Timestamped{
     }
 
     public void update(BoardDto boardDto){
-        this.title = title;
-        this.address = address;
-        this.img = img;
-        this.content = content;
+        this.title = boardDto.getTitle();
+        this.address = boardDto.getAddress();
+        this.img = boardDto.getImg();
+        this.content = boardDto.getContent();
     }
 }
