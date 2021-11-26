@@ -309,9 +309,8 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
-    public Board updateBoard(Long id, BoardDto boardDto,UserDetailsImpl userDetails)throws Exception{
+    public Board updateBoard(Long id, UpdateBoardDto boardDto,UserDetailsImpl userDetails)throws Exception{
         List<String> strings = api.processAddress(boardDto.getAddress()); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
-        Location findLocation = locationRepository.findByCityName(strings.get(0));
         GeographicDto address = addressToGps.getAddress(boardDto.getAddress());
 
         if(address.getY_location().equals("")){

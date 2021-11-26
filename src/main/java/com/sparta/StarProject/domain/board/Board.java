@@ -6,6 +6,7 @@ import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.dto.BoardDto;
 import com.sparta.StarProject.dto.GeographicDto;
 import com.sparta.StarProject.dto.QBoardDto;
+import com.sparta.StarProject.dto.UpdateBoardDto;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -98,17 +99,22 @@ public class Board extends Timestamped{
         this.content = content;
     }
 
-    public void update(BoardDto boardDto, GeographicDto address ){
+    public void update(UpdateBoardDto boardDto, GeographicDto address ){
         Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
         List result = new ArrayList();
         Matcher matcher = nonValidPattern.matcher(boardDto.getContent());
         while (matcher.find()) {
             result.add(matcher.group(1));
         }
+
         this.title = boardDto.getTitle();
         this.address = boardDto.getAddress();
-        this.img = (result == null) ? "" : result.get(0).toString();
+
+
+        this.img = (result.size() == 0) ? "" : result.get(0).toString();
+
         this.content = boardDto.getContent();
+
 
         this.longitude = Double.valueOf(address.getX_location());
         this.latitude = Double.valueOf(address.getY_location());

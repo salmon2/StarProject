@@ -83,7 +83,7 @@ public class BoardController {
 
     @PutMapping("/board/update")
     public ResponseDto updateBoard(@RequestParam Long boardId,
-                                   @RequestBody BoardDto boardDto,
+                                   @RequestBody UpdateBoardDto boardDto,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
 
         Board updateBoard = boardService.updateBoard(boardId, boardDto, userDetails);

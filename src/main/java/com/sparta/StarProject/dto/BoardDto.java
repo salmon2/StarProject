@@ -25,4 +25,5 @@ public class BoardDto {
         this.content = content;
         this.img = img;
     }
+
 }
