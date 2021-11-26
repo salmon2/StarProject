@@ -26,15 +26,13 @@ public class LikeService {
         Board findBoard = boardRepository.getById(boardId);
 
         List<Like> findDuplicateLike = likeRepository.findAllByBoardAndUser(findBoard, user);
-        List<Like> allByBoard = likeRepository.findAllByBoard(findBoard);
-        int size = allByBoard.size();
 
         // 좋아요 삭제
         if(findDuplicateLike.size() != 0){
             Like findLike = findDuplicateLike.get(0);
             deleteLike(findLike);
 
-            int count = likeRepository.countByUserAndBoard(user, findBoard) ;
+            int count = likeRepository.countByBoard(findBoard) ;
 
             findBoard.setLikeCount(Long.valueOf(count));
 
@@ -47,7 +45,7 @@ public class LikeService {
             Like newLike = new Like(findBoard,user);
             saveLike(newLike);
 
-            int count = likeRepository.countByUserAndBoard(user, findBoard);
+            int count = likeRepository.countByBoard(findBoard);
             findBoard.setLikeCount(Long.valueOf(count));
 
             LikeResponseDto likeResponseDto = new LikeResponseDto(boardId, true, Long.valueOf(count));

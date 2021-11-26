@@ -145,7 +145,12 @@ public class BoardController {
     public ResponseDto LikeInfo(@RequestParam Long cardId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         LikeResponseDto likeResponseDto = likeService.LikeInfo(cardId, userDetails.getUser());
 
-        return new ResponseDto(200L, "성공", likeResponseDto);
+        if(likeResponseDto.getLikeCheck().equals(false)){
+            return new ResponseDto(201L, "좋아요가 취소되었습니다..", likeResponseDto);
+        }
+        else{
+            return new ResponseDto(200L, "좋아요가 등록되었습니다..", likeResponseDto);
+        }
     }
 
     //주소

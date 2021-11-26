@@ -30,7 +30,7 @@ public class BookmarkController {
             return new ResponseDto(201L, "북마크가 취소되었습니다..", bookmarkDto);
         }
         else{
-            return new ResponseDto(200L, "북마크 되었습니다.", bookmarkDto);
+            return new ResponseDto(200L, "북마크가 등록되었습니다..", bookmarkDto);
         }
 
     }
