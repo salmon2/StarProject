@@ -4,6 +4,7 @@ package com.sparta.StarProject.domain.board;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.dto.BoardDto;
+import com.sparta.StarProject.dto.QBoardDto;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
@@ -95,9 +98,26 @@ public class Board extends Timestamped{
     }
 
     public void update(BoardDto boardDto){
+        Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
+        List result = new ArrayList();
+        Matcher matcher = nonValidPattern.matcher(boardDto.getContent());
+        while (matcher.find()) {
+            result.add(matcher.group(1));
+        }
         this.title = boardDto.getTitle();
         this.address = boardDto.getAddress();
-        this.img = boardDto.getImg();
+        this.img = (result == null) ? "" : result.get(0).toString();
         this.content = boardDto.getContent();
     }
+
+    public static void main(String[] args) {
+        BoardDto boardDto = new BoardDto("서울시", "xptmxm", "<p>테스트입미다~수정~</p><p><img src=\"https://star-project-post-storage.s3.ap-northeast-2.amazonaws.com/camping-3893587_640.jpeg\"></p>", null);
+
+        Board board = new Board();
+        board.update(boardDto);
+        System.out.println("board = " + board);
+    }
+
+
+
 }
