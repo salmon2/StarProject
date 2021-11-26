@@ -1,10 +1,13 @@
 package com.sparta.StarProject.controller;
 
 
+import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.LikeRepository;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
@@ -29,16 +32,9 @@ public class BoardController {
     private final LocationRepository locationRepository;
     private final LikeRepository likeRepository;
     private final BoardRepository boardRepository;
+    private final CampingRepository campingRepository;
 
-    @GetMapping("/test123")
-    @Transactional
-    public void asdf(){
-        List<Board> all = boardRepository.findAll();
-        for (Board board : all) {
-            board.setLikeCount(0L);
-        }
-        likeRepository.deleteAll();
-    }
+
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,

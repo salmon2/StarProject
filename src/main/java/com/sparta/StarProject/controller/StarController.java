@@ -22,8 +22,6 @@ public class StarController {
     private final StarService starService;
     private final StarInfoRepository starInfoRepository;
 
-
-
     @GetMapping("/star/photo")
     public ResponseDto getStarPhoto(){
         StarPhotoDto starPhotoDto = starService.getStarPhoto();
@@ -38,7 +36,6 @@ public class StarController {
 
         return new ResponseDto(200L, "성공", starInfoResponseDto);
     }
-
 
     @GetMapping("/star/info/time")
     public ResponseDto getWeatherByTime(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam("time") String predictTime) throws Exception {

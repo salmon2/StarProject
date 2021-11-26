@@ -4,6 +4,7 @@ package com.sparta.StarProject.domain.board;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.dto.BoardDto;
+import com.sparta.StarProject.dto.GeographicDto;
 import com.sparta.StarProject.dto.QBoardDto;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
@@ -97,7 +98,7 @@ public class Board extends Timestamped{
         this.content = content;
     }
 
-    public void update(BoardDto boardDto){
+    public void update(BoardDto boardDto, GeographicDto address ){
         Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
         List result = new ArrayList();
         Matcher matcher = nonValidPattern.matcher(boardDto.getContent());
@@ -108,14 +109,9 @@ public class Board extends Timestamped{
         this.address = boardDto.getAddress();
         this.img = (result == null) ? "" : result.get(0).toString();
         this.content = boardDto.getContent();
-    }
 
-    public static void main(String[] args) {
-        BoardDto boardDto = new BoardDto("서울시", "xptmxm", "<p>테스트입미다~수정~</p><p><img src=\"https://star-project-post-storage.s3.ap-northeast-2.amazonaws.com/camping-3893587_640.jpeg\"></p>", null);
-
-        Board board = new Board();
-        board.update(boardDto);
-        System.out.println("board = " + board);
+        this.longitude = Double.valueOf(address.getX_location());
+        this.latitude = Double.valueOf(address.getY_location());
     }
 
 
