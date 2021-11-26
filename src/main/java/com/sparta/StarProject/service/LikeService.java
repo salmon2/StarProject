@@ -32,20 +32,40 @@ public class LikeService {
         // 좋아요 삭제
         if(findDuplicateLike.size() != 0){
             Like findLike = findDuplicateLike.get(0);
-            likeRepository.delete(findLike);
-            findBoard.setLikeCount(findBoard.getLikeCount()-1);
-            LikeResponseDto likeResponseDto = new LikeResponseDto(boardId, false, new Long(size - 1));
+            deleteLike(findLike);
+
+            int count = likeRepository.countByUserAndBoard(user, findBoard) ;
+
+            findBoard.setLikeCount(Long.valueOf(count));
+
+            LikeResponseDto likeResponseDto = new LikeResponseDto(boardId, false, Long.valueOf(count));
             return likeResponseDto;
         }
 
         //좋아요 증가
         else{
             Like newLike = new Like(findBoard,user);
-            Like saveLike = likeRepository.save(newLike);
-            findBoard.setLikeCount(findBoard.getLikeCount()+1);
-            LikeResponseDto likeResponseDto = new LikeResponseDto(boardId, true, new Long(size + 1));
+            saveLike(newLike);
+
+            int count = likeRepository.countByUserAndBoard(user, findBoard);
+            findBoard.setLikeCount(Long.valueOf(count));
+
+            LikeResponseDto likeResponseDto = new LikeResponseDto(boardId, true, Long.valueOf(count));
             return likeResponseDto;
         }
 
     }
+
+    @Transactional
+    public void saveLike(Like newLike) {
+        Like saveLike = likeRepository.save(newLike);
+    }
+
+    @Transactional
+    public void deleteLike(Like findLike) {
+        likeRepository.delete(findLike);
+    }
+
+
+
 }

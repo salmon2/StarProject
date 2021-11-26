@@ -1,21 +1,17 @@
 package com.sparta.StarProject.controller;
 
-import com.sparta.StarProject.api.API;
-import com.sparta.StarProject.domain.Location;
+
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
-import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
-import com.sparta.StarProject.repository.CampingRepository;
+import com.sparta.StarProject.repository.LikeRepository;
 import com.sparta.StarProject.repository.LocationRepository;
-import com.sparta.StarProject.repository.StarInfoRepository;
-import com.sparta.StarProject.repository.UserMakeRepository;
+import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,9 +27,17 @@ public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
     private final LocationRepository locationRepository;
+    private final LikeRepository likeRepository;
+    private final BoardRepository boardRepository;
 
-
-
+    @GetMapping("/test123")
+    @Transactional
+    public void asdf(){
+        List<Board> all = boardRepository.findAll();
+        for (Board board : all) {
+            board.setLikeCount(0L);
+        }
+    }
 
 
     @GetMapping("/community/list")
@@ -55,9 +59,6 @@ public class BoardController {
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
-
-
-
 
     @GetMapping("/detail")
     public ResponseDto detailBoard(@RequestParam Long boardId,
