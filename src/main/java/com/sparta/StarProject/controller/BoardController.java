@@ -1,10 +1,14 @@
 package com.sparta.StarProject.controller;
 
+import com.sparta.StarProject.api.API;
+import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.domain.board.Camping;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.CampingRepository;
+import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarInfoRepository;
 import com.sparta.StarProject.repository.UserMakeRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
@@ -26,28 +30,9 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
-    private final UserMakeRepository userMakeRepository;
-    private final StarInfoRepository starInfoRepository;
-    private final CampingRepository campingRepository;
+    private final LocationRepository locationRepository;
 
-//    @GetMapping("/test12")
-//    @Transactional
-//    public void addUser(){
-//        List<Camping> all = campingRepository.findAll();
-//
-//        for (Camping camping : all) {
-//            String url = "https://stella-image-storage.s3.ap-northeast-2.amazonaws.com/camping" +
-//                    camping.getId() +
-//                    ".png";
-//            camping.setImg(url);
-//            camping.setContent("<p><img src=" +
-//                    url +
-//                    " style=\"width:720px; height:580px;\"" +
-//                    "></p>" +
-//                    "<p></p>"+
-//                    "<p>*운영진이 제공하는 정보입니다.</p>");
-//        }
-//    }
+
 
 
 

@@ -32,7 +32,9 @@ public class MainDto {
         this.title = title;
         this.address = result;
         this.contents = contentResult;
-        StarGazing = starGazing;
+        this.StarGazing = starGazing;
+        if(img==null)
+            this.img="";
         this.img = img;
         this.bookmark = bookmark;
     }
