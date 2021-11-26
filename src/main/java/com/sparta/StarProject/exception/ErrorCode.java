@@ -29,7 +29,9 @@ public enum  ErrorCode {
     LOGIN_TOKEN_EXPIRE(INTERNAL_SERVER_ERROR, "login fail"),
 
     NotFoundBoard(INTERNAL_SERVER_ERROR, "해당 게시물이 존재하지 않습니다."),
-    NotFoundGps(INTERNAL_SERVER_ERROR, "잘못된 주소입니다.");
+    NotFoundGps(INTERNAL_SERVER_ERROR, "잘못된 주소입니다."),
+
+    NOtFoundLocation(INTERNAL_SERVER_ERROR, "해당하는 지역을 찾을 수 없습니다.");
 
 
 

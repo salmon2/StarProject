@@ -99,7 +99,7 @@ public class Board extends Timestamped{
         this.content = content;
     }
 
-    public void update(UpdateBoardDto boardDto, GeographicDto address ){
+    public void update(UpdateBoardDto boardDto, GeographicDto address, Location location ){
         Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
         List result = new ArrayList();
         Matcher matcher = nonValidPattern.matcher(boardDto.getContent());
@@ -118,6 +118,8 @@ public class Board extends Timestamped{
 
         this.longitude = Double.valueOf(address.getX_location());
         this.latitude = Double.valueOf(address.getY_location());
+
+        this.location = location;
     }
 
 
