@@ -27,10 +27,16 @@ public abstract class Timestamped {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public static String TimeToString(LocalDateTime dateTime){
-        String stringTime = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    public static String TimeToString(LocalDateTime dateTime, DateTimeFormatter dateTimeFormatter){
+
+
+
+
+        String stringTime = dateTime.format(dateTimeFormatter);
+
         return stringTime;
     }
+
 
     public static List<String> getCurrentTime() {
         SimpleDateFormat format1 = new SimpleDateFormat ( "yyyyMMdd");

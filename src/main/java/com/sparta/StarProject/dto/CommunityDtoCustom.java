@@ -49,7 +49,7 @@ public class CommunityDtoCustom {
         this.address = imgResult;
         this.img = img;
         this.contents = contentResult;
-        this.modifiedAt = Timestamped.TimeToString(modifiedAt);
+        this.modifiedAt = Timestamped.TimeToString(modifiedAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.likeCount = likeCount;
         this.likeCheck = likeCheck;
         this.bookmarkCheck = bookmarkCheck;

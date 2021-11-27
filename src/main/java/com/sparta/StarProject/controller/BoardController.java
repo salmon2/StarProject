@@ -5,12 +5,15 @@ import com.sparta.StarProject.domain.Location;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Camping;
+import com.sparta.StarProject.domain.board.UserMake;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.CampingRepository;
 import com.sparta.StarProject.repository.LikeRepository;
 import com.sparta.StarProject.repository.LocationRepository;
+import com.sparta.StarProject.repository.UserMakeRepository;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
+import com.sparta.StarProject.repository.bookmarkRepository.BookmarkRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
@@ -33,6 +36,8 @@ public class BoardController {
     private final LikeRepository likeRepository;
     private final BoardRepository boardRepository;
     private final CampingRepository campingRepository;
+    private final UserMakeRepository userMakeRepository;
+    private final BookmarkRepository bookmarkRepository;
 
 
 

@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DetailBoardDto {
     private Long id;
+    private String date;
     private String writer;
     private String title;
     private String address;

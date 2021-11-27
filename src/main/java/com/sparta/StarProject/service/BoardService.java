@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,12 +91,13 @@ public class BoardService {
 
         DetailBoardDto detailBoardDto = new DetailBoardDto(
                 findBoard.getId(),
+                Timestamped.TimeToString(findBoard.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")),
                 findBoard.getUser().getNickname(),
                 findBoard.getTitle(),
                 findBoard.getAddress(),
                 findBoard.getImg(),
                 findBoard.getContent(),
-                findBoard.getLongitude(),   //경도
+                findBoard.getLongitude(),    //경도
                 findBoard.getLatitude(),     //위도,
                 likeCheck,
                 (long) likeSize,
@@ -229,7 +231,7 @@ public class BoardService {
                         location.getCityName(),
                         board.getImg(),
                         board.getContent(),
-                        Timestamped.TimeToString(board.getModifiedAt()),
+                        Timestamped.TimeToString(board.getModifiedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                         (long) size,
                         likeCheck
                 );
@@ -251,7 +253,7 @@ public class BoardService {
                         location.getCityName(),
                         board.getImg(),
                         board.getContent(),
-                        Timestamped.TimeToString(board.getModifiedAt()),
+                        Timestamped.TimeToString(board.getModifiedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                         (long) size,
                         likeCheck
                     );
