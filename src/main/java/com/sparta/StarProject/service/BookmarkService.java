@@ -38,6 +38,7 @@ public class BookmarkService {
 
         List<Bookmark> allByBoardAndUser = bookmarkRepository.findAllByBoardAndUser(board, user);
 
+
         BookmarkDto bookmarkDto = null;
 
         if (allByBoardAndUser.size() != 0){
@@ -53,6 +54,7 @@ public class BookmarkService {
     }
 
     public Page<MyBookmarkListDto> getMyBookMark(User user, int offset) {
+
 
         PageRequest pageRequest = PageRequest.of(offset, 4);
 
