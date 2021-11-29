@@ -15,7 +15,8 @@ public class WebMvcConfigurerimpl implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://localhost:8080",
                         "https://stellakorea.co.kr",
-                        "https://www.stellakorea.co.kr")
+                        "https://www.stellakorea.co.kr",
+                        "http://localhost:8000")
 
                 .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowCredentials(true);
