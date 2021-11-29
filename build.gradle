@@ -63,6 +63,10 @@ dependencies {
 			"javax.annotation:javax.annotation-api",
 			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
+	//Jsaypt properties 암호화
+	implementation  "com.github.ulisesbocchio:jasypt-spring-boot-starter:1.17"
+
+
 }
 
 // QueryDSL

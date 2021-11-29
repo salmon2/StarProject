@@ -50,7 +50,6 @@ public class Board extends Timestamped{
     private Long likeCount;
     private String type;
 
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
@@ -60,7 +59,6 @@ public class Board extends Timestamped{
     @JoinColumn(name = "location_id")
     @JsonIgnore
     private Location location;
-
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
     private Set<Like> like = new HashSet<>();
@@ -92,12 +90,14 @@ public class Board extends Timestamped{
         this.content = content;
         this.user = user;
     }
+
     public Board(String address,String content,String img,String title){
         this.title = title;
         this.address = address;
         this.img = img;
         this.content = content;
     }
+
 
     public void update(UpdateBoardDto boardDto, GeographicDto address, Location location ){
         Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
@@ -106,22 +106,13 @@ public class Board extends Timestamped{
         while (matcher.find()) {
             result.add(matcher.group(1));
         }
-
         this.title = boardDto.getTitle();
         this.address = boardDto.getAddress();
-
-
         this.img = (result.size() == 0) ? "" : result.get(0).toString();
-
         this.content = boardDto.getContent();
-
-
         this.longitude = Double.valueOf(address.getX_location());
         this.latitude = Double.valueOf(address.getY_location());
-
         this.location = location;
     }
-
-
 
 }

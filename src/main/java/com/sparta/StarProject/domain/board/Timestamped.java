@@ -29,9 +29,6 @@ public abstract class Timestamped {
 
     public static String TimeToString(LocalDateTime dateTime, DateTimeFormatter dateTimeFormatter){
 
-
-
-
         String stringTime = dateTime.format(dateTimeFormatter);
 
         return stringTime;

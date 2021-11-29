@@ -61,8 +61,7 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public ResponseDto detailBoard(@RequestParam Long boardId,
-                                       @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseDto detailBoard(@RequestParam Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         DetailBoardDto detailBoardDto = boardService.getDetailBoard(boardId, userDetails);
 
         return new ResponseDto(200L, "성공", detailBoardDto);
