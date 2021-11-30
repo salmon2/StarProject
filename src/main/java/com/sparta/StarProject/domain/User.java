@@ -19,8 +19,12 @@ public class User {
     @Id @GeneratedValue
     private Long id;
 
+    @Column(unique=true)
     private String username;
+
     private String password;
+
+    @Column(unique=true)
     private String nickname;
 
     public User(String username, String password, String nickname) {

@@ -12,14 +12,13 @@ import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.repository.LocationRepository;
 import com.sparta.StarProject.repository.StarInfoRepository;
-import com.sparta.StarProject.repository.StarRepository;
+import com.sparta.StarProject.repository.starRepository.StarRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 
@@ -60,27 +59,8 @@ public class StarService {
         try {
             String address = gpsToAddress.getAddress(latitude, longitude);
             List<String> cityName = api.processAddress(address);
-            Location findLocation = locationRepository.findByCityName(cityName.get(0));
 
-            List<Weather> weatherList = findLocation.getWeatherList();
-            Weather findWeather = null;
-
-            for (Weather weather : weatherList) {
-                if (weather.getPredictTime().equals(predictTime)) {
-                    findWeather = weather;
-                }
-            }
-
-            StarWeatherResponseDto starWeatherResponseDto = new StarWeatherResponseDto(
-                    findLocation.getCityName(),
-                    findWeather.getRainPercent(),
-                    findWeather.getHumidity(),
-                    findWeather.getWeather(),
-                    findWeather.getTemperature(),
-                    findWeather.getMaxTemperature(),
-                    findWeather.getMinTemperature(),
-                    findWeather.getDust()
-            );
+            StarWeatherResponseDto starWeatherResponseDto = starRepository.findStarWeatherResponse(cityName.get(0), predictTime);
 
             return starWeatherResponseDto;
         }

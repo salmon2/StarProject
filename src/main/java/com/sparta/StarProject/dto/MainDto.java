@@ -1,5 +1,6 @@
 package com.sparta.StarProject.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class MainDto {
     private String img;
     private Boolean bookmark;
 
+    @QueryProjection
     public MainDto(Long id, String title, String address, String contents, Long starGazing, String img, Boolean bookmark) {
         String[] sliceAddress = address.split(" ");
         String result = "";

@@ -1,5 +1,6 @@
 package com.sparta.StarProject.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.sparta.StarProject.domain.Location;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class StarWeatherResponseDto {
     private String minTemperature; //최고온도
     private String dust;    //미세먼지
 
+    @QueryProjection
     public StarWeatherResponseDto(String cityName, String rainPercent, String humidity, String weather, String temperature, String maxTemperature, String minTemperature, String dust) {
         this.cityName = cityName;
         this.rainPercent = rainPercent;

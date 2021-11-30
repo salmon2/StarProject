@@ -10,7 +10,7 @@ import com.sparta.StarProject.dto.MyBookmarkListDto;
 import com.sparta.StarProject.dto.BookmarkMapList;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.repository.bookmarkRepository.BookmarkRepository;
-import com.sparta.StarProject.repository.StarRepository;
+import com.sparta.StarProject.repository.starRepository.StarRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
