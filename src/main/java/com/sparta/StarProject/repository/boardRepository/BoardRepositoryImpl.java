@@ -37,11 +37,8 @@ import static com.sparta.StarProject.domain.board.QBoard.*;
 @Repository
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepositoryCustom{
+
     private final JPAQueryFactory queryFactory;
-
-  
-
-    
 
     @Override
     public Page<MyBoardDto> findAllByUserCustom(User user, PageRequest pageRequest) {
@@ -210,7 +207,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
     @Override
     public List<MainDto> findMainList(UserDetailsImpl userDetails) {
-        List<MainDto> result = queryFactory
+        List<MainDto> fetch = queryFactory
                 .select(
                         new QMainDto(
                                 board.id,
@@ -226,7 +223,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.location.star, star)
                 .fetch();
 
-        return result;
+        return fetch;
     }
 
 
@@ -329,15 +326,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .where(QUser.user.id.eq(user.getId()));
     }
 
-
-
     private JPAQuery<Board> countMapBoardList() {
         return queryFactory
                 .selectFrom(board)
                 .join(board.location.star, star)
                 .orderBy(star.starGazing.desc());
     }
-
 
     private JPAQuery<Board> countCommunityDtoCustomContainingCityListQuery(String cityName) {
         return queryFactory

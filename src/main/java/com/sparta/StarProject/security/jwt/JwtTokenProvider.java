@@ -19,9 +19,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-
     private String secretkey = "star";
-
 
     //토큰 유효시간
     private Long tokenValidTime = 24*60*60*1000L;

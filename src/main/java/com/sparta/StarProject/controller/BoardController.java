@@ -6,6 +6,7 @@ import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.*;
+import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
@@ -15,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -23,8 +25,7 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
-    private final UserRepository userRepository;
-
+    private final BoardRepository boardRepository;
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,

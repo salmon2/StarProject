@@ -81,6 +81,7 @@ public class UserController {
     public ResponseDto myLeave(@AuthenticationPrincipal UserDetailsImpl userDetails){
         userService.myLeave(userDetails.getUser());
 
+
         return new ResponseDto(200L, "성공", null );
     }
 

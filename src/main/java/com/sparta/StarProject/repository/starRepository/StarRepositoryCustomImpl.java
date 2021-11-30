@@ -13,7 +13,6 @@ import static com.sparta.StarProject.domain.QWeather.weather1;
 @Repository
 @RequiredArgsConstructor
 public class StarRepositoryCustomImpl implements StarRepositoryCustom{
-
     private final JPAQueryFactory queryFactory;
 
     @Override
