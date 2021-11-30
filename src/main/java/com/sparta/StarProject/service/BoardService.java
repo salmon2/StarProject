@@ -89,10 +89,15 @@ public class BoardService {
     @Transactional
     public Board createBoard(BoardDto boardDto, User user) throws Exception {
         GeographicDto gps = addressToGps.getAddress(boardDto.getAddress());
+        List<String> strings = api.processAddress(boardDto.getAddress());
+        Location findLocation = null;
 
-        String address = gpsToAddress.getAddress(Double.valueOf(gps.getY_location()), Double.valueOf(gps.getX_location()));
-        List<String> strings = api.processAddress(address); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
-        Location findLocation = locationRepository.findByCityName(strings.get(0));
+        try {
+            findLocation = locationRepository.findByCityName(strings.get(0));
+        }
+        catch(IndexOutOfBoundsException indexOutOfBoundsException){
+            throw new IndexOutOfBoundsException(ErrorCode.NOtFoundLocation.getMessage());
+        }
 
         if(gps.getY_location().equals("")){
             throw new NotFoundGps(ErrorCode.NotFoundGps.getMessage());
@@ -123,12 +128,15 @@ public class BoardService {
     @Transactional
     public Board updateBoard(Long id, UpdateBoardDto boardDto,UserDetailsImpl userDetails)throws Exception{
         GeographicDto gps = addressToGps.getAddress(boardDto.getAddress());
-        String address = gpsToAddress.getAddress(Double.valueOf(gps.getY_location()), Double.valueOf(gps.getX_location()));
+        List<String> strings = api.processAddress(boardDto.getAddress());
+        Location findLocation = null;
 
-
-        List<String> strings = api.processAddress(address); //0번이 도시이름, 1번이 행정구역명(예: 경상북도)
-        Location findLocation = locationRepository.findByCityName(strings.get(0));
-
+        try {
+            findLocation = locationRepository.findByCityName(strings.get(0));
+        }
+        catch(IndexOutOfBoundsException indexOutOfBoundsException){
+            throw new IndexOutOfBoundsException(ErrorCode.NOtFoundLocation.getMessage());
+        }
 
         if(findLocation == null){
             throw new NullPointerException(ErrorCode.NOtFoundLocation.getMessage());

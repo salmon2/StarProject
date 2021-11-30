@@ -80,7 +80,7 @@ public class AddressToGps {
 
     public static void main(String[] args) throws Exception {
         AddressToGps addressToGps = new AddressToGps();
-        GeographicDto address = addressToGps.getAddress("경기도");
+        GeographicDto address = addressToGps.getAddress("충청북도 청주시 상당구 미원면 운암옥화길 140");
         log.info("위도 = {}, 경도 = {}", address.getY_location(), address.getX_location());
     }
 
