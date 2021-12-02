@@ -142,7 +142,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.user, QUser.user)
                 .join(board.location, location)
                 .join(location.star, star)
-                .orderBy(board.modifiedAt.desc())
+                .orderBy(getOrderBy(sort))
                 .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
