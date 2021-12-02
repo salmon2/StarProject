@@ -1,2 +1,39 @@
 logging-module:
   version: 0.0.7
+spring:
+  datasource:
+    username: ENC(HGBakYJL16edJF7A2LqqAA==)
+    url: ENC(FWVLS3Mx1oRcUPM6vwl9atMrt1CytQRML75UOAGEqocNo2jxFqEAncCBb900KV2leiMpxiD88sR2UZ4rdmqxMthC4BQoYsUJDK3iRIs1EGlN8saME8aOnJKyNcEdbcvq0VZe3PAzoxg=)
+    password: ENC(xNRWIp6LrRx8klhCxRKEpkgzss4Q3G3U)
+  boot:
+    admin:
+      client:
+        auto-registration: 'true'
+        url: http://localhost:8000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: 'true'
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+logging:
+  pattern:
+    file: -%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx
+  file:
+    name: /home/ec2-user/starProject.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    logfile:
+      external-file: /home/ec2-user/starProject.log
