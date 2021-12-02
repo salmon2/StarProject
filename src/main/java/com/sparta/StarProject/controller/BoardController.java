@@ -91,12 +91,8 @@ public class BoardController {
                                   @RequestParam(defaultValue = "0", required = false)Double y_location,
                                   @AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestParam(defaultValue = "1", required = false) int offset){
-        long beforeTime = System.currentTimeMillis();
         Page<MapBoardDto> mapBoardDto;
-
-
         mapBoardDto = boardService.getBoardMapList(userDetails, cityName, x_location, y_location, offset-1);
-
         long boardCount = boardService.getBoardCount();
 
         PageResponseDto pageResponseDto= null;
@@ -110,9 +106,6 @@ public class BoardController {
                     mapBoardDto.getTotalPages(),  mapBoardDto.getContent().size(), mapBoardDto.getContent());
         }
 
-        long afterTime = System.currentTimeMillis();
-        double secDiffTime = (double)(afterTime - beforeTime)/1000;
-        log.info("실행시간 : {}", secDiffTime);
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
