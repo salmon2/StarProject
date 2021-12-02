@@ -223,6 +223,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 )
                 .from(board)
                 .join(board.location.star, star)
+                .orderBy(star.starGazing.desc())
                 .fetch();
 
         return fetch;
