@@ -27,7 +27,6 @@ public abstract class Timestamped {
 
 
     @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedAt;
 
     public static String TimeToString(LocalDateTime dateTime, DateTimeFormatter dateTimeFormatter){

@@ -28,6 +28,7 @@ public class BoardController {
     private final LikeService likeService;
 
 
+
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
                                 @RequestParam(defaultValue = "all") String cityName,
