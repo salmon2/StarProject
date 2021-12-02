@@ -26,7 +26,13 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
+    private final BoardRepository boardRepository;
 
+    @GetMapping("/test")
+    @Transactional
+    public void asdf(){
+        boardRepository.deleteById(38005L);
+    }
 
 
     @GetMapping("/community/list")

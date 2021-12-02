@@ -132,7 +132,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                                 board.address,
                                 board.img,
                                 board.content,
-                                board.createdAt,
+                                board.modifiedAt,
                                 boardLikeCount(),
                                 (userDetails == null) ? setFalse() : distinguishLikeExistUser(userDetails.getUser()),
                                 (userDetails == null) ? setFalse() : distinguishBookmarkExistUser(userDetails.getUser())
