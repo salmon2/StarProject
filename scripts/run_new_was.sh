@@ -16,12 +16,21 @@ else
 fi
 
 TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+MONITORING_PID=$(lsof -Fp -i TCP:8000 | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+
 
 if [ ! -z "${TARGET_PID}" ]; then
   echo "> Kill WAS running at ${TARGET_PORT}."
   sudo kill ${TARGET_PID}
 fi
 
+if [ ! -z "${MONITORING_PID}" ]; then
+  echo "> Kill MONITORING running at 8000."
+  sudo kill ${MONITORING_PID}
+fi
+
 nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/star-project/build/libs/* > /home/ec2-user/nohup.out 2>&1 &
+nohup java -jar /home/ec2-user/admin-0.0.1-SNAPSHOT.jar &
+
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
