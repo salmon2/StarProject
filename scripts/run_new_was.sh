@@ -22,6 +22,10 @@ MONITORING_PID=$(lsof -Fp -i TCP:8000 | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
 if [ ! -z "${TARGET_PID}" ]; then
   echo "> Kill WAS running at ${TARGET_PORT}."
   sudo kill ${TARGET_PID}
+fi
+
+if [ ! -z "${MONITORING_PID}" ]; then
+  echo "> Kill MONITORING running at 8000."
   sudo kill ${MONITORING_PID}
 fi
 
