@@ -1,6 +1,5 @@
 package com.sparta.StarProject.controller;
 
-
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.*;
@@ -11,6 +10,7 @@ import com.sparta.StarProject.security.UserDetailsImpl;
 import com.sparta.StarProject.service.BoardService;
 import com.sparta.StarProject.service.LikeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,14 +18,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
     private final BoardRepository boardRepository;
+    private final LocationRepository locationRepository;
+
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
@@ -83,6 +87,7 @@ public class BoardController {
                                   @RequestParam(defaultValue = "0", required = false)Double y_location,
                                   @AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestParam(defaultValue = "1", required = false) int offset){
+        long beforeTime = System.currentTimeMillis();
         Page<MapBoardDto> mapBoardDto;
 
 
@@ -100,6 +105,10 @@ public class BoardController {
             pageResponseDto= new PageResponseDto(mapBoardDto.getNumber()+1,
                     mapBoardDto.getTotalPages(),  mapBoardDto.getContent().size(), mapBoardDto.getContent());
         }
+
+        long afterTime = System.currentTimeMillis();
+        double secDiffTime = (double)(afterTime - beforeTime)/1000;
+        log.info("실행시간 : {}", secDiffTime);
 
         return new ResponseDto(200L, "성공", pageResponseDto);
     }
