@@ -27,10 +27,6 @@ public class BoardController {
     private final LikeService likeService;
     private final BoardRepository boardRepository;
 
-    @DeleteMapping("/test123")
-    public void asd(Board boardId){
-        boardRepository.deleteById(boardId);
-    }
 
     @GetMapping("/community/list")
     public ResponseDto getBoard(@RequestParam(defaultValue = "star") String sort,
