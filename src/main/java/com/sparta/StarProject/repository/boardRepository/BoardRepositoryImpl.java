@@ -2,6 +2,7 @@ package com.sparta.StarProject.repository.boardRepository;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -10,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.QUser;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.domain.board.QTimestamped;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.dto.QCommunityDtoCustom;
 import com.sparta.StarProject.dto.QDetailBoardDto;
@@ -54,7 +56,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .from(board)
                 .join(board.user, QUser.user)
                 .where(QUser.user.id.eq(user.getId()))
-                .orderBy(board.createdAt.desc())
+                .orderBy(board.modifiedAt.desc())
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -79,7 +81,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.bookmark, bookmark)
                 .join(bookmark.user, QUser.user)
                 .where(QUser.user.id.eq(user.getId()))
-                .orderBy(board.createdAt.desc())
+                .orderBy(board.modifiedAt.desc())
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -95,7 +97,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QDetailBoardDto(
                                 board.id,
-                                Expressions.asString(board.createdAt.toString()),
+                                board.modifiedAt,
                                 user.nickname,
                                 board.title,
                                 board.address,
@@ -140,7 +142,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.user, QUser.user)
                 .join(board.location, location)
                 .join(location.star, star)
-                .orderBy(getOrderBy(sort))
+                .orderBy(board.modifiedAt.desc())
                 .where(likeAddressOrTitle(cityName))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
@@ -278,7 +280,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
         else if(sort.equals("like"))
             return board.likeCount.desc();
         else if(sort.equals("latest"))
-            return board.createdAt.desc();
+            return board.modifiedAt.desc();
         else
             return null;
     }

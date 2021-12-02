@@ -1,10 +1,14 @@
 package com.sparta.StarProject.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.sparta.StarProject.domain.board.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -29,9 +33,9 @@ public class DetailBoardDto {
     private DetailWeatherCityInfoDto weather;
 
     @QueryProjection
-    public DetailBoardDto(Long id, String date, String writer, String title, String address, String img, String content, Double x_location, Double y_location, Boolean likeCheck, Long likeCount, Boolean bookmarkCheck) {
+    public DetailBoardDto(Long id, LocalDateTime date, String writer, String title, String address, String img, String content, Double x_location, Double y_location, Boolean likeCheck, Long likeCount, Boolean bookmarkCheck) {
         this.id = id;
-        this.date = date;
+        this.date = Timestamped.TimeToString(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.writer = writer;
         this.title = title;
         this.address = address;
@@ -43,4 +47,5 @@ public class DetailBoardDto {
         this.likeCount = likeCount;
         this.bookmarkCheck = bookmarkCheck;
     }
+
 }
