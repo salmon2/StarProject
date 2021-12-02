@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MoonCity {
-
     강릉("강릉"),
     강화도("강화도"),
     거제("거제"),

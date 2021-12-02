@@ -22,5 +22,4 @@ public class WebMvcConfigurerimpl implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
-
 }

@@ -2,6 +2,7 @@ package com.sparta.StarProject.repository.boardRepository;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -10,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.StarProject.domain.*;
 import com.sparta.StarProject.domain.QUser;
 import com.sparta.StarProject.domain.board.Board;
+import com.sparta.StarProject.domain.board.QTimestamped;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.dto.QCommunityDtoCustom;
 import com.sparta.StarProject.dto.QDetailBoardDto;
@@ -37,11 +39,8 @@ import static com.sparta.StarProject.domain.board.QBoard.*;
 @Repository
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepositoryCustom{
+
     private final JPAQueryFactory queryFactory;
-
-  
-
-    
 
     @Override
     public Page<MyBoardDto> findAllByUserCustom(User user, PageRequest pageRequest) {
@@ -57,7 +56,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .from(board)
                 .join(board.user, QUser.user)
                 .where(QUser.user.id.eq(user.getId()))
-                .orderBy(board.createdAt.desc())
+                .orderBy(board.modifiedAt.desc())
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -82,7 +81,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .join(board.bookmark, bookmark)
                 .join(bookmark.user, QUser.user)
                 .where(QUser.user.id.eq(user.getId()))
-                .orderBy(board.createdAt.desc())
+                .orderBy(board.modifiedAt.desc())
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .fetch();
@@ -98,7 +97,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .select(
                         new QDetailBoardDto(
                                 board.id,
-                                Expressions.asString(board.createdAt.toString()),
+                                board.modifiedAt,
                                 user.nickname,
                                 board.title,
                                 board.address,
@@ -210,7 +209,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
     @Override
     public List<MainDto> findMainList(UserDetailsImpl userDetails) {
-        List<MainDto> result = queryFactory
+        List<MainDto> fetch = queryFactory
                 .select(
                         new QMainDto(
                                 board.id,
@@ -224,9 +223,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 )
                 .from(board)
                 .join(board.location.star, star)
+                .orderBy(star.starGazing.desc())
                 .fetch();
 
-        return result;
+        return fetch;
     }
 
 
@@ -281,7 +281,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
         else if(sort.equals("like"))
             return board.likeCount.desc();
         else if(sort.equals("latest"))
-            return board.createdAt.desc();
+            return board.modifiedAt.desc();
         else
             return null;
     }
@@ -329,15 +329,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .where(QUser.user.id.eq(user.getId()));
     }
 
-
-
     private JPAQuery<Board> countMapBoardList() {
         return queryFactory
                 .selectFrom(board)
                 .join(board.location.star, star)
                 .orderBy(star.starGazing.desc());
     }
-
 
     private JPAQuery<Board> countCommunityDtoCustomContainingCityListQuery(String cityName) {
         return queryFactory

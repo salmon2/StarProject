@@ -1,5 +1,6 @@
 package com.sparta.StarProject.domain.board;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,6 +24,7 @@ public abstract class Timestamped {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;

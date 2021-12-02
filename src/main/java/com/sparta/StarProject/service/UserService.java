@@ -1,10 +1,12 @@
 package com.sparta.StarProject.service;
 
+import com.sparta.StarProject.domain.Like;
 import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.*;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
+import com.sparta.StarProject.repository.LikeRepository;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +25,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
-
-
-//    @Autowired
-//    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-//        this.userRepository = userRepository;
-//        this.passwordEncoder = passwordEncoder;
-//    }
+    private final LikeRepository likeRepository;
 
 
     //회원가입
@@ -132,6 +128,18 @@ public class UserService {
                 () -> new NullPointerException(ErrorCode.USER_NOT_FOUND.getMessage())
         );
 
+        List<Board> boardList = findUser.getBoardList();
+
+        deletUser(findUser);
+
+        for (Board board : boardList) {
+            board.setLikeCount(Long.valueOf(likeRepository.countByBoard(board)));
+        }
+
+    }
+
+    @Transactional
+    public void deletUser(User findUser) {
         userRepository.deleteById(findUser.getId());
     }
 
