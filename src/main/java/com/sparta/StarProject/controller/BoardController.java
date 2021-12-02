@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -27,8 +26,6 @@ import java.util.Optional;
 public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
-    private final BoardRepository boardRepository;
-    private final LocationRepository locationRepository;
 
 
     @GetMapping("/community/list")
