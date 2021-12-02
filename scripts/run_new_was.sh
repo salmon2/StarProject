@@ -26,6 +26,7 @@ if [ ! -z "${TARGET_PID}" ]; then
 fi
 
 nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/star-project/build/libs/* > /home/ec2-user/nohup.out 2>&1 &
+nohup java -jar /home/ec2-user/admin-0.0.1-SNAPSHOT.jar &
 
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
