@@ -72,10 +72,17 @@
 
 ## 유저 피드백 및 개선 사항
 ### 유저 피드백
+
+![image](https://user-images.githubusercontent.com/91645519/144547307-056a12e2-5c81-4c76-a907-8de0eff340da.png)
+
 + "별자리 설명을 클릭 유지시가 아니라 클릭으로 켜고 끄는게 좋을것 같아요"
++ ![image](https://user-images.githubusercontent.com/91645519/144548193-df7fe981-5217-4d91-8c28-c7e595fc7d25.png)
 	- 별자리 설명버튼을 클릭시 설명란 토글기능 추가
+	
 + "관측 지수에 따라 문구가 달라졌으면 좋겠어요"
++ ![image](https://user-images.githubusercontent.com/91645519/144548055-19ee734c-def1-44bc-8021-8ee4dfea9886.png)
 	- 관측 지수에 따라 문구 변경 "**별보기좋은날:)**"
+	
 ### 개선사항
 + JPA 버전으로 개발 이후 성능 개선을 위해 QeryDSL도입
 	- 3.089초에서 0.251초로 개선
