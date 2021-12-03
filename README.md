@@ -36,19 +36,19 @@
 
 ## 기술 스텍
 - <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
-- <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
+- <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
 - <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-
-- **Nginx**
+- <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=Nginx&logoColor=white">
 - <img src="https://img.shields.io/badge/github Action-181717?style=for-the-badge&logo=github&logoColor=white">
 - <img src="https://img.shields.io/badge/Spring Admin-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
 - <img src="https://img.shields.io/badge/Spring JPA-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
-- <img src="https://img.shields.io/badge/AWS EC2-232F3E?style=for-the-badge&logo=aws&logoColor=white">
+- <img src="https://img.shields.io/badge/AWS EC2-232F3E?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/>
 - <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
-- **jasypt**
-- **QueryDsl**
-- **CodeDeploy**
-- <img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=flat-square&logo=Amazon%20AWS&logoColor=white"/>
+- <img src="https://img.shields.io/badge/jasypt-EF2D5E?style=for-the-badge&logo=jasypt&logoColor=white">
+- <img src="https://img.shields.io/badge/QueryDsl-9999FF?style=for-the-badge&logo=QueryDsl&logoColor=white">
+- <img src="https://img.shields.io/badge/CodeDeploy-F8DC75?style=for-the-badge&logo=CodeDeploy&logoColor=white">
+
+출처: https://byul91oh.tistory.com/214 [개발하는 감자 [: 개감]]
 
 ## 설계
 - API 설계
