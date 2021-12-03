@@ -48,8 +48,6 @@
 - <img src="https://img.shields.io/badge/QueryDsl-9999FF?style=for-the-badge&logo=QueryDsl&logoColor=white">
 - <img src="https://img.shields.io/badge/CodeDeploy-F8DC75?style=for-the-badge&logo=CodeDeploy&logoColor=white">
 
-출처: https://byul91oh.tistory.com/214 [개발하는 감자 [: 개감]]
-
 ## 설계
 - API 설계
   - https://www.notion.so/48d7ae150c7a4d3a893a19052ab41e0d?v=c131cd1c89344c12bba6513e9a4c5399
