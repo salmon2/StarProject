@@ -52,7 +52,7 @@
 - API 설계
   - https://www.notion.so/48d7ae150c7a4d3a893a19052ab41e0d?v=c131cd1c89344c12bba6513e9a4c5399
 - 아키텍쳐
-  - <img src="https://user-images.githubusercontent.com/23234577/144532220-b4807cc3-9f86-47c3-9791-f86bd36030f0.png" width="720px" height="480px">
+  - <img src="https://user-images.githubusercontent.com/23234577/144532220-b4807cc3-9f86-47c3-9791-f86bd36030f0.png" width="720px" height="360">
 - 도메인 설계
   - <img src="https://user-images.githubusercontent.com/23234577/144532891-39a637f7-86bd-42c2-b11c-1d1e2cb7dfc8.png" width="720px" height="480px">
 
