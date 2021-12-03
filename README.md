@@ -1,17 +1,25 @@
 # 별 보러 가지 않을래?⭐️
+![썸네일](https://user-images.githubusercontent.com/23234577/144531606-3f50649e-982d-4a33-88b4-51558b4f4273.png)
+
+캠핑,차박 하실때 별⭐️도 구경해보세요! 
+
+나만의 장소도 공유하고 다른분들과 추억도 공유해보세요!
 
 ## 목차
 1. [프로젝트 소개](##프로젝트-소개)
 2. [팀원](##팀원)
 3. [기술 스텍](##기술-스택)
-4. [주요기능](##주요기능)
-5. [유저 피드백](###유저-피드백) 및 [개선사항](###개선사항)
+4. [설계](##설계)
+5. [주요기능](##주요기능)
+6. [유저 피드백](###유저-피드백) 및 [개선사항](###개선사항)
 
 ## 프로젝트 소개
 캠핑,차박 하실때 별⭐️도 구경해보세요!</br> 나만의 장소도 공유하고 다른분들과 추억도 공유해보세요!👫
 
-홈페이지 [stellakorea](https://stellakorea.co.kr/ "별 보러 가지 않을래?") </br>
-설계 [Notion](https://www.notion.so/b2c6675c28cd43dcacdda09ef4db329f)
+- 홈페이지 : [stellakorea](https://stellakorea.co.kr/ "별 보러 가지 않을래?") </br>
+- 소개 영상 : https://youtu.be/mB3gAzsY8s4
+- 날씨, 천문 데이터 업데이트 서버 : https://github.com/salmon2/StarProjectLocationDB
+- 모니터링 서버 : https://github.com/salmon2/StarMonitoringServer
 
 ## 팀원
 ### **Backend**
@@ -35,6 +43,19 @@
 - **Spring Admin**
 - **Spring JPA**
 - **AWS EC2**
+- **Spring Security**
+- **jasypt**
+- **QueryDsl**
+- **CodeDeploy**
+
+## 설계
+- API 설계
+  - https://www.notion.so/48d7ae150c7a4d3a893a19052ab41e0d?v=c131cd1c89344c12bba6513e9a4c5399
+- 아키텍쳐
+  - ![image](https://user-images.githubusercontent.com/23234577/144532220-b4807cc3-9f86-47c3-9791-f86bd36030f0.png)
+- 도메인 설계
+  - ![image](https://user-images.githubusercontent.com/23234577/144532891-39a637f7-86bd-42c2-b11c-1d1e2cb7dfc8.png)
+
 
 ## 주요 기능
 ### ⭐️별자리 페이지
