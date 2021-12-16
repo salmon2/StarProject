@@ -31,6 +31,10 @@ public class DetailWeatherCityInfoDto {
             data = " (낮음)";
 
         this.cityName = cityName;
+        if(cityName.equals("대구"))
+            cityName = "대구 광역시";
+        else if (cityName.equals("부산"))
+            cityName = "부산 광역시";
         this.date = date;
         this.starGazing =starGazing.toString() +  data;
         this.moonrise = moonrise;

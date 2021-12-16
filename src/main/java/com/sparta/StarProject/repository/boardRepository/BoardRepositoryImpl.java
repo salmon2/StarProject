@@ -108,7 +108,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                                 (userDetails == null) ? setFalse() : distinguishLikeExistUser(userDetails.getUser()),
                                 boardLikeCount(),
                                 (userDetails == null) ? setFalse() : distinguishBookmarkExistUser(userDetails.getUser())
-
                         )
                 )
                 .from(board)
@@ -223,6 +222,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 )
                 .from(board)
                 .join(board.location.star, star)
+                .orderBy(star.starGazing.desc())
                 .fetch();
 
         return fetch;

@@ -70,6 +70,9 @@ public class Board extends Timestamped{
     @JsonIgnore
     private List<Bookmark> bookmark;
 
+    @OneToMany(mappedBy = "board", fetch = LAZY, cascade = ALL)
+    private List<Comment> commentList = new ArrayList<>();
+
     public Board(String title, String address, String content, String img, Double longitude, Double latitude, User user, Location location, String type) {
         this.title = title;
         this.address = address;
@@ -98,7 +101,6 @@ public class Board extends Timestamped{
         this.content = content;
     }
 
-
     public void update(UpdateBoardDto boardDto, GeographicDto address, Location location ){
         Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
         List result = new ArrayList();
@@ -114,5 +116,4 @@ public class Board extends Timestamped{
         this.latitude = Double.valueOf(address.getY_location());
         this.location = location;
     }
-
 }
