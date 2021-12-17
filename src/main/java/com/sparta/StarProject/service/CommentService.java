@@ -1,7 +1,6 @@
 package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.Comment;
-import com.sparta.StarProject.domain.User;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.CommentRequestDto;
 import com.sparta.StarProject.dto.CommentResponseDto;
@@ -11,8 +10,6 @@ import com.sparta.StarProject.repository.CommentRepository.CommentRepository;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,8 +35,10 @@ public class CommentService {
         }
         Comment newComment = new Comment(
                 commentRequestDto.getComment(),
+                userDetails.getUser().getNickname(),
                 findBoard,
-                userDetails.getUser());
+                userDetails.getUser()
+        );
 
         Comment createComment = commentRepository.save(newComment);
         return createComment;

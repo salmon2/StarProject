@@ -27,7 +27,7 @@ public class CommentController {
     }
 
 
-    @PostMapping("/comment")
+    @PostMapping("/comment/save")
     public ResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto
             , @AuthenticationPrincipal UserDetailsImpl userDetails )throws Exception{
 

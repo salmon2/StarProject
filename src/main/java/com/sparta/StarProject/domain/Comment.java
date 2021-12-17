@@ -37,15 +37,22 @@ public class Comment extends Timestamped {
     @JsonIgnore
     private User user;
 
+    public Comment(String comments, String nickname, Board board, User user) {
+        this.comments = comments;
+        this.nickname = nickname;
+        this.board = board;
+        this.user = user;
+    }
+
     public Comment(String comment, String nickname) {
         this.comments = comment;
         this.nickname = nickname;
     }
-    public Comment(String comments, Board board, User user){
-        this.comments = comments;
-        this.board = board;
-        this.user = user;
-    }
+//    public Comment(String comments, Board board, User user){
+//        this.comments = comments;
+//        this.board = board;
+//        this.user = user;
+//    }
     public Comment update(CommentRequestDto commentRequestDto){
         this.comments = commentRequestDto.getComment();
         return this;

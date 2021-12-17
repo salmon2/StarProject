@@ -10,8 +10,17 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class CommentResponseDto {
+     private Long userId;
      private String nickname;
      private String date;
+
+     public CommentResponseDto(Long userId, String nickname, String date, String comment) {
+          this.userId = userId;
+          this.nickname = nickname;
+          this.date = date;
+          this.comment = comment;
+     }
+
      private String comment;
 
      public CommentResponseDto(String nickname, String date, String comment) {
