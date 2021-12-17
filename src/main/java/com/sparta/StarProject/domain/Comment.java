@@ -3,6 +3,7 @@ package com.sparta.StarProject.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.domain.board.Timestamped;
+import com.sparta.StarProject.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,14 +22,14 @@ public class Comment extends Timestamped {
     private Long id;
 
     @Column
-    private String comment;
+    private String comments;
 
     @Column
     private String nickname;
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "comment_id",nullable = false)
+    @JoinColumn(name = "board_id",nullable = false)
     private Board board;
 
     @ManyToOne(fetch = LAZY)
@@ -37,7 +38,16 @@ public class Comment extends Timestamped {
     private User user;
 
     public Comment(String comment, String nickname) {
-        this.comment = comment;
+        this.comments = comment;
         this.nickname = nickname;
+    }
+    public Comment(String comments, Board board, User user){
+        this.comments = comments;
+        this.board = board;
+        this.user = user;
+    }
+    public Comment update(CommentRequestDto commentRequestDto){
+        this.comments = commentRequestDto.getComment();
+        return this;
     }
 }

@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class CommentRequestDto {
+    private Long boardId;
     private String comment;
 }

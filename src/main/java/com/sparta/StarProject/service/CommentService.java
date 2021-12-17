@@ -2,7 +2,9 @@ package com.sparta.StarProject.service;
 
 import com.sparta.StarProject.domain.Comment;
 import com.sparta.StarProject.domain.User;
+import com.sparta.StarProject.domain.board.Board;
 import com.sparta.StarProject.dto.CommentRequestDto;
+import com.sparta.StarProject.dto.CommentResponseDto;
 import com.sparta.StarProject.exception.ErrorCode;
 import com.sparta.StarProject.exception.StarProjectException;
 import com.sparta.StarProject.repository.CommentRepository.CommentRepository;
@@ -19,22 +21,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final BoardRepository boardRepository;
 
-    public List<Comment> getComment(Long CommentId, UserDetailsImpl userDetails){
-        return commentRepository.findAllByIdOrderByCreatedAtDesc(CommentId);
+    public List<CommentResponseDto> findAll(){
+        return null;
     }
 
     @Transactional
-    public Comment saveComment(CommentRequestDto commentRequestDto, User user) throws Exception{
-        if(user == null){
+    public Comment saveComment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) throws Exception{
+        Board findBoard = boardRepository.findById(commentRequestDto.getBoardId()).orElseThrow(
+                () -> new StarProjectException(ErrorCode.BOARD_NOT_FOUND)
+        );
+        if(userDetails == null){
             throw new StarProjectException(ErrorCode.USER_NOT_FOUND);
         }
-        Comment saveComment = new Comment(
+        Comment newComment = new Comment(
                 commentRequestDto.getComment(),
-                user.getNickname()
-        );
-        Comment createComment = commentRepository.save(saveComment);
+                findBoard,
+                userDetails.getUser());
+
+        Comment createComment = commentRepository.save(newComment);
         return createComment;
     }
 
+    @Transactional
+    public Comment updateComment(Long id, CommentRequestDto commentRequestDto) throws StarProjectException{
+        Comment findComment = commentRepository.findById(id).orElseThrow(
+                () -> new StarProjectException(ErrorCode.COMMENT_NOT_FOUND)
+        );
+        findComment.update(commentRequestDto);
+        return findComment;
+    }
+
+    public void deleteComment(Long id) {
+       commentRepository.findById(id);
+    }
 }

@@ -14,6 +14,8 @@ public enum  ErrorCode {
 
     BOARD_NOT_FOUND(INTERNAL_SERVER_ERROR,"게시물을 찾을수 없습니다."),
 
+    COMMENT_NOT_FOUND(INTERNAL_SERVER_ERROR, "해당 댓글을 찾을수 없습니다."),
+
     USERNAME_AVAILABLE(OK, "사용 가능한 유저네임입니다."),
     USERNAME_NOT_FOUND(INTERNAL_SERVER_ERROR, "아이디를 입력해주세요."),
     USERNAME_DUPLICATE(NOT_IMPLEMENTED, "사용 불가능한 유저네임 입니다."),
