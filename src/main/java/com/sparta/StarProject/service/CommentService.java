@@ -11,6 +11,7 @@ import com.sparta.StarProject.repository.CommentRepository.CommentRepository;
 import com.sparta.StarProject.repository.boardRepository.BoardRepository;
 import com.sparta.StarProject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
-    public List<CommentResponseDto> findAll(){
-        return null;
+    public List<CommentResponseDto> getComment(Long boardId){
+        return commentRepository.findAllByIdOrderByCreatedAtDesc(boardId);
     }
 
     @Transactional
