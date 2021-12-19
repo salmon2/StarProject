@@ -16,6 +16,9 @@
 ## 프로젝트 소개
 캠핑,차박 하실때 별⭐️도 구경해보세요!</br> 나만의 장소도 공유하고 다른분들과 추억도 공유해보세요!👫
 
+#### 📆프로젝트 기간
+2021년 10월 25일 ~ 2021년 12월 03일
+
 - 홈페이지 : [stellakorea](https://stellakorea.co.kr/ "별 보러 가지 않을래?") </br>
 - 소개 영상 : https://youtu.be/mB3gAzsY8s4
 - 날씨, 천문 데이터 업데이트 서버 : https://github.com/salmon2/StarProjectLocationDB
