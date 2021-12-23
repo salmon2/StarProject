@@ -37,27 +37,38 @@
 - 박선현
 - 한주혜
 
-## 기술 스텍
-- <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
-- <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
-- <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-- <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=Nginx&logoColor=white">
-- <img src="https://img.shields.io/badge/github Action-181717?style=for-the-badge&logo=github&logoColor=white">
-- <img src="https://img.shields.io/badge/Spring Admin-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
-- <img src="https://img.shields.io/badge/Spring JPA-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
-- <img src="https://img.shields.io/badge/AWS EC2-232F3E?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/>
-- <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
-- <img src="https://img.shields.io/badge/jasypt-EF2D5E?style=for-the-badge&logo=jasypt&logoColor=white">
-- <img src="https://img.shields.io/badge/QueryDsl-9999FF?style=for-the-badge&logo=QueryDsl&logoColor=white">
-- <img src="https://img.shields.io/badge/CodeDeploy-F8DC75?style=for-the-badge&logo=CodeDeploy&logoColor=white">
+## :hammer: 개발 환경
+<div>
+	<img src="https://img.shields.io/badge/AWS EC2-232F3E?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/>
+	<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+	<img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">	
+	<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+	<img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=Nginx&logoColor=white">
+
+</div>
+
+|이름|구분|
+|---|---|
+|Server|AWS EC2 (Amazon Linux 2 AMI (HVM), 64bit)|
+|Framework| Spring Boot|
+|개발언어| Java|
+|ORM|JPA|
+|Database| Mysql|
+|CI/CD| Git Action, AWS CodeDeploy|
+|Load Balancer| Nginx|
+|Stoarage| AWS S3|
+|Tools| IntelliJ, Github, Slack, Notion|
+|Log|Log4J|
+
+
 
 ## 설계
 - API 설계
   - https://www.notion.so/48d7ae150c7a4d3a893a19052ab41e0d?v=c131cd1c89344c12bba6513e9a4c5399
 - 아키텍쳐
-  - ![image](https://user-images.githubusercontent.com/23234577/144532220-b4807cc3-9f86-47c3-9791-f86bd36030f0.png)
+  - <img src="https://user-images.githubusercontent.com/23234577/144532220-b4807cc3-9f86-47c3-9791-f86bd36030f0.png" width = 720 height =360>
 - 도메인 설계
-  - ![image](https://user-images.githubusercontent.com/23234577/144532891-39a637f7-86bd-42c2-b11c-1d1e2cb7dfc8.png)
+  - <img src="https://user-images.githubusercontent.com/23234577/147190600-8a4b0372-df91-4f8a-8800-22ed5b85490f.png" width = 720 height =480>
 
 
 ## 주요 기능
